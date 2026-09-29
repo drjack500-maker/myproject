@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ご予約リクエストを受け付けました｜名駅歯科クリニック・矯正歯科</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0e5a63">
+<meta name="format-detection" content="telephone=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- Google Tag Manager（index.html と同じコンテナIDを設定）
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+-->
+<script>
+  /* コンバージョン計測：このページの表示＝予約リクエスト完了。デモ遷移（?demo=1）は計測しない */
+  window.dataLayer = window.dataLayer || [];
+  if (!/[?&]demo=1/.test(location.search)) window.dataLayer.push({ event: 'reservation_complete' });
+</script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5 10-11"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5.2 3.5h3.6l1.8 4.6-2.3 1.4a11.5 11.5 0 0 0 6.2 6.2l1.4-2.3 4.6 1.8v3.6a2 2 0 0 1-2.1 2A16.5 16.5 0 0 1 3.2 5.6a2 2 0 0 1 2-2.1z"/></symbol>
+</svg>
+
+<div class="demo-banner" id="demo-banner" hidden>デモ表示：フォームの送信先（formEndpoint）が未設定のため、実際には送信されていません。</div>
+<script>if (/[?&]demo=1/.test(location.search)) document.getElementById('demo-banner').hidden = false;</script>
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="index.html">
+      <span class="brand__sub">JR名古屋駅 徒歩2分</span>
+      <span class="brand__name">名駅歯科クリニック<span class="brand__name-sub">・矯正歯科</span></span>
+    </a>
+  </div>
+</header>
+
+<main class="thanks">
+  <div class="container">
+    <div class="thanks__card">
+      <div class="thanks__icon"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></div>
+      <h1 class="thanks__title">ご予約リクエストを<br>受け付けました</h1>
+      <p>お申し込みいただき、ありがとうございます。<br>内容を確認のうえ、当院より<b>お電話でご予約確定のご連絡</b>をいたします。</p>
+
+      <ol class="thanks__steps">
+        <li><span class="num-badge">1</span><span>当院から確認のお電話をいたします（052-571-3345）。ご希望の日時を調整し、ご予約確定となります。</span></li>
+        <li><span class="num-badge">2</span><span>ご来院時は、<b>健康保険証・お薬手帳（服用中のお薬がある方）・今お使いの入れ歯</b>をお持ちください。</span></li>
+        <li><span class="num-badge">3</span><span>ご家族とご一緒のご来院も歓迎です。気になることは何でもご質問ください。</span></li>
+      </ol>
+
+      <p class="note">お急ぎの場合や、ご予約内容を変更したい場合はお電話ください。</p>
+      <a class="btn btn--tel btn--block" href="tel:0525713345">
+        <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>
+        <span>052-571-3345<span class="btn__sub">受付：平日 9:30〜12:30／14:30〜19:00</span></span>
+      </a>
+      <p class="note" style="margin-top:24px">名駅歯科クリニック・矯正歯科<br>〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階<br>JR・名鉄「名古屋駅」3番出口から徒歩2分</p>
+      <p><a href="index.html">ページトップへ戻る</a></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p class="site-footer__name">名駅歯科クリニック・矯正歯科</p>
+    <p>医療法人スマイル／院長 二宮 奈津子</p>
+    <p class="site-footer__copy"><small>&copy; 名駅歯科クリニック・矯正歯科</small></p>
+  </div>
+</footer>
+</body>
+</html>
