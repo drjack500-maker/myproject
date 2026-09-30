@@ -4,6 +4,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 
 | 資料 | 内容 |
 |---|---|
+| [`current-lp-hotfix/`](current-lp-hotfix/) | **現LPの応急処置版**（体験談の非表示・表現の修正・税込表示・リスクの追記・誤字修正。新LPの公開まで差し替えて使える） |
 | [`docs/current-lp-review.md`](docs/current-lp-review.md) | **現LPの診断レポート**（2026年9月30日確認。問題点・ガイドライン上のリスク・誤字・予約システムの離脱ポイント・応急処置） |
 | [`docs/improvement-proposal.md`](docs/improvement-proposal.md) | 改善提案書（優先施策・チェックリスト・医療広告ガイドライン・A/Bテスト・公開前の確認事項） |
 | [`docs/measurement-setup.md`](docs/measurement-setup.md) | 計測設定の手順（GTM／GA4／Google 広告、見出しの出し分け用URL） |
