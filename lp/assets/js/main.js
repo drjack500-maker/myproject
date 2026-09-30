@@ -13,8 +13,13 @@
     // ※ application/x-www-form-urlencoded で POST するため、一般的なフォーム受信サービスでも利用可
     formEndpoint: '',
     thanksUrl: 'thanks.html',
-    // LINE公式アカウントの友だち追加URL（空ならLINEボタンを表示しない）
-    lineUrl: '',
+    // LINE公式アカウント（L-Message）の友だち追加URL。小冊子プレゼントの受け取り先（空ならLINEボタンを表示しない）
+    // ※現LPと同じ流入経路。新LPの効果を分けて測る場合は L-Message で新しい流入経路URLを発行して差し替え
+    lineUrl: 'https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco',
+    // 予約の受け方：'form' = LP内の3ステップフォーム／'apotool' = 予約システム（Apotool & Box）へ移動
+    // URL に ?reserve=apotool または ?reserve=form を付けると、その表示だけ切り替え可能（A/Bテスト用）
+    reserveMode: 'form',
+    apotoolUrl: 'https://reservation.stransa.co.jp/8f35d9e533e7ff19cf138ee5bf932a1f',
     // 予約候補として表示する日数（休診日を除く）
     bookingDays: 21,
     // 休診曜日（0=日, 6=土）【要確認】
@@ -26,8 +31,8 @@
       '2027-04-29', '2027-05-03', '2027-05-04', '2027-05-05', '2027-07-19',
       '2027-08-11', '2027-09-20', '2027-09-23', '2027-10-11', '2027-11-03', '2027-11-23',
     ],
-    // 予約時間帯【要確認】
-    timeSlots: ['午前（9:30〜12:30）', '午後（14:30〜17:00）', '夕方（17:00〜19:00）'],
+    // 予約時間帯（診療 9:30〜12:30／14:30〜19:00、治療受付は終了30分前まで）
+    timeSlots: ['午前（9:30〜12:00）', '午後（14:30〜16:30）', '夕方（16:30〜18:30）'],
   };
   // HTML側で window.LP_CONFIG = { formEndpoint: '...' } のように上書きも可能（main.js を編集せずに設定したい場合）
   if (window.LP_CONFIG && typeof window.LP_CONFIG === 'object') Object.assign(CONFIG, window.LP_CONFIG);
@@ -45,7 +50,7 @@
     price: {
       pre: 'オールオン4の費用が気になる方へ',
       title: 'オールオン4（片あご）<br><mark>1,925,000円</mark><small>（税込）</small>',
-      lead: '最大120回の分割払い（月々39,000円〜）に対応。医療費控除の対象にもなります。精密検査の後、治療を始める前に総額のお見積りをご説明します。',
+      lead: '税抜1,750,000円。CT撮影・画像診断の費用を含みます。デンタルローンなら月々19,000円台から。医療費控除の対象にもなります。診断のうえ、治療を始める前に総額をご説明します。',
     },
     bone: {
       pre: '「骨が足りない」と言われた方へ',
@@ -55,7 +60,7 @@
     fear: {
       pre: '手術が怖い・痛みが不安な方へ',
       title: 'うとうとした状態で、<br><mark>手術を受けられます。</mark>',
-      lead: '静脈内鎮静法・全身麻酔に対応。緊張や恐怖心が強い方も、リラックスした状態でオールオン4の手術を受けていただけます。手術当日には固定式の仮歯が入ります。',
+      lead: '麻酔専門医が常駐し、すべての手術に麻酔医が立ち会います。静脈内鎮静法・全身麻酔に対応しているので、緊張や恐怖心が強い方もリラックスした状態で手術を受けていただけます。',
     },
   };
   const VARIANT_RULES = [
@@ -110,7 +115,7 @@
     $$('[data-hl]').forEach((el) => { const k = el.dataset.hl; if (h[k]) el.innerHTML = h[k]; });
   }
   document.documentElement.dataset.variant = variant;
-  track('lp_view', { lp_variant: variant });
+  track('lp_view', { lp_variant: variant, reserve_mode: ['form', 'apotool'].includes(params.get('reserve')) ? params.get('reserve') : CONFIG.reserveMode });
 
   /* ---------------------------------------------------------
      3. 文字サイズ切り替え
@@ -136,6 +141,23 @@
     $$('[data-line-link]').forEach((a) => {
       a.href = CONFIG.lineUrl; a.target = '_blank'; a.rel = 'noopener'; a.hidden = false;
     });
+    $$('[data-line-block]').forEach((el) => { el.hidden = false; });
+  }
+
+  /* ---------------------------------------------------------
+     4-2. 予約の受け方（LP内フォーム／予約システム）
+     --------------------------------------------------------- */
+  const reserveParam = params.get('reserve');
+  const reserveMode = ['form', 'apotool'].includes(reserveParam) ? reserveParam : CONFIG.reserveMode;
+  document.documentElement.dataset.reserve = reserveMode;
+  if (reserveMode === 'apotool' && CONFIG.apotoolUrl) {
+    const form = $('#reserve-form');
+    const ext = $('[data-reserve-ext]');
+    if (form) form.hidden = true;
+    if (ext) ext.hidden = false;
+    $$('[data-reserve-ext-link]').forEach((a) => { a.href = CONFIG.apotoolUrl; });
+    // 各所の「予約」ボタンも予約システムへ直接移動
+    $$('a[href="#reserve"]').forEach((a) => { a.href = CONFIG.apotoolUrl; a.dataset.reserveOutbound = ''; });
   }
 
   /* ---------------------------------------------------------
@@ -146,6 +168,7 @@
     if (!el) return;
     const href = el.getAttribute('href') || '';
     if (href.startsWith('tel:')) track('tel_click', { cta: el.dataset.track || 'inline' });
+    else if (el.hasAttribute('data-reserve-outbound') || el.hasAttribute('data-reserve-ext-link')) track('reserve_outbound', { cta: el.dataset.track || 'inline', lp_variant: variant });
     else if (el.hasAttribute('data-line-link')) track('line_click', { cta: el.dataset.track || 'inline' });
     else if (el.dataset.track) track('cta_click', { cta: el.dataset.track });
   });

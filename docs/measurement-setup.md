@@ -4,9 +4,9 @@ LPは、ユーザーの行動を `dataLayer` にイベントとして送って�
 
 ## 0. 準備
 
-- GTM のコンテナを作成し、コンテナID（`GTM-XXXXXXX`）を控える
-- `lp/index.html` と `lp/thanks.html` の `<head>` にある GTM スニペットのコメント（`<!--` と `-->`）を外し、`GTM-XXXXXXX` を置き換える
-- 可能であれば `<body>` 直後に GTM の `<noscript>` スニペットも追加
+- 現LPで使っている GTM コンテナ **`GTM-TKQ2RFV`** を、`lp/index.html` と `lp/thanks.html` に設定済みです
+- 誤計測を防ぐため、**`meieki-dental.net` / `meieki-dental.com` のドメインでのみ読み込みます**（ローカル確認・プレビュー・テストでは送信されません）。別のドメインで公開する場合は、スニペット内の正規表現を変更してください
+- コンテナには現LP用のタグ（予約システムへのリンククリック、Meta（Facebook）の計測タグなど）が入っています。新LPのイベントを追加する際、現LP用のタグが二重に発火しないか GTM のプレビューで確認してください
 
 ## 1. 変数（GTM →［変数］→ ユーザー定義変数 →「データレイヤーの変数」）
 
@@ -27,7 +27,8 @@ LPは、ユーザーの行動を `dataLayer` にイベントとして送って�
 |---|---|---|
 | CE - reservation_complete | `reservation_complete` | **予約完了（主要コンバージョン）**。サンクスページで発火 |
 | CE - tel_click | `tel_click` | 電話タップ |
-| CE - line_click | `line_click` | LINEタップ（LINE設定時） |
+| CE - line_click | `line_click` | LINEタップ（小冊子プレゼント） |
+| CE - reserve_outbound | `reserve_outbound` | 予約システム（Apotool）へ移動（`reserve=apotool` のとき） |
 | CE - form_start | `form_start` | フォーム入力開始 |
 | CE - form_step | `form_step` | フォームのステップ到達 |
 | CE - form_error | `form_error` | 入力エラー |
@@ -47,6 +48,7 @@ LPは、ユーザーの行動を `dataLayer` にイベントとして送って�
 | GA4 - 行動 | GA4 イベント | CE - lp_events | イベント名 `{{Event}}`、パラメータ `cta` `section` `question` `lp_variant` |
 
 GA4 の［管理］→［イベント］で `generate_lead` と `tel_click` を「キーイベント」に設定します。
+Meta（Facebook）の計測タグを使っている場合は、`CE - reservation_complete` で標準イベント **Lead** を送るタグも追加してください。
 ［カスタム定義］で `lp_variant` `cta` `section` をイベントスコープのディメンションとして登録すると、見出しパターン別・ボタン別に比較できます。
 
 ### Google 広告

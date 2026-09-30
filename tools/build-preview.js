@@ -23,6 +23,9 @@ replaceOnce('<script src="assets/js/main.js" defer></script>',
 replaceOnce('<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">',
   `<link rel="icon" href="${dataUri('assets/img/favicon.svg', 'image/svg+xml')}" type="image/svg+xml">`);
 replaceOnce('<body>', '<body>\n<div class="demo-banner">確認用プレビュー：予約フォームは送信されません</div>');
+// 写真も埋め込む（1ファイルで表示できるように）
+const TYPES = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml' };
+html = html.replace(/src="(assets\/img\/[^"]+)"/g, (m, p) => `src="${dataUri(p, TYPES[path.extname(p).toLowerCase()] || 'application/octet-stream')}"`);
 
 fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, 'preview.html'), html);

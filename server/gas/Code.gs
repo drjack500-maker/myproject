@@ -20,7 +20,7 @@ const SETTINGS = {
   notifyTo: 'clinic@example.com',
   clinicName: '名駅歯科クリニック・矯正歯科',
   clinicTel: '052-571-3345',
-  clinicHours: '平日 9:30〜12:30／14:30〜19:00',
+  clinicHours: '電話受付 月〜金 9:00〜19:00',
   // メールアドレスを入力した方へ自動返信する
   sendAutoReply: true,
   sheetName: '予約台帳',

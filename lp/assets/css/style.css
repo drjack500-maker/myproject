@@ -22,7 +22,8 @@
   --c-accent-soft: #fff1e7;
   --c-mark: #ffe0b5;
   --c-gold: #a97a1d;
-  --c-line-green: #06c755;
+  /* LINEの緑を、白文字が読める濃さ（コントラスト比4.5以上）に調整 */
+  --c-line-green: #06833a;
   --c-error: #b3261e;
 
   --radius: 16px;
@@ -90,7 +91,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
   -webkit-tap-highlight-color: transparent;
 }
 .btn > span { display: inline-flex; flex-direction: column; align-items: center; }
-.btn__sub { display: block; font-size: .75rem; font-weight: 500; letter-spacing: .02em; opacity: .92; margin-top: 2px; }
+.btn__sub { display: block; font-size: .75rem; font-weight: 500; letter-spacing: .02em; margin-top: 2px; }
 .btn--block { display: flex; width: 100%; }
 .btn--sm { min-height: 44px; padding: .5em 1.2em; font-size: .9375rem; }
 .btn--xl { min-height: 68px; font-size: 1.1875rem; }
@@ -120,7 +121,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .btn--tel:hover { background: var(--c-tint); }
 .btn--tel-inverse { color: #fff; background: transparent; border: 2px solid rgba(255,255,255,.85); }
 .btn--tel-inverse:hover { background: rgba(255,255,255,.1); }
-.btn--line { color: #fff; background: var(--c-line-green); box-shadow: 0 4px 0 #04963f; }
+.btn--line { color: #fff; background: var(--c-line-green); box-shadow: 0 4px 0 #035a28; }
 .btn--ghost { color: var(--c-ink-2); background: #fff; border: 2px solid var(--c-line); }
 .btn--ghost:hover { border-color: var(--c-muted); }
 
@@ -524,7 +525,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .doctor__catch { font-size: clamp(1.1875rem, 1rem + 1vw, 1.5rem); font-weight: 900; line-height: 1.6; color: var(--c-deep); padding-left: 16px; border-left: 5px solid var(--c-accent); }
 .doctor__body > p:not(.doctor__catch) { color: var(--c-ink-2); }
 .doctor__career { margin: 20px 0 0; padding: 16px; background: var(--c-warm); border-radius: 12px; font-size: .875rem; }
-.doctor__career > div { display: grid; grid-template-columns: 6.5em 1fr; gap: 8px; }
+.doctor__career > div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
 .doctor__career dt { font-weight: 700; color: var(--c-primary); }
 .doctor__career dd { margin: 0; }
 
@@ -717,3 +718,90 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .thanks__booking-list { list-style: none; font-weight: 700; font-size: 1.0625rem; }
 .thanks__booking .note { margin-top: 8px; }
 .demo-banner { padding: 10px 16px; background: #fff4d6; color: #6b4e00; font-size: .8125rem; font-weight: 700; text-align: center; }
+
+/* =========================================================
+   現LPの情報を反映した追加要素（実績・料金・医師・院内・LINE・予約システム）
+   ========================================================= */
+
+/* 実績 */
+.stats { margin-top: 18px; }
+.stats__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.stats__list > div { padding: 12px 6px; text-align: center; background: #fff; border: 1px solid var(--c-line); border-radius: 12px; box-shadow: 0 2px 8px rgba(10,60,66,.04); }
+.stats__list dt { font-size: .6875rem; font-weight: 700; color: var(--c-ink-2); line-height: 1.4; white-space: nowrap; letter-spacing: 0; }
+.stats__list dd { margin: 2px 0 0; font-size: .75rem; font-weight: 700; color: var(--c-deep); line-height: 1.2; }
+.stats__list .unit { display: block; }
+.stats__list .num { display: inline-block; font-size: 1.625rem; font-weight: 900; color: var(--c-primary); letter-spacing: 0; font-feature-settings: "tnum"; }
+.stats__note { margin: 6px 0 0; font-size: .6875rem; color: var(--c-muted); text-align: right; }
+@media (min-width: 900px) {
+  .stats { margin-top: 24px; }
+  .stats__list { gap: 16px; }
+  .stats__list > div { display: flex; align-items: baseline; justify-content: center; gap: 12px; padding: 14px; }
+  .stats__list dt { font-size: .875rem; }
+  .stats__list dd { font-size: .875rem; }
+  .stats__list .unit { display: inline; }
+  .stats__list .num { font-size: 2rem; }
+}
+
+/* 料金 */
+.fv-card__tax { margin: -2px 0 0; text-align: center; font-size: .75rem; font-weight: 700; line-height: 1.3; color: var(--c-muted); }
+@media (max-width: 480px) { .fv-card__loan-sub { display: none; } }
+.price-main__tax { margin: -.2em 0 .8em; font-size: .875rem; font-weight: 700; color: var(--c-ink-2); }
+.pay-methods { margin: 16px 0 0; padding: 12px 16px; border-radius: 12px; background: var(--c-warm); font-size: .875rem; color: var(--c-ink-2); line-height: 1.7; }
+@media (min-width: 900px) { .pay-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pay-grid--3 .pay-card__value .num { font-size: 1.5em; }
+
+/* 特長・院内 */
+.feature__cond { display: block; margin-top: 6px; font-size: .8125rem; color: var(--c-muted); }
+.rooms { margin-top: 40px; }
+.rooms__title { margin-bottom: 14px; font-size: 1.125rem; font-weight: 900; color: var(--c-deep); text-align: center; }
+.rooms__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 900px) { .rooms__list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; } }
+.rooms__list figure { margin: 0; }
+.rooms__list img { display: block; width: 100%; height: auto; aspect-ratio: 330 / 247; object-fit: cover; border-radius: 12px; background: var(--c-tint); }
+.rooms__list figcaption { margin-top: 6px; font-size: .8125rem; font-weight: 700; text-align: center; color: var(--c-ink-2); }
+
+.sedation__team { margin-top: 12px; padding: 12px 14px; border-left: 4px solid var(--c-primary); background: var(--c-tint); border-radius: 0 10px 10px 0; font-size: .9375rem; }
+
+/* 医師 */
+.doctor__photo img { aspect-ratio: 504 / 429; object-position: center top; }
+.doctor__catch { font-size: clamp(1.0625rem, .95rem + .8vw, 1.375rem); }
+.team { display: grid; gap: 16px; margin-top: 20px; }
+@media (min-width: 800px) { .team { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; } }
+.member { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 14px; align-items: start; padding: 18px; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.member__photo-wrap { display: block; width: 112px; height: 112px; overflow: hidden; border-radius: 50%; background: var(--c-tint); }
+/* 元写真は上半身が小さく写っているため、顔が中心に来るよう拡大して切り抜く */
+.member__photo { display: block; width: 170%; max-width: none; height: auto; margin-left: -31%; }
+.member__role { margin: 0; font-size: .8125rem; font-weight: 700; color: var(--c-primary); }
+.member__name { margin: 0 0 6px; font-size: 1.3125rem; font-weight: 900; letter-spacing: .1em; }
+.member__msg { font-size: .875rem; color: var(--c-ink-2); line-height: 1.75; }
+.member__career { padding-left: 1.1em; font-size: .8125rem; color: var(--c-ink-2); line-height: 1.7; }
+@media (max-width: 420px) {
+  .member { grid-template-columns: 84px minmax(0, 1fr); padding: 16px 14px; }
+  .member__photo-wrap { width: 84px; height: 84px; }
+}
+
+/* LINE 小冊子 */
+.booklet { padding: 40px 0; background: #effaf3; border-top: 1px solid #cfeedb; border-bottom: 1px solid #cfeedb; }
+.booklet__inner { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: center; }
+.booklet__cover svg { display: block; width: 96px; height: auto; filter: drop-shadow(0 8px 14px rgba(10,60,66,.15)); }
+.booklet__pre { margin: 0 0 4px; font-size: .8125rem; font-weight: 700; color: #067a36; }
+.booklet__title { font-size: clamp(1.125rem, 1rem + .9vw, 1.5rem); font-weight: 900; line-height: 1.5; margin-bottom: .5em; }
+.booklet__title mark { background: linear-gradient(transparent 62%, #c8f0d6 62%); }
+.booklet__lead { font-size: .9375rem; color: var(--c-ink-2); }
+.booklet .btn--line { margin-top: 4px; }
+@media (max-width: 599px) {
+  .booklet__inner { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 12px; }
+  .booklet__cover svg { width: 84px; }
+  .booklet__body .btn { width: 100%; }
+}
+@media (min-width: 900px) {
+  .booklet { padding: 56px 0; }
+  .booklet__inner { grid-template-columns: 140px minmax(0, 1fr); gap: 40px; max-width: 880px; }
+  .booklet__cover svg { width: 140px; }
+}
+
+/* 予約システムへ送る方式 */
+.reserve-ext { min-width: 0; padding: 24px 20px; background: #fff; color: var(--c-ink); border-radius: var(--radius-lg); box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+.reserve-ext__title { font-size: 1.25rem; font-weight: 900; color: var(--c-deep); margin-bottom: 12px; }
+.reserve-ext__steps { margin: 0 0 18px; padding-left: 1.4em; font-size: .9375rem; line-height: 1.9; }
+@media (max-width: 899px) { .reserve-ext { order: 1; } }

@@ -4,6 +4,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 
 | 資料 | 内容 |
 |---|---|
+| [`docs/current-lp-review.md`](docs/current-lp-review.md) | **現LPの診断レポート**（2026年9月30日確認。問題点・ガイドライン上のリスク・誤字・予約システムの離脱ポイント・応急処置） |
 | [`docs/improvement-proposal.md`](docs/improvement-proposal.md) | 改善提案書（優先施策・チェックリスト・医療広告ガイドライン・A/Bテスト・公開前の確認事項） |
 | [`docs/measurement-setup.md`](docs/measurement-setup.md) | 計測設定の手順（GTM／GA4／Google 広告、見出しの出し分け用URL） |
 | [`server/gas/README.md`](server/gas/README.md) | 予約フォームの受信設定（Google スプレッドシートの予約台帳・通知メール・広告への成約データ連携） |
@@ -29,13 +30,14 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 
 ## 公開までの手順
 
-1. **内容の確認**：[提案書「8. 公開前に医院で確認が必要な事項」](docs/improvement-proposal.md#8-公開前に医院で確認が必要な事項)をチェック（価格・診療時間・院長メッセージなど）。HTML・JS内の `【要確認】` `【要設定】` コメントも確認
-2. **予約フォームの受け皿を用意**：[`server/gas/README.md`](server/gas/README.md) の手順でスプレッドシートを作り、発行されたURLを `lp/assets/js/main.js` の `CONFIG.formEndpoint` に設定
-   - 未設定のままだと、フォームは送信されずに完了ページへ進む「デモモード」になります
-3. **LINE（任意）**：`CONFIG.lineUrl` に公式アカウントのURLを入れると、LINEボタンが表示されます
+1. **内容の確認**：料金・保証・医師情報などは現LP（2026年9月時点）に合わせてあります。残りの確認事項は [提案書「8. 公開前に医院で確認が必要な事項」](docs/improvement-proposal.md#8-公開前に医院で確認が必要な事項) を参照。HTML・JS内の `【要確認】` `【要更新】` `【要設定】` コメントも確認
+2. **予約の受け方を決める**（[診断レポート5章](docs/current-lp-review.md#5-予約の受け方について要判断)）
+   - **LP内フォーム（標準）**：[`server/gas/README.md`](server/gas/README.md) の手順でスプレッドシートを作り、発行されたURLを `lp/assets/js/main.js` の `CONFIG.formEndpoint` に設定。未設定のままだと、フォームは送信されずに完了ページへ進む「デモモード」です
+   - **予約システム（Apotool & Box）へ直行**：`CONFIG.reserveMode` を `'apotool'` に。URLの末尾に `?reserve=apotool` を付けると、その表示だけ切り替わります（A/Bテスト用）
+3. **LINE**：現LPと同じ L-Message の小冊子プレゼントURLを設定済み（`CONFIG.lineUrl`）。新LPの効果を分けて測る場合は新しい流入経路URLに差し替え
 4. **休診日・予約枠**：`CONFIG.closedWeekdays` `CONFIG.holidays` `CONFIG.timeSlots` を実際の診療体制に合わせる（年末年始の休診日も追加）
-5. **写真（任意だが推奨）**：院長写真は `index.html` の `#doctor` のコメントに沿って追加。症例は `#cases` に写真と情報を入れてから `hidden` を外す
-6. **計測**：[`docs/measurement-setup.md`](docs/measurement-setup.md) の手順で GTM を設定
+5. **写真**：医師3名と院内の写真は現LPのものを使用しています。症例は `#cases` に写真と情報を入れてから `hidden` を外す
+6. **計測**：現LPと同じ GTM（`GTM-TKQ2RFV`）を設定済みで、`meieki-dental.net` / `meieki-dental.com` でのみ読み込みます。予約完了の計測は [`docs/measurement-setup.md`](docs/measurement-setup.md) の手順で追加
 7. **公開URL**：`index.html` の `og:url` `og:image` を実際の公開URLに合わせる
 8. **公開後**：スマホでテスト予約を1件送り、台帳への記録・通知メール・完了ページ・GTMのタグ発火を確認
 
@@ -50,7 +52,7 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 
 ### 価格を変更するとき
 
-価格はFV・特長・費用・FAQ・見出しパターン（`main.js` の `HEADLINES.price`）に書かれています。`grep -rn "1,925,000\|39,000" lp/` で一括確認してください。
+価格はFV・特長・費用・FAQ・見出しパターン（`main.js` の `HEADLINES.price`）に書かれています。`grep -rn "1,925,000\|1,750,000\|19,000" lp/` で一括確認してください。
 
 ## 見出しの出し分け（広告のキーワード別）
 
@@ -77,9 +79,9 @@ npm run build:preview  # 1ファイル版の確認用プレビュー（dist/prev
 ### 品質チェックの結果（2026年9月時点）
 
 - HTML検証（html-validate）：エラーなし
-- 自動テスト：受信スクリプト 8件、ブラウザ操作 14件すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／医療費控除の計算 など）
+- 自動テスト：受信スクリプト 8件、ブラウザ操作 16件すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／予約システム方式への切り替え／医療費控除の計算 など）
 - アクセシビリティ（axe-core）：重大・深刻な問題なし
-- Lighthouse（モバイル）：パフォーマンス 93〜94／アクセシビリティ 100／ベストプラクティス 96／SEO 60（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
+- Lighthouse（モバイル、3回計測）：パフォーマンス 84〜97（計測ごとのばらつきあり。3回中2回は97）／アクセシビリティ 100／ベストプラクティス 96／SEO 63（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
 
 公開サーバーでは、HTML・CSS・JS の gzip／brotli 圧縮と、`assets/` のブラウザキャッシュを有効にしてください。
 

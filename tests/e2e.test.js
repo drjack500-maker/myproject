@@ -30,7 +30,7 @@ async function open(path = 'index.html', { width = 390, height = 844, config, in
   const mobile = width < 600;
   const ctx = await browser.newContext({ viewport: { width, height }, isMobile: mobile, hasTouch: mobile, locale: 'ja-JP', reducedMotion: 'reduce' });
   // 外部（フォント・地図）は読み込まない
-  await ctx.route(/fonts\.(googleapis|gstatic)\.com|google\.com\/maps|maps\.google\.com/, (r) => r.abort());
+  await ctx.route(/fonts\.(googleapis|gstatic)\.com|google\.com\/maps|maps\.google\.com|googletagmanager|lmes\.jp|stransa\.co\.jp/, (r) => r.abort());
   if (config) await ctx.addInitScript((c) => { window.LP_CONFIG = c; }, config);
   if (init) await init(ctx);
   const page = await ctx.newPage();
@@ -197,13 +197,38 @@ test('追従ボタン：最初は非表示、スクロールで表示、フォ�
   await page.context().close();
 });
 
-test('院長写真が未設置でも崩れない／文字拡大が保存される', async () => {
+test('医師・院内の写真が表示される／文字拡大が保存される', async () => {
   const page = await open();
-  await page.waitForFunction(() => document.querySelector('.doctor').classList.contains('is-noimg'));
+  for (const sel of ['.rooms', '#doctor .doctor', '#doctor .team']) {
+    await page.locator(sel).scrollIntoViewIfNeeded();
+    await page.waitForFunction((q) => [...document.querySelectorAll(`${q} img`)].every((i) => i.complete && i.naturalWidth > 0), sel);
+  }
   await page.click('[data-fs-toggle]');
   assert.equal(await page.evaluate(() => document.documentElement.dataset.fs), 'lg');
   await page.reload();
   assert.equal(await page.evaluate(() => document.documentElement.dataset.fs), 'lg');
+  await page.context().close();
+});
+
+test('予約システム方式（?reserve=apotool）：予約ボタンが予約システムへ向き、フォームは非表示', async () => {
+  const page = await open('index.html?reserve=apotool');
+  const hrefs = await page.$$eval('a[data-track="fv_reserve"], a[data-track="sticky_reserve"], [data-reserve-ext-link]', (els) => els.map((a) => a.getAttribute('href')));
+  assert.equal(hrefs.length, 3);
+  hrefs.forEach((h) => assert.match(h, /^https:\/\/reservation\.stransa\.co\.jp\//));
+  assert.equal(await page.isVisible('#reserve-form'), false);
+  await page.locator('[data-reserve-ext]').scrollIntoViewIfNeeded();
+  assert.equal(await page.isVisible('[data-reserve-ext]'), true);
+  await page.context().close();
+});
+
+test('LINE小冊子ブロックと追従LINEボタンが表示され、計測タグは本番以外で読み込まない', async () => {
+  const page = await open();
+  await page.locator('.booklet').scrollIntoViewIfNeeded();
+  assert.equal(await page.isVisible('.booklet'), true);
+  const lineHrefs = await page.$$eval('[data-line-link]:not([hidden])', (els) => els.map((a) => a.href));
+  assert.ok(lineHrefs.length >= 3);
+  lineHrefs.forEach((h) => assert.match(h, /^https:\/\/s\.lmes\.jp\//));
+  assert.equal(await page.evaluate(() => !!document.querySelector('script[src*="googletagmanager"]')), false);
   await page.context().close();
 });
 
