@@ -23,9 +23,10 @@
   })();
 </script>
 <script>
-  /* コンバージョン計測：このページの表示＝予約リクエスト完了。デモ遷移（?demo=1）は計測しない */
+  /* コンバージョン計測：このページの表示＝予約リクエスト完了。
+     デモ遷移（?demo=1）とスパム疑い（?nc=1）は計測しない */
   window.dataLayer = window.dataLayer || [];
-  if (!/[?&]demo=1/.test(location.search)) window.dataLayer.push({ event: 'reservation_complete' });
+  if (!/[?&](demo|nc)=1/.test(location.search)) window.dataLayer.push({ event: 'reservation_complete' });
 </script>
 </head>
 <body>

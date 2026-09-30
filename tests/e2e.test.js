@@ -155,7 +155,7 @@ test('送信先設定時：流入元つきでPOSTし、完了ページへ', asyn
   assert.equal(p.get('utm_source'), 'google');
   assert.equal(p.get('lp_variant'), 'denture');
   assert.ok(Number(p.get('elapsed')) >= 0);
-  assert.equal(p.get('website'), '');
+  assert.equal(p.get('hp_extra'), '');
   await page.context().close();
 });
 
@@ -172,16 +172,49 @@ test('送信エラー時：電話案内を表示し、再送信できる', async
   await page.context().close();
 });
 
-test('スパム対策：見えない項目に入力があると送信しない', async () => {
-  let requests = 0;
+test('スパム対策：見えない項目に入力があっても予約は送り、受信側がスパム疑いと判定したら成約として数えない', async () => {
+  let posted = null;
   const page = await open('index.html', {
     config: { formEndpoint: ENDPOINT },
-    init: (ctx) => ctx.route(ENDPOINT, (route) => { requests += 1; return route.fulfill({ status: 200, body: '{"ok":true}' }); }),
+    init: (ctx) => ctx.route(ENDPOINT, async (route) => {
+      posted = new URLSearchParams(route.request().postData());
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true,"flagged":true}', headers: { 'access-control-allow-origin': '*' } });
+    }),
   });
   await fillForm(page);
-  await page.evaluate(() => { document.querySelector('input[name="website"]').value = 'http://spam.example'; });
-  await Promise.all([page.waitForURL(/thanks\.html/), page.click('[data-submit]')]);
-  assert.equal(requests, 0);
+  await page.evaluate(() => { document.querySelector('input[name="hp_extra"]').value = 'http://spam.example'; });
+  await Promise.all([page.waitForURL(/thanks\.html\?nc=1$/), page.click('[data-submit]')]);
+  assert.equal(posted.get('hp_extra'), 'http://spam.example', '予約データは送られる（受信側で「スパム疑い」として保存）');
+  const events = await page.evaluate(() => window.dataLayer.map((d) => d.event));
+  assert.ok(!events.includes('reservation_complete'), '成約（予約完了）として数えない');
+  await page.context().close();
+});
+
+test('送信の時間切れ：届いている可能性があるので、再送信より電話での確認を案内する', async () => {
+  const page = await open('index.html', {
+    config: { formEndpoint: ENDPOINT, submitTimeoutMs: 500 },
+    init: (ctx) => ctx.route(ENDPOINT, () => { /* 応答しない */ }),
+  });
+  await fillForm(page);
+  await page.click('[data-submit]');
+  await page.waitForSelector('[data-error="timeout"]:not([hidden])');
+  assert.equal(await page.isVisible('[data-error="submit"]'), false);
+  await page.context().close();
+});
+
+test('第2希望は日付と時間帯の両方が必要。解除すれば進める', async () => {
+  const page = await open();
+  await page.locator('#reserve-form').scrollIntoViewIfNeeded();
+  await page.click('[data-step="1"] [data-next]');
+  await page.locator('[data-picker="1"] [data-dates] .chip').nth(1).click();
+  await page.locator('[data-picker="1"] [data-times] .chip').nth(0).click();
+  await page.click('[data-picker="2"] summary');
+  await page.locator('[data-picker="2"] [data-dates] .chip').nth(3).click();
+  await page.click('[data-step="2"] [data-next]');
+  assert.ok(await page.isVisible('[data-error="date2"]'), '日付だけではエラー');
+  await page.click('[data-clear-picker="2"]');
+  await page.click('[data-step="2"] [data-next]');
+  assert.ok(await page.isVisible('[data-step="3"]'), '解除すれば次へ進める');
   await page.context().close();
 });
 
@@ -210,23 +243,25 @@ test('医師・院内の写真が表示される／文字拡大が保存され�
   await page.context().close();
 });
 
-test('本番ドメインで送信先が未設定のときは、送信したことにせず電話を案内する', async () => {
-  // 本番ドメイン（www.meieki-dental.net）へのアクセスを、ローカルの lp/ に振り向けて再現する
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
-  await ctx.route(/fonts\.(googleapis|gstatic)\.com|google\.com\/maps|maps\.google\.com|googletagmanager|lmes\.jp/, (r) => r.abort());
-  await ctx.route(/^https:\/\/www\.meieki-dental\.net\//, async (route) => {
-    const url = new URL(route.request().url());
-    const res = await fetch(base + url.pathname.replace(/^\/all_on_4_004\//, ''));
-    await route.fulfill({ status: res.status, body: Buffer.from(await res.arrayBuffer()), contentType: res.headers.get('content-type') || undefined });
+for (const host of ['https://www.meieki-dental.net/all_on_4_004/', 'https://staging.example.test/']) {
+  test(`送信先が未設定のサーバーでは、最初からフォームを止めて電話を案内する（${new URL(host).hostname}）`, async () => {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+    await ctx.route(/fonts\.(googleapis|gstatic)\.com|google\.com\/maps|maps\.google\.com|googletagmanager|lmes\.jp/, (r) => r.abort());
+    // 公開サーバーへのアクセスを、ローカルの lp/ に振り向けて再現する
+    await ctx.route((url) => url.href.startsWith(host), async (route) => {
+      const rel = route.request().url().slice(host.length);
+      const res = await fetch(base + rel);
+      await route.fulfill({ status: res.status, body: Buffer.from(await res.arrayBuffer()), contentType: res.headers.get('content-type') || undefined });
+    });
+    const p = await ctx.newPage();
+    await p.goto(`${host}index.html`);
+    await p.locator('#reserve').scrollIntoViewIfNeeded();
+    assert.equal(await p.isVisible('#reserve-form'), false, 'フォームは表示しない');
+    assert.equal(await p.isVisible('[data-form-unavailable]'), true, '電話の案内を表示');
+    assert.equal(await p.getAttribute('[data-form-unavailable] a', 'href'), 'tel:0525713345');
+    await ctx.close();
   });
-  const p = await ctx.newPage();
-  await p.goto('https://www.meieki-dental.net/all_on_4_004/index.html');
-  await fillForm(p);
-  await p.click('[data-submit]');
-  await p.waitForSelector('[data-error="submit"]:not([hidden])');
-  assert.match(p.url(), /index\.html$/, '完了ページへ進まない');
-  await ctx.close();
-});
+}
 
 test('電話の希望時間帯（任意）が送信される', async () => {
   let posted = null;

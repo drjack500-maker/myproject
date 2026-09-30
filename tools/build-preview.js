@@ -19,7 +19,7 @@ const replaceOnce = (from, to) => {
 
 replaceOnce('<link rel="stylesheet" href="assets/css/style.css">', `<style>\n${read('assets/css/style.css')}\n</style>`);
 replaceOnce('<script src="assets/js/main.js" defer></script>',
-  `<script>window.LP_CONFIG = { formEndpoint: '', thanksUrl: '#reserve' };</script>\n<script>\n${read('assets/js/main.js')}\n</script>`);
+  `<script>window.LP_CONFIG = { formEndpoint: '', demo: true, thanksUrl: '#reserve' };</script>\n<script>\n${read('assets/js/main.js')}\n</script>`);
 replaceOnce('<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">',
   `<link rel="icon" href="${dataUri('assets/img/favicon.svg', 'image/svg+xml')}" type="image/svg+xml">`);
 replaceOnce('<body>', '<body>\n<div class="demo-banner">確認用プレビュー：予約フォームは送信されません</div>');

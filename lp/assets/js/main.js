@@ -9,10 +9,14 @@
      --------------------------------------------------------- */
   const CONFIG = {
     // フォーム送信先：同梱の Google Apps Script（server/gas/Code.gs）をデプロイした「…/exec」のURL【要設定】
-    // 未設定のとき：ローカル確認・プレビューではデモ（送信せず完了ページへ）
-    //               本番ドメインでは予約が失われないよう、送信せずに電話での予約を案内する
+    // 未設定のとき：手元の確認（localhost・ファイルを直接開いたとき）ではデモ動作（送信せず完了ページへ）。
+    //               それ以外のサーバーでは予約が失われないよう、フォームを止めて電話での予約を案内する
     // ※ application/x-www-form-urlencoded で POST するため、一般的なフォーム受信サービスでも利用可
     formEndpoint: '',
+    // true にすると、どこで開いても送信せずに完了ページへ進むデモ動作になる（確認用プレビュー専用）
+    demo: false,
+    // 送信の待ち時間（ミリ秒）。受信側は混雑時や起動直後に時間がかかるため長めに設定
+    submitTimeoutMs: 45000,
     thanksUrl: 'thanks.html',
     // LINE公式アカウント（L-Message）の友だち追加URL。小冊子プレゼントの受け取り先（空ならLINEボタンを表示しない）
     // ※現LPと同じ流入経路。新LPの効果を分けて測る場合は L-Message で新しい流入経路URLを発行して差し替え
@@ -33,9 +37,11 @@
   };
   // HTML側で window.LP_CONFIG = { formEndpoint: '...' } のように上書きも可能（main.js を編集せずに設定したい場合）
   if (window.LP_CONFIG && typeof window.LP_CONFIG === 'object') Object.assign(CONFIG, window.LP_CONFIG);
-  // 本番ドメインかどうか（GTM の読み込み条件と同じ）
-  const isProduction = /(^|\.)meieki-dental\.(net|com)$/.test(location.hostname);
-  if (isProduction && !CONFIG.formEndpoint) console.error('[LP] CONFIG.formEndpoint が未設定です。予約フォームは送信できません（server/gas/README.md 参照）');
+  // デモ動作を許すのは手元の確認と明示指定のときだけ。それ以外で送信先が未設定なら、フォームを止める（fail-closed）
+  const LOCAL_HOSTS = ['localhost', '127.0.0.1', '[::1]', ''];
+  const demoAllowed = CONFIG.demo === true || LOCAL_HOSTS.includes(location.hostname);
+  const formUnavailable = !CONFIG.formEndpoint && !demoAllowed;
+  if (formUnavailable) console.error('[LP] CONFIG.formEndpoint が未設定のため、予約フォームを停止し電話予約を案内しています（server/gas/README.md 参照）');
 
   /* ---------------------------------------------------------
      広告キーワード別のファーストビュー出し分け（メッセージマッチ）
@@ -244,6 +250,13 @@
      9. 予約フォーム（3ステップ）
      --------------------------------------------------------- */
   const form = $('#reserve-form');
+  if (form && formUnavailable) {
+    // 送信先が未設定：入力させてから失敗させないよう、最初からフォームを隠して電話を案内する
+    form.hidden = true;
+    const na = $('[data-form-unavailable]');
+    if (na) na.hidden = false;
+    track('form_unavailable');
+  }
   if (form) {
     const steps = $$('.rform__step', form);
     const progressItems = $$('.rform__progress li', form);
@@ -309,6 +322,15 @@
         const good = !!val('date1') && !!val('time1');
         showError('date1', !good);
         if (!good) { ok = false; firstBad = $('[data-picker="1"]', form); }
+        // 第2希望は任意。ただし日付と時間帯は両方そろえる
+        const secondOk = !!val('date2') === !!val('time2');
+        showError('date2', !secondOk);
+        if (!secondOk) {
+          ok = false;
+          const p2 = $('[data-picker="2"]', form);
+          if (p2) p2.open = true;
+          if (!firstBad) firstBad = p2;
+        }
       }
       if (i === 2) {
         const nameOk = val('name').length > 0;
@@ -357,7 +379,14 @@
       if (!started) { started = true; track('form_start', { lp_variant: variant }); }
       const n = e.target.name;
       if (/^(date1|time1)$/.test(n) && val('date1') && val('time1')) showError('date1', false);
+      if (/^(date2|time2)$/.test(n) && !!val('date2') === !!val('time2')) showError('date2', false);
     });
+    // 第2希望の選択を解除
+    $$('[data-clear-picker]', form).forEach((b) => b.addEventListener('click', () => {
+      const n = b.dataset.clearPicker;
+      $$(`input[name="date${n}"], input[name="time${n}"]`, form).forEach((r) => { r.checked = false; });
+      showError(`date${n}`, false);
+    }));
     // エラー表示は入力中に消す（入力欄から離れた瞬間に消すと、ボタンの位置がずれてタップが外れるため）
     form.addEventListener('input', (e) => {
       const n = e.target.name;
@@ -407,20 +436,20 @@
       const concerns = $$('input[name="concerns"]:checked', form).map((c) => c.value);
       const eventParams = { lp_variant: variant, who: val('who'), concerns: concerns.join(','), age: val('age') };
 
-      // スパム対策：人には見えない項目に入力があれば、送信したふりをして終了
-      if (val('website')) { location.href = CONFIG.thanksUrl; return; }
+      const timeoutBox = $('[data-error="timeout"]', form);
+      timeoutBox.hidden = true;
 
       saveBooking();
 
-      if (!CONFIG.formEndpoint && isProduction) {
-        // 本番で送信先が未設定：完了したように見せると予約が失われるため、電話での予約を案内する
+      if (formUnavailable) {
+        // 念のため：送信先が未設定で送れない場合は、完了したように見せず電話を案内する
         errBox.hidden = false;
         errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         track('form_submit_error', { message: 'endpoint_not_configured' });
         return;
       }
       if (!CONFIG.formEndpoint) {
-        // デモモード（ローカル確認・プレビュー）：送信先が未設定のため、送信せずにサンクスページへ
+        // デモ動作（手元の確認・プレビュー）：送信先が未設定のため、送信せずにサンクスページへ
         console.info('[LP] formEndpoint が未設定のため、送信せずにサンクスページへ遷移します（デモモード）');
         track('form_submit', { ...eventParams, demo: true });
         location.href = `${CONFIG.thanksUrl}?demo=1`;
@@ -432,7 +461,7 @@
       submitBtn.setAttribute('aria-busy', 'true');
       submitBtn.textContent = '送信しています…';
       const ctrl = 'AbortController' in window ? new AbortController() : null;
-      const timer = ctrl ? setTimeout(() => ctrl.abort(), 20000) : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), CONFIG.submitTimeoutMs) : null;
       try {
         const res = await fetch(CONFIG.formEndpoint, {
           method: 'POST',
@@ -444,16 +473,23 @@
         let data = null;
         try { data = await res.json(); } catch (_) { /* JSON以外の応答は成功扱い */ }
         if (data && data.ok === false) throw new Error(data.error || 'rejected');
+        if (data && data.flagged) {
+          // スパムの疑い（受信側で「スパム疑い」として保存）：コンバージョンとして数えない
+          location.href = `${CONFIG.thanksUrl}?nc=1`;
+          return;
+        }
         track('form_submit', eventParams);
         location.href = CONFIG.thanksUrl;
       } catch (err) {
         submitting = false;
-        errBox.hidden = false;
+        // 時間切れのときは、届いている可能性があるので再送信より電話での確認を案内する
+        if (err && err.name === 'AbortError') timeoutBox.hidden = false;
+        else errBox.hidden = false;
         submitBtn.disabled = false;
         submitBtn.removeAttribute('aria-busy');
         submitBtn.innerHTML = submitLabel;
-        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        track('form_submit_error', { message: String(err && err.message) });
+        (timeoutBox.hidden ? errBox : timeoutBox).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        track('form_submit_error', { message: String(err && (err.name === 'AbortError' ? 'timeout' : err.message)) });
       } finally {
         if (timer) clearTimeout(timer);
       }

@@ -33,7 +33,7 @@ LPは、ユーザーの行動を `dataLayer` にイベントとして送って�
 | CE - form_error | `form_error` | 入力エラー |
 | CE - lp_events | 正規表現 `^(lp_view\|cta_click\|section_view\|worry_check\|tax_sim_use\|faq_open\|font_size)$` | 行動分析用（まとめて1つ） |
 
-> `form_submit` は送信直後にページが移動するため、送信できないことがあります。**コンバージョンには必ず `reservation_complete`（サンクスページ）を使ってください。** `?demo=1`（送信先未設定のテスト）では発火しません。
+> `form_submit` は送信直後にページが移動するため、送信できないことがあります。**コンバージョンには必ず `reservation_complete`（サンクスページ）を使ってください。** `?demo=1`（手元の確認）と `?nc=1`（受信側でスパム疑いと判定）では発火しません。
 
 ## 3. タグ
 

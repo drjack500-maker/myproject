@@ -70,7 +70,8 @@ const COLUMNS = [
   ['referrer', '参照元'],
 ];
 const STAFF_COLUMNS = ['status', 'visit_at', 'contract_at', 'contract_value', 'memo'];
-const STATUS_OPTIONS = ['未対応', '連絡済み', '予約確定', '来院', '成約', '失注', 'キャンセル'];
+const STATUS_OPTIONS = ['未対応', '連絡済み', '予約確定', '来院', '成約', '失注', 'キャンセル', 'スパム疑い'];
+const SPAM_STATUS = 'スパム疑い';
 const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
 
 /* ----------------------------------------------------------------
@@ -81,9 +82,9 @@ function doPost(e) {
     const p = (e && e.parameter) || {};
     const ps = (e && e.parameters) || {};
 
-    // スパム対策：見えない項目に入力がある／送信が速すぎる → 保存せず成功を返す
-    if (p.website) return json_({ ok: true });
-    if (Number(p.elapsed || 0) < SETTINGS.minElapsedSec) return json_({ ok: true });
+    // スパムの疑い（人には見えない項目に入力がある／送信が速すぎる）：
+    // 捨てずに「スパム疑い」として台帳に残し、通知・自動返信はしない（自動入力で埋まった本物の予約を失わないため）
+    const suspicious = !!(p.hp_extra || p.website) || Number(p.elapsed || 0) < SETTINGS.minElapsedSec;
 
     const data = {};
     COLUMNS.forEach(([key]) => { data[key] = clean_(p[key], key === 'note' ? 1000 : 500); });
@@ -95,7 +96,7 @@ function doPost(e) {
     }
 
     const lock = LockService.getScriptLock();
-    lock.waitLock(15000);
+    lock.waitLock(10000);
     try {
       // 同じ電話番号からの連続送信（二重クリック等）は1件として扱う
       const cache = CacheService.getScriptCache();
@@ -103,17 +104,25 @@ function doPost(e) {
       if (cache.get(dupKey)) return json_({ ok: true, duplicate: true });
 
       const sheet = getSheet_();
-      const row = COLUMNS.map(([key]) => {
-        if (key === 'received_at') return new Date();
-        if (key === 'status') return STATUS_OPTIONS[0];
-        if (STAFF_COLUMNS.indexOf(key) !== -1) return '';
-        return asText_(data[key]);
+      // 列は位置ではなく見出し名で対応づける（列の追加・並べ替えがあってもずれない）
+      const cols = ensureColumns_(sheet);
+      const row = new Array(sheet.getLastColumn()).fill('');
+      COLUMNS.forEach(([key]) => {
+        let v;
+        if (key === 'received_at') v = new Date();
+        else if (key === 'status') v = suspicious ? SPAM_STATUS : STATUS_OPTIONS[0];
+        else if (STAFF_COLUMNS.indexOf(key) !== -1) v = '';
+        else v = asText_(data[key]);
+        row[cols[key] - 1] = v;
       });
       sheet.appendRow(row);
+      ensureCapacity_(sheet, cols);
       cache.put(dupKey, '1', SETTINGS.duplicateWindowSec);
     } finally {
       lock.releaseLock();
     }
+
+    if (suspicious) return json_({ ok: true, flagged: true });
 
     // 台帳への保存は完了しているため、メール送信の失敗は記録のみ（利用者にはエラーを返さない）
     try { notify_(data); } catch (err) { console.error('notify failed', err); }
@@ -140,22 +149,27 @@ function setup() {
   const ss = SpreadsheetApp.getActive();
   ss.setSpreadsheetTimeZone('Asia/Tokyo');
   const sheet = getSheet_();
+  const cols = ensureColumns_(sheet);
+  applyFormats_(sheet, cols);
+  getConversionSheet_();
+  const msg = '初期設定が完了しました。続けて［デプロイ］→［新しいデプロイ］でウェブアプリとして公開してください。';
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+}
 
-  const statusCol = colOf_('status');
+// 対応状況のプルダウン・日付の表示形式・行の色分けを、2行目から最終行まで設定する
+function applyFormats_(sheet, cols) {
+  const n = sheet.getMaxRows() - 1;
   const rule = SpreadsheetApp.newDataValidation().requireValueInList(STATUS_OPTIONS, true).setAllowInvalid(false).build();
-  sheet.getRange(2, statusCol, sheet.getMaxRows() - 1, 1).setDataValidation(rule);
-
-  sheet.getRange(2, colOf_('received_at'), sheet.getMaxRows() - 1, 1).setNumberFormat('yyyy/mm/dd hh:mm');
-  sheet.getRange(2, colOf_('visit_at'), sheet.getMaxRows() - 1, 1).setNumberFormat('yyyy/mm/dd hh:mm');
-  sheet.getRange(2, colOf_('contract_at'), sheet.getMaxRows() - 1, 1).setNumberFormat('yyyy/mm/dd hh:mm');
-  sheet.getRange(2, colOf_('contract_value'), sheet.getMaxRows() - 1, 1).setNumberFormat('#,##0');
+  sheet.getRange(2, cols.status, n, 1).setDataValidation(rule);
+  ['received_at', 'visit_at', 'contract_at'].forEach((key) => sheet.getRange(2, cols[key], n, 1).setNumberFormat('yyyy/mm/dd hh:mm'));
+  sheet.getRange(2, cols.contract_value, n, 1).setNumberFormat('#,##0');
 
   // 医院スタッフが記入する列を色分け
-  STAFF_COLUMNS.forEach((key) => sheet.getRange(1, colOf_(key)).setBackground('#fde7d6'));
+  STAFF_COLUMNS.forEach((key) => sheet.getRange(1, cols[key]).setBackground('#fde7d6'));
 
   // 対応状況で行を色分け
-  const range = sheet.getRange(2, 1, sheet.getMaxRows() - 1, COLUMNS.length);
-  const letter = columnLetter_(statusCol);
+  const range = sheet.getRange(2, 1, n, sheet.getLastColumn());
+  const letter = columnLetter_(cols.status);
   const color = (status, bg) => SpreadsheetApp.newConditionalFormatRule()
     .whenFormulaSatisfied('=$' + letter + '2="' + status + '"').setBackground(bg).setRanges([range]).build();
   sheet.setConditionalFormatRules([
@@ -163,11 +177,15 @@ function setup() {
     color('成約', '#dff3e4'),
     color('失注', '#eeeeee'),
     color('キャンセル', '#eeeeee'),
+    color(SPAM_STATUS, '#f3e5e5'),
   ]);
+}
 
-  getConversionSheet_();
-  const msg = '初期設定が完了しました。続けて［デプロイ］→［新しいデプロイ］でウェブアプリとして公開してください。';
-  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+// 空き行が少なくなったら行を追加し、書式を追加分にも広げる（新しい行でもプルダウンや色分けが効くように）
+function ensureCapacity_(sheet, cols) {
+  if (sheet.getMaxRows() - sheet.getLastRow() >= 50) return;
+  sheet.insertRowsAfter(sheet.getMaxRows(), 1000);
+  applyFormats_(sheet, cols);
 }
 
 function onOpen() {
@@ -189,8 +207,9 @@ function buildConversionSheet() {
   const sheet = getSheet_();
   const out = getConversionSheet_();
   const values = sheet.getDataRange().getValues();
+  const cols = ensureColumns_(sheet);
   const idx = {};
-  COLUMNS.forEach(([key], i) => { idx[key] = i; });
+  COLUMNS.forEach(([key]) => { idx[key] = cols[key] - 1; });
 
   const rows = [];
   values.slice(1).forEach((r) => {
@@ -314,8 +333,21 @@ function getConversionSheet_() {
   return sheet;
 }
 
-function colOf_(key) {
-  return COLUMNS.findIndex(([k]) => k === key) + 1;
+// 見出し行から「項目 → 列番号（1始まり）」を作る。足りない見出しは右端に追加する
+function ensureColumns_(sheet) {
+  const lastCol = sheet.getLastColumn();
+  const header = lastCol ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map((v) => String(v).trim()) : [];
+  const cols = {};
+  COLUMNS.forEach(([key, label]) => {
+    let i = header.indexOf(label);
+    if (i === -1) {
+      header.push(label);
+      i = header.length - 1;
+      sheet.getRange(1, i + 1).setValue(label).setFontWeight('bold').setBackground('#e3f0f1');
+    }
+    cols[key] = i + 1;
+  });
+  return cols;
 }
 
 function columnLetter_(n) {

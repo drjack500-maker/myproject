@@ -12,23 +12,30 @@ const SRC = fs.readFileSync(path.join(__dirname, '..', 'server', 'gas', 'Code.gs
 
 function makeSheet(name) {
   const rows = [];
+  let maxRows = 1000;
+  const cell = (r, c) => { const v = (rows[r - 1] || [])[c - 1]; return v === undefined ? '' : v; };
   const api = {
-    name, rows,
+    name, rows, inserted: 0,
     getRange(r, c, nr = 1, nc = 1) {
-      if (typeof r === 'string') return rangeStub();
-      return {
-        setValues(v) { v.forEach((row, i) => { rows[r - 1 + i] = rows[r - 1 + i] || []; row.forEach((val, j) => { rows[r - 1 + i][c - 1 + j] = val; }); }); return this; },
-        clearContent() { for (let i = 0; i < nr; i++) if (rows[r - 1 + i]) for (let j = 0; j < nc; j++) rows[r - 1 + i][c - 1 + j] = ''; return this; },
-        setFontWeight() { return this; }, setBackground() { return this; }, setNumberFormat() { return this; }, setDataValidation() { return this; },
+      if (typeof r === 'string') return { setNumberFormat() { return this; } };
+      const range = {
+        getValues: () => Array.from({ length: nr }, (_, i) => Array.from({ length: nc }, (__, j) => cell(r + i, c + j))),
+        setValues(v) { v.forEach((row, i) => { rows[r - 1 + i] = rows[r - 1 + i] || []; row.forEach((val, j) => { rows[r - 1 + i][c - 1 + j] = val; }); }); return range; },
+        setValue(v) { return range.setValues([[v]]); },
+        clearContent() { for (let i = 0; i < nr; i++) if (rows[r - 1 + i]) for (let j = 0; j < nc; j++) rows[r - 1 + i][c - 1 + j] = ''; return range; },
+        setFontWeight() { return range; }, setBackground() { return range; }, setNumberFormat() { return range; }, setDataValidation() { return range; },
       };
+      return range;
     },
     appendRow(row) { rows.push(row.slice()); },
-    getDataRange() { return { getValues: () => rows.map((r) => r.slice()) }; },
+    getDataRange() { const w = api.getLastColumn(); return { getValues: () => rows.map((r) => Array.from({ length: w }, (_, j) => (r[j] === undefined ? '' : r[j]))) }; },
     getLastRow() { return rows.length; },
-    getMaxRows() { return 1000; },
+    getLastColumn() { return rows.reduce((m, r) => Math.max(m, (r || []).length), 0); },
+    getMaxRows() { return maxRows; },
+    setMaxRows(n) { maxRows = n; },
+    insertRowsAfter(_, n) { maxRows += n; api.inserted += n; },
     setFrozenRows() {}, setFrozenColumns() {}, setConditionalFormatRules() {},
   };
-  function rangeStub() { return { setNumberFormat() { return this; } }; }
   return api;
 }
 
@@ -67,8 +74,11 @@ function load() {
   };
   vm.createContext(ctx);
   vm.runInContext(`${SRC}\n;this.__api = { doPost, doGet, setup, buildConversionSheet, SETTINGS, COLUMNS };`, ctx);
-  return { api: ctx.__api, sheets, mails, cache };
+  return { api: ctx.__api, sheets, mails, cache, ctx };
 }
+
+// 見出し名から列の位置を求める（台帳は見出し名で対応づけるため）
+const colOf = (api, sheet, key) => sheet.rows[0].indexOf(api.COLUMNS.find(([k]) => k === key)[1]);
 
 const post = (api, fields, concerns = []) => {
   const parameter = { ...fields };
@@ -90,7 +100,7 @@ test('valid submission is saved, notifies clinic and auto-replies', () => {
   const sheet = sheets[api.SETTINGS.sheetName];
   assert.equal(sheet.rows.length, 2, 'header + 1 row');
   const row = sheet.rows[1];
-  const col = (k) => api.COLUMNS.findIndex(([key]) => key === k);
+  const col = (k) => colOf(api, sheet, k);
   assert.equal(row[col('status')], '未対応');
   assert.equal(row[col('tel')], "'090-1234-5678", 'phone kept as text');
   assert.equal(row[col('note')], "'=HYPERLINK(\"x\")", 'formula injection neutralised');
@@ -111,11 +121,42 @@ test('placeholder notify address does not send clinic mail', () => {
   assert.equal(mails.length, 0);
 });
 
-test('honeypot and too-fast submissions are silently dropped', () => {
+test('honeypot and too-fast submissions are kept as spam suspects without emails', () => {
+  const { api, sheets, mails } = load();
+  api.SETTINGS.notifyTo = 'reception@clinic.test';
+  assert.deepEqual(post(api, { ...VALID, hp_extra: 'http://spam' }), { ok: true, flagged: true });
+  assert.deepEqual(post(api, { ...VALID, tel: '080-1111-2222', elapsed: '2' }), { ok: true, flagged: true });
+  const sheet = sheets[api.SETTINGS.sheetName];
+  assert.equal(sheet.rows.length, 3, 'saved, not dropped');
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'status')], 'スパム疑い');
+  assert.equal(sheet.rows[2][colOf(api, sheet, 'status')], 'スパム疑い');
+  assert.equal(mails.length, 0, 'no notification or auto-reply');
+});
+
+test('existing ledger with an older column layout stays aligned by header name', () => {
+  const { api, sheets, ctx } = load();
+  // 旧版の台帳：列の順番が違い、「電話希望時間」の列がない。スタッフが独自の列も追加している
+  const oldLabels = api.COLUMNS.filter(([k]) => k !== 'contact_time').map(([, l]) => l).reverse();
+  const sheet = ctx.SpreadsheetApp.getActive().insertSheet(api.SETTINGS.sheetName);
+  sheet.rows.push([...oldLabels, '院内メモ']);
+  post(api, VALID);
+  const header = sheet.rows[0];
+  assert.equal(header[header.length - 1], '電話希望時間', 'missing column appended at the end');
+  const row = sheet.rows[1];
+  assert.equal(row[header.indexOf('お名前')], '名駅 花子');
+  assert.equal(row[header.indexOf('gclid')], 'Cj0TEST');
+  assert.equal(row[header.indexOf('電話希望時間')], '夕方（17:00〜19:00）');
+  assert.equal(row[header.indexOf('院内メモ')], '', 'custom staff column left empty');
+});
+
+test('rows and formatting are extended before the sheet fills up', () => {
   const { api, sheets } = load();
-  assert.deepEqual(post(api, { ...VALID, website: 'http://spam' }), { ok: true });
-  assert.deepEqual(post(api, { ...VALID, elapsed: '2' }), { ok: true });
-  assert.equal(sheets[api.SETTINGS.sheetName], undefined, 'nothing written');
+  post(api, VALID);
+  const sheet = sheets[api.SETTINGS.sheetName];
+  sheet.setMaxRows(40);
+  post(api, { ...VALID, tel: '080-3333-4444' });
+  assert.equal(sheet.inserted, 1000);
+  assert.equal(sheet.getMaxRows(), 1040);
 });
 
 test('invalid phone or missing date is rejected', () => {
@@ -138,7 +179,7 @@ test('conversion sheet exports visit and contract rows with gclid only', () => {
   post(api, VALID);
   post(api, { ...VALID, tel: '080-0000-0000', gclid: '' });
   const sheet = sheets[api.SETTINGS.sheetName];
-  const col = (k) => api.COLUMNS.findIndex(([key]) => key === k);
+  const col = (k) => colOf(api, sheet, k);
   sheet.rows[1][col('visit_at')] = new Date(2026, 9, 2, 15, 0, 0);
   sheet.rows[1][col('contract_at')] = new Date(2026, 9, 9, 11, 30, 0);
   sheet.rows[1][col('contract_value')] = '1,925,000';

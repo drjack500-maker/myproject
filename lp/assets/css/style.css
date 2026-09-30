@@ -799,3 +799,10 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
   .booklet__inner { grid-template-columns: 140px minmax(0, 1fr); gap: 40px; max-width: 880px; }
   .booklet__cover svg { width: 140px; }
 }
+
+/* 第2希望の解除ボタン・フォーム停止時の案内 */
+.picker__clear { margin-top: 10px; padding: 6px 12px; border: 1.5px solid var(--c-line); border-radius: 8px; background: #fff; color: var(--c-ink-2); font: inherit; font-size: .8125rem; font-weight: 700; cursor: pointer; }
+.form-na { min-width: 0; padding: 24px 20px; background: #fff; color: var(--c-ink); border-radius: var(--radius-lg); box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+.form-na__title { font-size: 1.25rem; font-weight: 900; color: var(--c-deep); margin-bottom: 8px; }
+.form-na .btn { margin-top: 16px; }
+@media (max-width: 899px) { .form-na { order: 1; } }

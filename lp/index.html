@@ -862,6 +862,8 @@
             <summary>第2希望も選ぶ（任意）</summary>
             <div class="chips chips--scroll" data-dates role="radiogroup" aria-label="第2希望の日付"></div>
             <div class="chips chips--wrap" data-times role="radiogroup" aria-label="第2希望の時間帯"></div>
+            <p class="field__error" data-error="date2" hidden>第2希望は、日付と時間帯を両方選んでください（不要な場合は「選択を解除」）。</p>
+            <button type="button" class="picker__clear" data-clear-picker="2">第2希望の選択を解除</button>
           </details>
           <p class="note">※ご希望日時はご予約のリクエストです。確定のご連絡をもって予約完了となります。ご希望の日時がない場合は、次の画面の備考欄にご記入ください。</p>
           <div class="rform__nav rform__nav--split">
@@ -921,17 +923,28 @@
           <input type="hidden" name="elapsed">
           <!-- スパム対策（人には見えない項目。入力があれば送信しない） -->
           <div class="rform__hp" aria-hidden="true">
-            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            <label>この欄は空欄のままにしてください<input type="text" name="hp_extra" tabindex="-1" autocomplete="off"></label>
           </div>
 
           <p class="rform__privacy">ご入力いただいた個人情報は、ご予約・ご相談への対応のみに使用し、適切に管理します。詳しくは<a href="privacy.html" target="_blank" rel="noopener">個人情報の取り扱い</a>をご覧ください。</p>
           <p class="field__error rform__submit-error" data-error="submit" hidden>送信できませんでした。お手数ですが、お電話（<a href="tel:0525713345">052-571-3345</a>）でご予約ください。</p>
+          <p class="field__error rform__submit-error" data-error="timeout" hidden>送信に時間がかかっています。ご予約リクエストが届いている可能性があるため、重複を防ぐために、再送信の前にお電話（<a href="tel:0525713345">052-571-3345</a>・平日 9:00〜19:00）でご確認ください。</p>
           <div class="rform__nav rform__nav--split">
             <button type="button" class="btn btn--ghost" data-prev>戻る</button>
             <button type="submit" class="btn btn--primary btn--xl" data-submit><span>予約リクエストを送信<span class="btn__sub">無料カウンセリング</span></span></button>
           </div>
         </fieldset>
       </form>
+
+      <!-- 送信先（CONFIG.formEndpoint）が未設定のサーバーでは、フォームの代わりにこちらを表示 -->
+      <div class="form-na" data-form-unavailable hidden>
+        <p class="form-na__title">お電話でご予約ください</p>
+        <p>ただいまWebからのご予約を受け付けできません。お手数ですが、お電話で無料カウンセリングをご予約ください。</p>
+        <a class="btn btn--primary btn--block btn--xl" href="tel:0525713345" data-track="form_na_tel">
+          <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>
+          <span>052-571-3345<span class="btn__sub">受付：月〜金 9:00〜19:00</span></span>
+        </a>
+      </div>
 
     </div>
   </div>
