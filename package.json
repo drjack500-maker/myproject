@@ -10,7 +10,8 @@
     "lint:html": "html-validate lp/*.html",
     "build:images": "node tools/build-images.js",
     "build:preview": "node tools/build-preview.js",
-    "build:hotfix": "node tools/build-hotfix.js"
+    "build:hotfix": "node tools/build-hotfix.js",
+    "build:ultimate-preview": "node tools/build-ultimate-preview.js"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
