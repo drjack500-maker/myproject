@@ -799,9 +799,3 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
   .booklet__inner { grid-template-columns: 140px minmax(0, 1fr); gap: 40px; max-width: 880px; }
   .booklet__cover svg { width: 140px; }
 }
-
-/* 予約システムへ送る方式 */
-.reserve-ext { min-width: 0; padding: 24px 20px; background: #fff; color: var(--c-ink); border-radius: var(--radius-lg); box-shadow: 0 24px 60px rgba(0,0,0,.25); }
-.reserve-ext__title { font-size: 1.25rem; font-weight: 900; color: var(--c-deep); margin-bottom: 12px; }
-.reserve-ext__steps { margin: 0 0 18px; padding-left: 1.4em; font-size: .9375rem; line-height: 1.9; }
-@media (max-width: 899px) { .reserve-ext { order: 1; } }

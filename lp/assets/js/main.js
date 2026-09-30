@@ -8,18 +8,15 @@
      設定（運用時はここを編集）
      --------------------------------------------------------- */
   const CONFIG = {
-    // フォーム送信先（空ならデモモード：送信せずサンクスページへ遷移）
-    // 同梱の Google Apps Script（server/gas/Code.gs）をデプロイした「…/exec」のURLを設定
+    // フォーム送信先：同梱の Google Apps Script（server/gas/Code.gs）をデプロイした「…/exec」のURL【要設定】
+    // 未設定のとき：ローカル確認・プレビューではデモ（送信せず完了ページへ）
+    //               本番ドメインでは予約が失われないよう、送信せずに電話での予約を案内する
     // ※ application/x-www-form-urlencoded で POST するため、一般的なフォーム受信サービスでも利用可
     formEndpoint: '',
     thanksUrl: 'thanks.html',
     // LINE公式アカウント（L-Message）の友だち追加URL。小冊子プレゼントの受け取り先（空ならLINEボタンを表示しない）
     // ※現LPと同じ流入経路。新LPの効果を分けて測る場合は L-Message で新しい流入経路URLを発行して差し替え
     lineUrl: 'https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco',
-    // 予約の受け方：'form' = LP内の3ステップフォーム／'apotool' = 予約システム（Apotool & Box）へ移動
-    // URL に ?reserve=apotool または ?reserve=form を付けると、その表示だけ切り替え可能（A/Bテスト用）
-    reserveMode: 'form',
-    apotoolUrl: 'https://reservation.stransa.co.jp/8f35d9e533e7ff19cf138ee5bf932a1f',
     // 予約候補として表示する日数（休診日を除く）
     bookingDays: 21,
     // 休診曜日（0=日, 6=土）【要確認】
@@ -36,6 +33,9 @@
   };
   // HTML側で window.LP_CONFIG = { formEndpoint: '...' } のように上書きも可能（main.js を編集せずに設定したい場合）
   if (window.LP_CONFIG && typeof window.LP_CONFIG === 'object') Object.assign(CONFIG, window.LP_CONFIG);
+  // 本番ドメインかどうか（GTM の読み込み条件と同じ）
+  const isProduction = /(^|\.)meieki-dental\.(net|com)$/.test(location.hostname);
+  if (isProduction && !CONFIG.formEndpoint) console.error('[LP] CONFIG.formEndpoint が未設定です。予約フォームは送信できません（server/gas/README.md 参照）');
 
   /* ---------------------------------------------------------
      広告キーワード別のファーストビュー出し分け（メッセージマッチ）
@@ -115,7 +115,7 @@
     $$('[data-hl]').forEach((el) => { const k = el.dataset.hl; if (h[k]) el.innerHTML = h[k]; });
   }
   document.documentElement.dataset.variant = variant;
-  track('lp_view', { lp_variant: variant, reserve_mode: ['form', 'apotool'].includes(params.get('reserve')) ? params.get('reserve') : CONFIG.reserveMode });
+  track('lp_view', { lp_variant: variant });
 
   /* ---------------------------------------------------------
      3. 文字サイズ切り替え
@@ -145,22 +145,6 @@
   }
 
   /* ---------------------------------------------------------
-     4-2. 予約の受け方（LP内フォーム／予約システム）
-     --------------------------------------------------------- */
-  const reserveParam = params.get('reserve');
-  const reserveMode = ['form', 'apotool'].includes(reserveParam) ? reserveParam : CONFIG.reserveMode;
-  document.documentElement.dataset.reserve = reserveMode;
-  if (reserveMode === 'apotool' && CONFIG.apotoolUrl) {
-    const form = $('#reserve-form');
-    const ext = $('[data-reserve-ext]');
-    if (form) form.hidden = true;
-    if (ext) ext.hidden = false;
-    $$('[data-reserve-ext-link]').forEach((a) => { a.href = CONFIG.apotoolUrl; });
-    // 各所の「予約」ボタンも予約システムへ直接移動
-    $$('a[href="#reserve"]').forEach((a) => { a.href = CONFIG.apotoolUrl; a.dataset.reserveOutbound = ''; });
-  }
-
-  /* ---------------------------------------------------------
      5. クリック計測（data-track / tel:）
      --------------------------------------------------------- */
   document.addEventListener('click', (e) => {
@@ -168,7 +152,6 @@
     if (!el) return;
     const href = el.getAttribute('href') || '';
     if (href.startsWith('tel:')) track('tel_click', { cta: el.dataset.track || 'inline' });
-    else if (el.hasAttribute('data-reserve-outbound') || el.hasAttribute('data-reserve-ext-link')) track('reserve_outbound', { cta: el.dataset.track || 'inline', lp_variant: variant });
     else if (el.hasAttribute('data-line-link')) track('line_click', { cta: el.dataset.track || 'inline' });
     else if (el.dataset.track) track('cta_click', { cta: el.dataset.track });
   });
@@ -429,8 +412,15 @@
 
       saveBooking();
 
+      if (!CONFIG.formEndpoint && isProduction) {
+        // 本番で送信先が未設定：完了したように見せると予約が失われるため、電話での予約を案内する
+        errBox.hidden = false;
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        track('form_submit_error', { message: 'endpoint_not_configured' });
+        return;
+      }
       if (!CONFIG.formEndpoint) {
-        // デモモード：送信先が未設定のため、送信せずにサンクスページへ
+        // デモモード（ローカル確認・プレビュー）：送信先が未設定のため、送信せずにサンクスページへ
         console.info('[LP] formEndpoint が未設定のため、送信せずにサンクスページへ遷移します（デモモード）');
         track('form_submit', { ...eventParams, demo: true });
         location.href = `${CONFIG.thanksUrl}?demo=1`;

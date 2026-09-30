@@ -28,7 +28,6 @@ LPは、ユーザーの行動を `dataLayer` にイベントとして送って�
 | CE - reservation_complete | `reservation_complete` | **予約完了（主要コンバージョン）**。サンクスページで発火 |
 | CE - tel_click | `tel_click` | 電話タップ |
 | CE - line_click | `line_click` | LINEタップ（小冊子プレゼント） |
-| CE - reserve_outbound | `reserve_outbound` | 予約システム（Apotool）へ移動（`reserve=apotool` のとき） |
 | CE - form_start | `form_start` | フォーム入力開始 |
 | CE - form_step | `form_step` | フォームのステップ到達 |
 | CE - form_error | `form_error` | 入力エラー |

@@ -79,7 +79,7 @@ const post = (api, fields, concerns = []) => {
 const VALID = {
   name: '名駅 花子', tel: '090-1234-5678', email: 'hanako@example.jp', age: '60代', who: '本人',
   date1: '2026-10-02', time1: '午後（14:30〜17:00）', date2: '', time2: '', note: '=HYPERLINK("x")',
-  elapsed: '40', gclid: 'Cj0TEST', utm_source: 'google', utm_term: 'オールオン4 費用', lp_variant: 'price',
+  contact_time: '夕方（17:00〜19:00）', elapsed: '40', gclid: 'Cj0TEST', utm_source: 'google', utm_term: 'オールオン4 費用', lp_variant: 'price',
 };
 
 test('valid submission is saved, notifies clinic and auto-replies', () => {
@@ -96,8 +96,11 @@ test('valid submission is saved, notifies clinic and auto-replies', () => {
   assert.equal(row[col('note')], "'=HYPERLINK(\"x\")", 'formula injection neutralised');
   assert.equal(row[col('concerns')], '入れ歯が合わない・外れる / 費用を知りたい');
   assert.equal(row[col('gclid')], 'Cj0TEST');
+  assert.equal(row[col('contact_time')], '夕方（17:00〜19:00）');
   assert.equal(mails.length, 2);
   assert.match(mails[0].subject, /予約リクエスト：名駅 花子 様（第1希望 10月2日（金））/);
+  assert.match(mails[0].body, /お電話のご希望時間帯：夕方/);
+  assert.match(mails[0].body, /予約システム（Apotool）に予約を登録/);
   assert.equal(mails[1].to, 'hanako@example.jp');
   assert.match(mails[1].body, /第1希望：10月2日（金） 午後/);
 });

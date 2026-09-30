@@ -210,14 +210,37 @@ test('医師・院内の写真が表示される／文字拡大が保存され�
   await page.context().close();
 });
 
-test('予約システム方式（?reserve=apotool）：予約ボタンが予約システムへ向き、フォームは非表示', async () => {
-  const page = await open('index.html?reserve=apotool');
-  const hrefs = await page.$$eval('a[data-track="fv_reserve"], a[data-track="sticky_reserve"], [data-reserve-ext-link]', (els) => els.map((a) => a.getAttribute('href')));
-  assert.equal(hrefs.length, 3);
-  hrefs.forEach((h) => assert.match(h, /^https:\/\/reservation\.stransa\.co\.jp\//));
-  assert.equal(await page.isVisible('#reserve-form'), false);
-  await page.locator('[data-reserve-ext]').scrollIntoViewIfNeeded();
-  assert.equal(await page.isVisible('[data-reserve-ext]'), true);
+test('本番ドメインで送信先が未設定のときは、送信したことにせず電話を案内する', async () => {
+  // 本番ドメイン（www.meieki-dental.net）へのアクセスを、ローカルの lp/ に振り向けて再現する
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  await ctx.route(/fonts\.(googleapis|gstatic)\.com|google\.com\/maps|maps\.google\.com|googletagmanager|lmes\.jp/, (r) => r.abort());
+  await ctx.route(/^https:\/\/www\.meieki-dental\.net\//, async (route) => {
+    const url = new URL(route.request().url());
+    const res = await fetch(base + url.pathname.replace(/^\/all_on_4_004\//, ''));
+    await route.fulfill({ status: res.status, body: Buffer.from(await res.arrayBuffer()), contentType: res.headers.get('content-type') || undefined });
+  });
+  const p = await ctx.newPage();
+  await p.goto('https://www.meieki-dental.net/all_on_4_004/index.html');
+  await fillForm(p);
+  await p.click('[data-submit]');
+  await p.waitForSelector('[data-error="submit"]:not([hidden])');
+  assert.match(p.url(), /index\.html$/, '完了ページへ進まない');
+  await ctx.close();
+});
+
+test('電話の希望時間帯（任意）が送信される', async () => {
+  let posted = null;
+  const page = await open('index.html', {
+    config: { formEndpoint: ENDPOINT },
+    init: (ctx) => ctx.route(ENDPOINT, async (route) => {
+      posted = route.request().postData();
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}', headers: { 'access-control-allow-origin': '*' } });
+    }),
+  });
+  await fillForm(page);
+  await page.locator('label.chip:has(input[name="contact_time"][value^="夕方"])').click();
+  await Promise.all([page.waitForURL(/thanks\.html$/), page.click('[data-submit]')]);
+  assert.match(new URLSearchParams(posted).get('contact_time'), /^夕方/);
   await page.context().close();
 });
 

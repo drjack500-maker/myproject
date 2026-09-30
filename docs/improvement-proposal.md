@@ -220,7 +220,7 @@
 |---|---|
 | 分割の最大回数 | 改善版は「最大120回」と記載（外部サイトの情報）。現LPには回数の記載なし |
 | 実績数値 | 2023年の数字のまま。最新年の数字に更新を推奨 |
-| 予約の受け方 | LP内フォーム（標準）と予約システム直行のどちらにするか（[`current-lp-review.md`](current-lp-review.md) 5章）。フォームを使う場合は [`server/gas/README.md`](../server/gas/README.md) の手順で受け皿を設置 |
+| 予約フォームの受け皿 | LP内の3ステップフォームに決定。[`server/gas/README.md`](../server/gas/README.md) の手順で予約台帳を設置し、`CONFIG.formEndpoint` を設定（未設定だと本番では電話案内になります）。受付の手順は [`reception-manual.md`](reception-manual.md) |
 | LINEの流入経路 | 新LPの効果を分けて測る場合は、L-Message で新しい流入経路URLを発行して差し替え |
 | 症例 | テンプレートを用意し、初期状態は非表示。現LPの術前・術後写真を使う場合は、治療内容・費用・期間・リスクの情報が必要 |
 | 個人情報の取り扱い | 予約フォーム用のひな形（`lp/privacy.html`）。法人の正式なポリシーとの整合 |

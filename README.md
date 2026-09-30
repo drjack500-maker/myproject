@@ -8,6 +8,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/improvement-proposal.md`](docs/improvement-proposal.md) | 改善提案書（優先施策・チェックリスト・医療広告ガイドライン・A/Bテスト・公開前の確認事項） |
 | [`docs/measurement-setup.md`](docs/measurement-setup.md) | 計測設定の手順（GTM／GA4／Google 広告、見出しの出し分け用URL） |
 | [`server/gas/README.md`](server/gas/README.md) | 予約フォームの受信設定（Google スプレッドシートの予約台帳・通知メール・広告への成約データ連携） |
+| [`docs/reception-manual.md`](docs/reception-manual.md) | 予約リクエストの受付対応マニュアル（電話のタイミング・トーク例・台帳の更新・リマインド） |
 
 ## ファイル構成
 
@@ -31,9 +32,9 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 ## 公開までの手順
 
 1. **内容の確認**：料金・保証・医師情報などは現LP（2026年9月時点）に合わせてあります。残りの確認事項は [提案書「8. 公開前に医院で確認が必要な事項」](docs/improvement-proposal.md#8-公開前に医院で確認が必要な事項) を参照。HTML・JS内の `【要確認】` `【要更新】` `【要設定】` コメントも確認
-2. **予約の受け方を決める**（[診断レポート5章](docs/current-lp-review.md#5-予約の受け方について要判断)）
-   - **LP内フォーム（標準）**：[`server/gas/README.md`](server/gas/README.md) の手順でスプレッドシートを作り、発行されたURLを `lp/assets/js/main.js` の `CONFIG.formEndpoint` に設定。未設定のままだと、フォームは送信されずに完了ページへ進む「デモモード」です
-   - **予約システム（Apotool & Box）へ直行**：`CONFIG.reserveMode` を `'apotool'` に。URLの末尾に `?reserve=apotool` を付けると、その表示だけ切り替わります（A/Bテスト用）
+2. **予約フォームの受け皿を設置**：予約はLP内の3ステップフォームで受け付けます。[`server/gas/README.md`](server/gas/README.md) の手順でスプレッドシート（予約台帳）を作り、発行されたURLを `lp/assets/js/main.js` の `CONFIG.formEndpoint` に設定
+   - 未設定のまま**本番ドメインで公開すると、フォームは送信されず電話での予約を案内します**（予約が失われるのを防ぐため）。ローカル確認・プレビューでは、送信せずに完了ページへ進むデモ動作になります
+   - 受付スタッフの対応手順は [`docs/reception-manual.md`](docs/reception-manual.md)
 3. **LINE**：現LPと同じ L-Message の小冊子プレゼントURLを設定済み（`CONFIG.lineUrl`）。新LPの効果を分けて測る場合は新しい流入経路URLに差し替え
 4. **休診日・予約枠**：`CONFIG.closedWeekdays` `CONFIG.holidays` `CONFIG.timeSlots` を実際の診療体制に合わせる（年末年始の休診日も追加）
 5. **写真**：医師3名と院内の写真は現LPのものを使用しています。症例は `#cases` に写真と情報を入れてから `hidden` を外す
@@ -79,7 +80,7 @@ npm run build:preview  # 1ファイル版の確認用プレビュー（dist/prev
 ### 品質チェックの結果（2026年9月時点）
 
 - HTML検証（html-validate）：エラーなし
-- 自動テスト：受信スクリプト 8件、ブラウザ操作 16件すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／予約システム方式への切り替え／医療費控除の計算 など）
+- 自動テスト：受信スクリプト 8件、ブラウザ操作 17件すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／本番で送信先が未設定のときの電話案内／医療費控除の計算 など）
 - アクセシビリティ（axe-core）：重大・深刻な問題なし
 - Lighthouse（モバイル、3回計測）：パフォーマンス 84〜97（計測ごとのばらつきあり。3回中2回は97）／アクセシビリティ 100／ベストプラクティス 96／SEO 63（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
 
@@ -94,6 +95,6 @@ npm run build:preview  # 1ファイル版の確認用プレビュー（dist/prev
 | ご相談内容（複数） | `concerns` |
 | どなたのご相談か | `who` |
 | 第1希望（必須）／第2希望 | `date1` `time1` / `date2` `time2` |
-| お名前（必須）／電話番号（必須）／メール／年代／備考 | `name` `tel` `email` `age` `note` |
+| お名前（必須）／電話番号（必須）／電話の希望時間帯／メール／年代／備考 | `name` `tel` `contact_time` `email` `age` `note` |
 | 流入元（自動） | `utm_source` `utm_medium` `utm_campaign` `utm_term` `utm_content` `gclid` `gbraid` `wbraid` `yclid` `lp_variant` `landing_url` `referrer` |
 | スパム対策（自動） | `elapsed`（ページを開いてから送信までの秒数）、`website`（人には見えない項目。入力があれば送信しない） |

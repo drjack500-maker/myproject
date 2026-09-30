@@ -845,7 +845,7 @@
           </div>
 
           <div class="rform__nav">
-            <button type="button" class="btn btn--primary btn--block btn--xl" data-next>次へ進む<span class="btn__sub">あと2ステップ</span></button>
+            <button type="button" class="btn btn--primary btn--block btn--xl" data-next><span>次へ進む<span class="btn__sub">あと2ステップ</span></span></button>
           </div>
         </fieldset>
 
@@ -866,7 +866,7 @@
           <p class="note">※ご希望日時はご予約のリクエストです。確定のご連絡をもって予約完了となります。ご希望の日時がない場合は、次の画面の備考欄にご記入ください。</p>
           <div class="rform__nav rform__nav--split">
             <button type="button" class="btn btn--ghost" data-prev>戻る</button>
-            <button type="button" class="btn btn--primary btn--xl" data-next>次へ進む<span class="btn__sub">あと1ステップ</span></button>
+            <button type="button" class="btn btn--primary btn--xl" data-next><span>次へ進む<span class="btn__sub">あと1ステップ</span></span></button>
           </div>
         </fieldset>
 
@@ -884,6 +884,16 @@
             <span class="field__help">ご予約確定のご連絡に使用します。</span>
             <span class="field__error" id="err-tel" data-error="tel" hidden>電話番号を正しく入力してください（半角数字10〜11桁）。</span>
           </label>
+          <div class="field" role="group" aria-labelledby="contact-time-label">
+            <span class="field__label" id="contact-time-label">お電話のご都合のよい時間帯<span class="opt">任意</span></span>
+            <div class="chips chips--wrap">
+              <label class="chip"><input type="radio" name="contact_time" value="いつでも"><span>いつでも</span></label>
+              <label class="chip"><input type="radio" name="contact_time" value="午前（9:00〜12:00）"><span>午前</span></label>
+              <label class="chip"><input type="radio" name="contact_time" value="午後（12:00〜17:00）"><span>午後</span></label>
+              <label class="chip"><input type="radio" name="contact_time" value="夕方（17:00〜19:00）"><span>夕方</span></label>
+            </div>
+            <span class="field__help">ご予約確定のお電話をこの時間帯におかけします（平日 9:00〜19:00）。</span>
+          </div>
           <label class="field">
             <span class="field__label">メールアドレス<span class="opt">任意</span></span>
             <span class="field__input"><input type="email" name="email" autocomplete="email" inputmode="email" placeholder="例）example@mail.jp" aria-describedby="err-email"></span>
@@ -918,25 +928,11 @@
           <p class="field__error rform__submit-error" data-error="submit" hidden>送信できませんでした。お手数ですが、お電話（<a href="tel:0525713345">052-571-3345</a>）でご予約ください。</p>
           <div class="rform__nav rform__nav--split">
             <button type="button" class="btn btn--ghost" data-prev>戻る</button>
-            <button type="submit" class="btn btn--primary btn--xl" data-submit>予約リクエストを送信<span class="btn__sub">無料カウンセリング</span></button>
+            <button type="submit" class="btn btn--primary btn--xl" data-submit><span>予約リクエストを送信<span class="btn__sub">無料カウンセリング</span></span></button>
           </div>
         </fieldset>
       </form>
 
-      <!-- 予約システム（Apotool & Box）へ送る方式のときだけ表示（CONFIG.reserveMode = 'apotool' または URL に ?reserve=apotool） -->
-      <div class="reserve-ext" data-reserve-ext hidden>
-        <p class="reserve-ext__title">空き状況を見て、<br>そのままWeb予約</p>
-        <ol class="reserve-ext__steps">
-          <li>下のボタンから予約ページを開く</li>
-          <li>「初めて来院の方」の<b>「初診予約」</b>を選ぶ</li>
-          <li>ご希望の日時を選んで予約完了</li>
-        </ol>
-        <a class="btn btn--primary btn--block btn--xl" href="#" data-reserve-ext-link data-track="reserve_ext">
-          <svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>
-          <span>Web予約ページを開く<span class="btn__sub">24時間受付・無料カウンセリング</span></span>
-        </a>
-        <p class="note">※予約システム（Apotool &amp; Box）のページに移動します。ご希望の日時が埋まっている場合は、お電話（052-571-3345）でもご案内できる場合があります。</p>
-      </div>
     </div>
   </div>
 </section>
