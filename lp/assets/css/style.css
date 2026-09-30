@@ -7,7 +7,7 @@
 :root {
   --c-ink: #1d2b33;
   --c-ink-2: #45545e;
-  --c-muted: #66757f;
+  --c-muted: #5b6a74;
   --c-line: #dde6e9;
   --c-bg: #ffffff;
   --c-warm: #f8f4ee;
@@ -15,9 +15,10 @@
   --c-deep: #0a3c42;
   --c-primary: #0e5a63;
   --c-primary-2: #137682;
-  --c-accent: #cf5317;
-  --c-accent-2: #ea7331;
-  --c-accent-dark: #9e3c0c;
+  /* 白文字とのコントラスト比4.5以上を確保したオレンジ（シニア層の見やすさ・WCAG AA） */
+  --c-accent: #b83d0b;
+  --c-accent-2: #cc4a12;
+  --c-accent-dark: #7f2a06;
   --c-accent-soft: #fff1e7;
   --c-mark: #ffe0b5;
   --c-gold: #a97a1d;
@@ -55,6 +56,7 @@ p:last-child { margin-bottom: 0; }
 ul, ol { margin: 0; padding: 0; }
 [role="list"] { list-style: none; }
 a { color: var(--c-primary-2); text-underline-offset: .2em; }
+a[href^="tel:"]:not(.btn) { white-space: nowrap; }
 img, svg { max-width: 100%; }
 b, strong { font-weight: 700; }
 sup { font-size: .65em; }
@@ -102,11 +104,11 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .btn--primary {
   color: #fff;
   background: linear-gradient(180deg, var(--c-accent-2), var(--c-accent));
-  box-shadow: 0 5px 0 var(--c-accent-dark), 0 12px 24px rgba(207, 83, 23, .28);
+  box-shadow: 0 5px 0 var(--c-accent-dark), 0 12px 24px rgba(184, 61, 11, .28);
   overflow: hidden;
 }
-.btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 0 var(--c-accent-dark), 0 16px 28px rgba(207, 83, 23, .32); }
-.btn--primary:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--c-accent-dark), 0 6px 12px rgba(207, 83, 23, .25); }
+.btn--primary:hover { transform: translateY(-1px); box-shadow: 0 6px 0 var(--c-accent-dark), 0 16px 28px rgba(184, 61, 11, .32); }
+.btn--primary:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--c-accent-dark), 0 6px 12px rgba(184, 61, 11, .25); }
 .btn--primary::after { /* 光の反射で視線を引く */
   content: ""; position: absolute; inset: 0 auto 0 -60%; width: 40%;
   background: linear-gradient(100deg, transparent, rgba(255,255,255,.45), transparent);
@@ -333,7 +335,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .diagram__legend { list-style: none; display: grid; gap: 8px; margin-top: 14px; font-size: .9375rem; line-height: 1.6; }
 .diagram__legend li { display: flex; gap: 10px; align-items: flex-start; }
 .num-badge { display: grid; place-items: center; flex: none; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; background: var(--c-primary); color: #fff; font-size: .8125rem; font-weight: 900; }
-.legend-nerve { color: #b37d0a; font-weight: 700; }
+.legend-nerve { color: #8a5d00; font-weight: 700; }
 .points { display: grid; gap: 14px; }
 .point { padding: 22px 20px; background: var(--c-tint); border-radius: var(--radius); }
 .point__num { margin: 0 0 4px; font-size: .75rem; font-weight: 900; letter-spacing: .16em; color: var(--c-accent); }
@@ -385,6 +387,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
   border: 1px solid var(--c-line); box-shadow: var(--shadow); overflow: hidden;
 }
 .feature__num { position: absolute; right: 16px; top: 6px; font-size: 3.5rem; font-weight: 900; line-height: 1; color: var(--c-tint); letter-spacing: 0; }
+.feature__num::before { content: attr(data-num); }
 .feature__icon { position: relative; display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: 14px; border-radius: 16px; background: var(--c-tint); color: var(--c-primary); }
 .feature__icon .ic { width: 30px; height: 30px; }
 .feature__title { position: relative; font-size: 1.1875rem; font-weight: 900; margin-bottom: .5em; color: var(--c-deep); }
@@ -507,8 +510,15 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .doctor { display: grid; gap: 24px; padding: 24px 20px; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
 @media (min-width: 900px) { .doctor { grid-template-columns: 320px 1fr; gap: 44px; padding: 44px; } }
 .doctor__photo { margin: 0; }
-.doctor__photo img { display: block; width: 100%; height: auto; border-radius: 16px; }
-.doctor__photo figcaption { display: flex; align-items: baseline; justify-content: center; gap: .6em; margin-top: 12px; }
+.doctor__photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 16px; background: var(--c-tint); }
+.doctor__photo figcaption { display: flex; align-items: center; justify-content: center; gap: .6em; margin-top: 12px; }
+.doctor__badge { display: none; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--c-tint); color: var(--c-primary); }
+.doctor__badge .ic { width: 26px; height: 26px; }
+/* 院長写真が未設置のとき：名前だけのコンパクトな表示に切り替え */
+.doctor.is-noimg { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.doctor.is-noimg .doctor__photo img { display: none; }
+.doctor.is-noimg .doctor__photo figcaption { justify-content: flex-start; margin: 0; padding-bottom: 16px; border-bottom: 1px solid var(--c-line); }
+.doctor.is-noimg .doctor__badge { display: grid; }
 .doctor__role { font-size: .875rem; font-weight: 700; color: var(--c-primary); }
 .doctor__name { font-size: 1.5rem; font-weight: 900; letter-spacing: .12em; }
 .doctor__catch { font-size: clamp(1.1875rem, 1rem + 1vw, 1.5rem); font-weight: 900; line-height: 1.6; color: var(--c-deep); padding-left: 16px; border-left: 5px solid var(--c-accent); }
@@ -591,6 +601,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .rform__nav--split { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
 .rform__nav--split .btn--ghost { padding-inline: 1.1em; }
 .rform__privacy { margin-top: 18px; font-size: .8125rem; color: var(--c-muted); line-height: 1.6; }
+.rform__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .rform__submit-error { margin-top: 12px; padding: 12px; background: #fff3f2; border-radius: 10px; }
 
 .chips { display: flex; gap: 8px; }
@@ -672,7 +683,7 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 @media (min-width: 900px) {
   .sticky-cta { left: auto; right: 24px; bottom: 24px; padding: 0; background: none; box-shadow: none; border-radius: 16px; }
   .sticky-cta__btn--tel, .sticky-cta__btn--line { display: none; }
-  .sticky-cta__btn--primary { min-height: 64px; padding: 10px 24px; border-radius: 999px; box-shadow: 0 4px 0 var(--c-accent-dark), 0 14px 30px rgba(207,83,23,.35); }
+  .sticky-cta__btn--primary { min-height: 64px; padding: 10px 24px; border-radius: 999px; box-shadow: 0 4px 0 var(--c-accent-dark), 0 14px 30px rgba(184,61,11,.35); }
 }
 
 /* ---------- Reveal animation ---------- */
@@ -685,6 +696,12 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
   .js .reveal { opacity: 1; transform: none; }
 }
 
+/* ---------- Legal page ---------- */
+.legal .section-title { margin-bottom: 24px; }
+.legal h2 { font-size: 1.125rem; font-weight: 900; color: var(--c-deep); margin: 32px 0 8px; padding-left: 12px; border-left: 4px solid var(--c-primary); }
+.legal ul { padding-left: 1.4em; margin-bottom: 1em; }
+.legal p, .legal li { color: var(--c-ink-2); }
+
 /* ---------- Thanks page ---------- */
 .thanks { padding: 56px 0 72px; background: linear-gradient(180deg, #f3f9f9, #fff); }
 .thanks__card { max-width: 720px; margin-inline: auto; padding: 32px 22px; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); text-align: center; }
@@ -694,4 +711,9 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .thanks__steps { list-style: none; display: grid; gap: 10px; margin: 24px 0; text-align: left; }
 .thanks__steps li { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; background: var(--c-tint); border-radius: 12px; }
 .thanks__steps .num-badge { margin-top: 2px; }
+.thanks__address { margin-top: 24px; }
+.thanks__booking { margin: 20px 0 0; padding: 16px 18px; border: 2px solid var(--c-accent); border-radius: 14px; background: var(--c-accent-soft); text-align: left; }
+.thanks__booking-title { margin: 0 0 6px; font-weight: 900; color: var(--c-accent-dark); }
+.thanks__booking-list { list-style: none; font-weight: 700; font-size: 1.0625rem; }
+.thanks__booking .note { margin-top: 8px; }
 .demo-banner { padding: 10px 16px; background: #fff4d6; color: #6b4e00; font-size: .8125rem; font-weight: 700; text-align: center; }

@@ -1,0 +1,10 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "doctype-style": "off",
+    "tel-non-breaking": "off",
+    "no-redundant-role": "off",
+    "form-dup-name": ["error", { "shared": ["radio", "checkbox"] }],
+    "prefer-native-element": ["error", { "exclude": ["region"] }]
+  }
+}

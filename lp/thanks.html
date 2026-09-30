@@ -9,7 +9,10 @@
 <meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"></noscript>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/style.css">
 
 <!-- Google Tag Manager（index.html と同じコンテナIDを設定）
@@ -46,6 +49,27 @@
       <h1 class="thanks__title">ご予約リクエストを<br>受け付けました</h1>
       <p>お申し込みいただき、ありがとうございます。<br>内容を確認のうえ、当院より<b>お電話でご予約確定のご連絡</b>をいたします。</p>
 
+      <div class="thanks__booking" id="booking" hidden>
+        <p class="thanks__booking-title">ご希望の日時</p>
+        <ol class="thanks__booking-list" id="booking-list"></ol>
+        <p class="note">※ご予約はまだ確定していません。当院からのお電話で確定となります。</p>
+      </div>
+      <script>
+        (function () {
+          try {
+            var list = JSON.parse(sessionStorage.getItem('lp_booking') || '[]');
+            if (!list.length) return;
+            var ol = document.getElementById('booking-list');
+            list.forEach(function (text, i) {
+              var li = document.createElement('li');
+              li.textContent = '第' + (i + 1) + '希望：' + text;
+              ol.appendChild(li);
+            });
+            document.getElementById('booking').hidden = false;
+          } catch (e) {}
+        })();
+      </script>
+
       <ol class="thanks__steps">
         <li><span class="num-badge">1</span><span>当院から確認のお電話をいたします（052-571-3345）。ご希望の日時を調整し、ご予約確定となります。</span></li>
         <li><span class="num-badge">2</span><span>ご来院時は、<b>健康保険証・お薬手帳（服用中のお薬がある方）・今お使いの入れ歯</b>をお持ちください。</span></li>
@@ -57,7 +81,7 @@
         <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>
         <span>052-571-3345<span class="btn__sub">受付：平日 9:30〜12:30／14:30〜19:00</span></span>
       </a>
-      <p class="note" style="margin-top:24px">名駅歯科クリニック・矯正歯科<br>〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階<br>JR・名鉄「名古屋駅」3番出口から徒歩2分</p>
+      <p class="note thanks__address">名駅歯科クリニック・矯正歯科<br>〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階<br>JR・名鉄「名古屋駅」3番出口から徒歩2分</p>
       <p><a href="index.html">ページトップへ戻る</a></p>
     </div>
   </div>

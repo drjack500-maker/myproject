@@ -13,6 +13,14 @@
 <meta property="og:title" content="手術当日に固定式の仮歯｜名古屋駅徒歩2分のオールオン4">
 <meta property="og:description" content="4本のインプラントで片あごすべての歯を支えるオールオン4。静脈内鎮静法・最大120回分割に対応。無料カウンセリング受付中。">
 <meta property="og:locale" content="ja_JP">
+<!-- 【要設定】公開URLに合わせて変更（SNSやLINEで共有されたときの画像はフルURLが必要） -->
+<meta property="og:url" content="https://www.meieki-dental.net/all_on_4_004/">
+<meta property="og:image" content="https://www.meieki-dental.net/all_on_4_004/assets/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 
 <script>
   /* JS有効判定と文字サイズ設定を描画前に適用（レイアウトのズレ防止） */
@@ -22,7 +30,10 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<!-- Webフォントは表示を止めないよう非同期で読み込む（読み込み前は端末の日本語フォントで表示） -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"></noscript>
 <link rel="stylesheet" href="assets/css/style.css">
 
 <!-- Google Tag Manager（コンテナIDを設定して有効化）
@@ -78,16 +89,16 @@
 <!-- ================= Header ================= -->
 <header class="site-header" id="top">
   <div class="container site-header__inner">
-    <a class="brand" href="#top" aria-label="名駅歯科クリニック・矯正歯科 ページ先頭へ">
+    <a class="brand" href="#top">
       <span class="brand__sub">JR名古屋駅 徒歩2分</span>
       <span class="brand__name">名駅歯科クリニック<span class="brand__name-sub">・矯正歯科</span></span>
     </a>
     <div class="site-header__actions">
-      <button type="button" class="fs-toggle" data-fs-toggle aria-pressed="false" aria-label="文字サイズを大きくする">
+      <button type="button" class="fs-toggle" data-fs-toggle aria-pressed="false">
         <span class="fs-toggle__a" aria-hidden="true">A</span><span class="fs-toggle__label">文字<br>拡大</span>
       </button>
       <a class="header-tel" href="tel:0525713345" data-track="header_tel">
-        <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>
+        <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span class="u-visually-hidden">電話をかける</span>
         <span class="header-tel__body"><span class="header-tel__num">052-571-3345</span><span class="header-tel__time">平日 9:30〜19:00</span></span>
       </a>
       <a class="btn btn--primary btn--sm header-cta" href="#reserve" data-track="header_reserve">無料カウンセリング予約</a>
@@ -317,37 +328,37 @@
 
     <ul class="features" role="list">
       <li class="feature reveal">
-        <span class="feature__num">01</span>
+        <span class="feature__num" data-num="01" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-train"/></svg></span>
         <h3 class="feature__title">名古屋駅から徒歩2分</h3>
         <p>JR・名鉄「名古屋駅」3番出口から徒歩2分。手術当日や術後の通院、ご家族の付き添いにも便利です。愛知・岐阜・三重からも通いやすい立地です。</p>
       </li>
       <li class="feature reveal">
-        <span class="feature__num">02</span>
+        <span class="feature__num" data-num="02" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg></span>
         <h3 class="feature__title">静脈内鎮静法・全身麻酔に対応</h3>
         <p>うとうとした状態で手術を受けられる静脈内鎮静法や、全身麻酔に対応しています。歯科治療に強い不安や恐怖心がある方もご相談ください。</p>
       </li>
       <li class="feature reveal">
-        <span class="feature__num">03</span>
+        <span class="feature__num" data-num="03" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-scan"/></svg></span>
         <h3 class="feature__title">CT×デジタルガイドで計画的に</h3>
         <p>歯科用CTで骨の量・形・神経の位置を立体的に確認。コンピューター上で計画した位置へ埋め込むため、デジタルインプラントガイドを活用します。</p>
       </li>
       <li class="feature reveal">
-        <span class="feature__num">04</span>
+        <span class="feature__num" data-num="04" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-room"/></svg></span>
         <h3 class="feature__title">専用オペ室と滅菌システム</h3>
         <p>外科手術であるインプラント治療のために、専用のオペルームを完備。器具の滅菌システムを整え、感染対策に取り組んでいます。</p>
       </li>
       <li class="feature reveal">
-        <span class="feature__num">05</span>
+        <span class="feature__num" data-num="05" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-layers"/></svg></span>
         <h3 class="feature__title">骨が少ない方にも選択肢を</h3>
         <p>斜めの埋入に加え、上あごの骨が少ない方には頬骨を利用する「ザイゴマインプラント」も選択肢になります。他院で難しいと言われた方もご相談ください。</p>
       </li>
       <li class="feature reveal">
-        <span class="feature__num">06</span>
+        <span class="feature__num" data-num="06" aria-hidden="true"></span>
         <span class="feature__icon"><svg class="ic" aria-hidden="true"><use href="#i-yen"/></svg></span>
         <h3 class="feature__title">最大120回の分割払い</h3>
         <p>デンタルローンで月々39,000円〜。医療費控除の対象となるため、確定申告で税金の還付・減額を受けられる場合があります。</p>
@@ -477,7 +488,7 @@
       <p class="section-lead">ご相談から最終的な歯が入るまで、一つひとつ丁寧にご説明しながら進めます。</p>
     </header>
 
-    <ol class="flow" role="list">
+    <ol class="flow">
       <li class="flow__step reveal">
         <span class="flow__no">STEP<b>1</b></span>
         <div class="flow__body">
@@ -534,12 +545,12 @@
 </section>
 
 <!-- ================= Cases =================
-  【差し替え必須】実際の症例写真・情報に置き換えてください。
+  【初期状態は非表示】実際の症例写真・情報を入れてから、下の section の hidden 属性を外してください。
   医療広告ガイドラインにより、術前・術後写真を掲載する場合は
   「治療内容」「標準的な費用」「治療期間・回数」「主なリスク・副作用」の併記が必要です。
   症例が用意できるまでは、このセクションごと非表示（hidden属性）にしてください。
 -->
-<section class="section" id="cases" aria-labelledby="cases-title">
+<section class="section" id="cases" aria-labelledby="cases-title" hidden>
   <div class="container">
     <header class="section-head">
       <p class="eyebrow">CASES</p>
@@ -587,11 +598,11 @@
       <h2 class="section-title" id="doctor-title">院長からのメッセージ</h2>
     </header>
 
-    <div class="doctor reveal">
+    <!-- 院長写真を使う場合：assets/img/doctor.jpg（縦5:横4、幅960px程度）を置き、下の div の「is-noimg」を消して img のコメントを外す -->
+    <div class="doctor is-noimg reveal" data-photo-wrap>
       <figure class="doctor__photo">
-        <!-- 院長写真に差し替え：<img src="assets/img/doctor.jpg" alt="院長 二宮奈津子" width="480" height="600" loading="lazy"> -->
-        <div class="ph ph--portrait" role="img" aria-label="院長写真（差し替え）">院長写真</div>
-        <figcaption><span class="doctor__role">院長</span><span class="doctor__name">二宮 奈津子</span></figcaption>
+        <!-- <img src="assets/img/doctor.jpg" alt="院長 二宮 奈津子" width="480" height="600" decoding="async" loading="lazy" data-optional-img> -->
+        <figcaption><span class="doctor__badge" aria-hidden="true"><svg class="ic"><use href="#i-tooth"/></svg></span><span class="doctor__role">院長</span><span class="doctor__name">二宮 奈津子</span></figcaption>
       </figure>
       <div class="doctor__body">
         <!-- 【要確認】以下のメッセージは公開情報をもとにした下書きです。院長ご本人の確認・修正を経て公開してください -->
@@ -804,8 +815,13 @@
           <input type="hidden" name="utm_term"><input type="hidden" name="utm_content"><input type="hidden" name="gclid">
           <input type="hidden" name="gbraid"><input type="hidden" name="wbraid"><input type="hidden" name="yclid">
           <input type="hidden" name="lp_variant"><input type="hidden" name="landing_url"><input type="hidden" name="referrer">
+          <input type="hidden" name="elapsed">
+          <!-- スパム対策（人には見えない項目。入力があれば送信しない） -->
+          <div class="rform__hp" aria-hidden="true">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
 
-          <p class="rform__privacy">ご入力いただいた個人情報は、ご予約・ご相談への対応のみに使用し、適切に管理します。</p>
+          <p class="rform__privacy">ご入力いただいた個人情報は、ご予約・ご相談への対応のみに使用し、適切に管理します。詳しくは<a href="privacy.html" target="_blank" rel="noopener">個人情報の取り扱い</a>をご覧ください。</p>
           <p class="field__error rform__submit-error" data-error="submit" hidden>送信できませんでした。お手数ですが、お電話（<a href="tel:0525713345">052-571-3345</a>）でご予約ください。</p>
           <div class="rform__nav rform__nav--split">
             <button type="button" class="btn btn--ghost" data-prev>戻る</button>
@@ -876,12 +892,13 @@
     <p>医療法人スマイル／院長 二宮 奈津子</p>
     <p>〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階</p>
     <p>TEL <a href="tel:0525713345">052-571-3345</a></p>
+    <p><a href="privacy.html">個人情報の取り扱い</a></p>
     <p class="site-footer__copy"><small>&copy; 名駅歯科クリニック・矯正歯科</small></p>
   </div>
 </footer>
 
 <!-- ================= Sticky CTA (mobile) ================= -->
-<div class="sticky-cta" data-sticky aria-label="予約・お問い合わせ">
+<nav class="sticky-cta" data-sticky aria-label="予約・お問い合わせ">
   <a class="sticky-cta__btn sticky-cta__btn--tel" href="tel:0525713345" data-track="sticky_tel">
     <svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span>電話</span>
   </a>
@@ -891,7 +908,7 @@
   <a class="sticky-cta__btn sticky-cta__btn--primary" href="#reserve" data-track="sticky_reserve">
     <svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><span>無料カウンセリング予約<small>相談だけでもOK</small></span>
   </a>
-</div>
+</nav>
 
 <script src="assets/js/main.js" defer></script>
 </body>

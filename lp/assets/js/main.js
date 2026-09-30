@@ -9,7 +9,8 @@
      --------------------------------------------------------- */
   const CONFIG = {
     // フォーム送信先（空ならデモモード：送信せずサンクスページへ遷移）
-    // 例：自社のフォーム受信API、formrun / Googleフォーム連携のエンドポイントなど
+    // 同梱の Google Apps Script（server/gas/Code.gs）をデプロイした「…/exec」のURLを設定
+    // ※ application/x-www-form-urlencoded で POST するため、一般的なフォーム受信サービスでも利用可
     formEndpoint: '',
     thanksUrl: 'thanks.html',
     // LINE公式アカウントの友だち追加URL（空ならLINEボタンを表示しない）
@@ -28,6 +29,8 @@
     // 予約時間帯【要確認】
     timeSlots: ['午前（9:30〜12:30）', '午後（14:30〜17:00）', '夕方（17:00〜19:00）'],
   };
+  // HTML側で window.LP_CONFIG = { formEndpoint: '...' } のように上書きも可能（main.js を編集せずに設定したい場合）
+  if (window.LP_CONFIG && typeof window.LP_CONFIG === 'object') Object.assign(CONFIG, window.LP_CONFIG);
 
   /* ---------------------------------------------------------
      広告キーワード別のファーストビュー出し分け（メッセージマッチ）
@@ -77,6 +80,7 @@
   const pad = (n) => String(n).padStart(2, '0');
   const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
+  const loadedAt = Date.now();
 
   /* ---------------------------------------------------------
      1. 流入元パラメータの保持（フォームの隠し項目へ）
@@ -114,10 +118,7 @@
   const fsButtons = $$('[data-fs-toggle]');
   const syncFs = () => {
     const on = document.documentElement.dataset.fs === 'lg';
-    fsButtons.forEach((b) => {
-      b.setAttribute('aria-pressed', String(on));
-      b.setAttribute('aria-label', on ? '文字サイズを標準に戻す' : '文字サイズを大きくする');
-    });
+    fsButtons.forEach((b) => b.setAttribute('aria-pressed', String(on)));
   };
   fsButtons.forEach((b) => b.addEventListener('click', () => {
     const next = document.documentElement.dataset.fs === 'lg' ? '' : 'lg';
@@ -350,6 +351,10 @@
       if (!started) { started = true; track('form_start', { lp_variant: variant }); }
       const n = e.target.name;
       if (/^(date1|time1)$/.test(n) && val('date1') && val('time1')) showError('date1', false);
+    });
+    // エラー表示は入力中に消す（入力欄から離れた瞬間に消すと、ボタンの位置がずれてタップが外れるため）
+    form.addEventListener('input', (e) => {
+      const n = e.target.name;
       if (n === 'tel' || n === 'name' || n === 'email') showError(n, false);
     });
     $$('[data-next]', form).forEach((b) => b.addEventListener('click', () => {
@@ -365,19 +370,41 @@
       }
     });
 
+    // サンクスページで希望日時を表示するために保存（個人情報は含めない）
+    const dateLabel = (iso) => {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-').map(Number);
+      const w = new Date(y, m - 1, d).getDay();
+      return `${m}月${d}日（${WEEK[w]}）`;
+    };
+    const saveBooking = () => {
+      const booking = [[val('date1'), val('time1')], [val('date2'), val('time2')]]
+        .filter(([d]) => d)
+        .map(([d, t]) => `${dateLabel(d)} ${t}`.trim());
+      store.set('lp_booking', JSON.stringify(booking));
+    };
+
+    let submitting = false;
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (current !== steps.length - 1) return;
+      if (submitting || current !== steps.length - 1) return;
       if (!validateStep(current)) return;
 
       Object.entries(attribution).forEach(([k, v]) => { if (form.elements[k]) form.elements[k].value = v; });
       form.elements.lp_variant.value = variant;
+      form.elements.elapsed.value = String(Math.round((Date.now() - loadedAt) / 1000));
 
       const submitBtn = $('[data-submit]', form);
+      const submitLabel = submitBtn.innerHTML;
       const errBox = $('[data-error="submit"]', form);
       errBox.hidden = true;
       const concerns = $$('input[name="concerns"]:checked', form).map((c) => c.value);
       const eventParams = { lp_variant: variant, who: val('who'), concerns: concerns.join(','), age: val('age') };
+
+      // スパム対策：人には見えない項目に入力があれば、送信したふりをして終了
+      if (val('website')) { location.href = CONFIG.thanksUrl; return; }
+
+      saveBooking();
 
       if (!CONFIG.formEndpoint) {
         // デモモード：送信先が未設定のため、送信せずにサンクスページへ
@@ -387,25 +414,49 @@
         return;
       }
 
+      submitting = true;
       submitBtn.disabled = true;
       submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.textContent = '送信しています…';
+      const ctrl = 'AbortController' in window ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 20000) : null;
       try {
         const res = await fetch(CONFIG.formEndpoint, {
           method: 'POST',
-          body: new FormData(form),
+          body: new URLSearchParams(new FormData(form)),
           headers: { Accept: 'application/json' },
+          signal: ctrl ? ctrl.signal : undefined,
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        let data = null;
+        try { data = await res.json(); } catch (_) { /* JSON以外の応答は成功扱い */ }
+        if (data && data.ok === false) throw new Error(data.error || 'rejected');
         track('form_submit', eventParams);
         location.href = CONFIG.thanksUrl;
       } catch (err) {
+        submitting = false;
         errBox.hidden = false;
         submitBtn.disabled = false;
         submitBtn.removeAttribute('aria-busy');
+        submitBtn.innerHTML = submitLabel;
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         track('form_submit_error', { message: String(err && err.message) });
+      } finally {
+        if (timer) clearTimeout(timer);
       }
     });
   }
+
+  /* ---------------------------------------------------------
+     9-2. 任意の写真（未設置なら写真なしのレイアウトに切り替え）
+     --------------------------------------------------------- */
+  $$('img[data-optional-img]').forEach((img) => {
+    const wrap = img.closest('[data-photo-wrap]');
+    if (!wrap) return;
+    const fail = () => wrap.classList.add('is-noimg');
+    if (img.complete && img.naturalWidth === 0) fail();
+    else img.addEventListener('error', fail, { once: true });
+  });
 
   /* ---------------------------------------------------------
      10. スクロール表示アニメーション
