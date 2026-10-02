@@ -100,3 +100,12 @@ npm run build:preview  # 1ファイル版の確認用プレビュー（dist/prev
 | お名前（必須）／電話番号（必須）／電話の希望時間帯／メール／年代／備考 | `name` `tel` `contact_time` `email` `age` `note` |
 | 流入元（自動） | `utm_source` `utm_medium` `utm_campaign` `utm_term` `utm_content` `gclid` `gbraid` `wbraid` `yclid` `lp_variant` `landing_url` `referrer` |
 | スパム対策（自動） | `elapsed`（ページを開いてから送信までの秒数）、`hp_extra`（人には見えない項目）。疑わしい送信は受信側で「スパム疑い」として台帳に残し、通知メールは送らず、成約としても数えません |
+
+## 別事業の制作物（`ibiki/`）
+
+`ibiki/` は、医院とは別に運営する「となりのいびき相談室」（いびきのコンテンツ販売）の制作物です（LINE配信文・LP・ショート動画台本）。医院のLPとは独立しています。詳しくは [`ibiki/README.md`](ibiki/README.md)。
+
+```bash
+npm run serve:ibiki          # いびきLPを http://localhost:8000/ で確認
+npm run build:ibiki-images   # いびきLPのOGP画像を作り直す
+```

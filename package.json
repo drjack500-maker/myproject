@@ -4,11 +4,13 @@
   "description": "オールオン4 LP（名駅歯科クリニック・矯正歯科）",
   "scripts": {
     "serve": "node tools/serve.js",
+    "serve:ibiki": "node tools/serve.js ibiki/lp",
     "test": "npm run lint:html && npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/gas.test.js",
-    "test:e2e": "node --test tests/e2e.test.js",
-    "lint:html": "html-validate lp/*.html",
+    "test:e2e": "node --test tests/e2e.test.js tests/ibiki-lp.test.js",
+    "lint:html": "html-validate lp/*.html ibiki/lp/*.html",
     "build:images": "node tools/build-images.js",
+    "build:ibiki-images": "node tools/build-ibiki-images.js",
     "build:preview": "node tools/build-preview.js",
     "build:hotfix": "node tools/build-hotfix.js"
   },
