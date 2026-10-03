@@ -487,15 +487,25 @@ def load_api_key() -> str | None:
 
 def require_api_key() -> str:
     key = load_api_key()
-    if not key:
+    if key:
+        return key
+    empty = [v for v in ("GEMINI_API_KEY", "GOOGLE_API_KEY") if v in os.environ]
+    found = f"（{'・'.join(empty)} はありますが値が空です）" if empty else "（GEMINI_API_KEY という環境変数がありません）"
+    if os.environ.get("CLAUDE_CODE_REMOTE"):  # claude.ai のクラウド環境で実行中
         raise UserError(
-            "Gemini の API キーが見つかりません。\n"
+            f"Gemini の API キーが見つかりません{found}。\n"
             "  1. https://aistudio.google.com/apikey でキーを発行\n"
-            "  2. ターミナルで export GEMINI_API_KEY='発行したキー'（~/.zshrc に書くと毎回不要）\n"
-            f"     または {SKILL_DIR / '.env'} に GEMINI_API_KEY=発行したキー と書く\n"
-            "  3. Claude Code を起動し直してもう一度実行"
+            "  2. セッション上部のクラウド環境メニュー →「Edit」で、環境変数に GEMINI_API_KEY=発行したキー を追加して保存\n"
+            "     （名前は大文字・アンダースコアまで正確に。手元の Mac の ~/.zshrc はクラウドには届きません）\n"
+            "  3. 新しいセッションを始めてもう一度実行（実行中のセッションには反映されません）"
         )
-    return key
+    raise UserError(
+        f"Gemini の API キーが見つかりません{found}。\n"
+        "  1. https://aistudio.google.com/apikey でキーを発行\n"
+        "  2. ターミナルで export GEMINI_API_KEY='発行したキー'（~/.zshrc に書くと毎回不要）\n"
+        f"     または {SKILL_DIR / '.env'} に GEMINI_API_KEY=発行したキー と書く\n"
+        "  3. Claude Code を起動し直してもう一度実行"
+    )
 
 
 _ssl_context: ssl.SSLContext | None = None

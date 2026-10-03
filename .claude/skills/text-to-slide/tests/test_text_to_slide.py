@@ -304,9 +304,19 @@ class EndToEndTest(unittest.TestCase):
     def test_missing_key(self):
         deck = self.prepare()
         self.write_plan(deck, self.PLAN)
-        code, out = run_cli("render", str(deck))
+        with mock.patch.dict(os.environ, {"CLAUDE_CODE_REMOTE": ""}):
+            del os.environ["CLAUDE_CODE_REMOTE"]
+            code, out = run_cli("render", str(deck))
         self.assertEqual(code, 2)
-        self.assertIn("GEMINI_API_KEY", out)
+        self.assertIn("export GEMINI_API_KEY", out)
+        self.assertIn("環境変数がありません", out)
+
+        with mock.patch.dict(os.environ, {"CLAUDE_CODE_REMOTE": "true", "GEMINI_API_KEY": " "}):
+            code, out = run_cli("check")
+        self.assertEqual(code, 2)
+        self.assertIn("クラウド環境メニュー", out)
+        self.assertIn("新しいセッション", out)
+        self.assertIn("GEMINI_API_KEY はありますが値が空です", out)
 
     def test_render_reuse_and_partial_regeneration(self):
         deck = self.prepare()
