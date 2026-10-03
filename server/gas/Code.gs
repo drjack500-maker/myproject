@@ -8,7 +8,7 @@
  *
  * 設置手順（詳しくは server/gas/README.md）
  *   1. Google スプレッドシートを新規作成 →［拡張機能］→［Apps Script］
- *   2. このファイルの内容を貼り付け、下の SETTINGS を編集して保存
+ *   2. このファイルの内容を貼り付けて保存（通知先を変える場合だけ下の SETTINGS を編集）
  *   3. 関数「setup」を1回実行（シートの作成・権限の承認）
  *   4. ［デプロイ］→［新しいデプロイ］→ 種類「ウェブアプリ」
  *      実行ユーザー：自分 ／ アクセスできるユーザー：全員
@@ -16,8 +16,8 @@
  */
 
 const SETTINGS = {
-  // 通知メールの送信先（複数ある場合はカンマ区切り）【要設定】
-  notifyTo: 'clinic@example.com',
+  // 通知メールの送信先（複数ある場合はカンマ区切り）。空欄なら、このスクリプトを設置した Google アカウントに送る
+  notifyTo: '',
   clinicName: '名駅歯科クリニック・矯正歯科',
   clinicTel: '052-571-3345',
   clinicHours: '電話受付 月〜金 9:00〜19:00',
@@ -231,7 +231,8 @@ function buildConversionSheet() {
    メール
    ---------------------------------------------------------------- */
 function notify_(d) {
-  if (!SETTINGS.notifyTo || /example\.com$/.test(SETTINGS.notifyTo)) return;
+  const to = SETTINGS.notifyTo || Session.getEffectiveUser().getEmail();
+  if (!to) return;
   const url = SpreadsheetApp.getActive().getUrl();
   const body = [
     'オールオン4 LP から予約リクエストが届きました。',
@@ -259,7 +260,7 @@ function notify_(d) {
     '予約台帳：' + url,
   ].join('\n');
   MailApp.sendEmail({
-    to: SETTINGS.notifyTo,
+    to: to,
     subject: '【オールオン4 LP】予約リクエスト：' + d.name + ' 様（第1希望 ' + dateLabel_(d.date1) + '）',
     body: body,
     name: 'オールオン4 LP',

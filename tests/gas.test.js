@@ -60,6 +60,7 @@ function load() {
     },
     CacheService: { getScriptCache: () => ({ get: (k) => cache.get(k) || null, put: (k, v) => cache.set(k, v) }) },
     LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
+    Session: { getEffectiveUser: () => ({ getEmail: () => 'owner@clinic.test' }) },
     MailApp: { sendEmail: (m) => mails.push(m) },
     ContentService: {
       MimeType: { JSON: 'json' },
@@ -115,10 +116,11 @@ test('valid submission is saved, notifies clinic and auto-replies', () => {
   assert.match(mails[1].body, /第1希望：10月2日（金） 午後/);
 });
 
-test('placeholder notify address does not send clinic mail', () => {
+test('empty notify address sends clinic mail to the script owner', () => {
   const { api, mails } = load();
   post(api, { ...VALID, email: '' });
-  assert.equal(mails.length, 0);
+  assert.equal(mails.length, 1);
+  assert.equal(mails[0].to, 'owner@clinic.test');
 });
 
 test('honeypot and too-fast submissions are kept as spam suspects without emails', () => {
