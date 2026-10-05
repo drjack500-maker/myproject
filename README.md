@@ -14,6 +14,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/youtube-acquisition-plan.md`](docs/youtube-acquisition-plan.md) | **グループ院（アルティメイト栄歯科）の YouTube チャンネルからの集客プラン**（2026年10月5日時点の数字・問い合わせが少ない原因・優先順の施策・KPI・ガイドライン上の注意） |
 | [`docs/youtube-templates.md`](docs/youtube-templates.md) | 上のプランの貼り付け用文面（固定コメント・説明欄・UTMつきURL・動画内の台本・LINE配信・新企画・YouTube 広告の設定・受付での聞き取り） |
 | [`docs/youtube-video-texts.md`](docs/youtube-video-texts.md) | **動画11本それぞれの固定コメント・説明欄・終了画面の設定**（そのまま貼り付けられる完成版。`python3 tools/youtube-texts.py` で生成）と、直したいタイトル・サムネイル |
+| [`youtube-assets/`](youtube-assets/) | **動画に入れる素材**：QRコード入りの終了画面・重ねるQRコード・電話番号の帯（テレビで見ている人向け。`npm run build:youtube-assets` で生成、QRコードの読み取りはテストで確認） |
 | [`youtube-lp/`](youtube-lp/) | **栄院の「YouTube をご覧の方へ」ページ**（説明欄・固定コメント・YouTube 広告のリンク先。院長の北村が最初の画面に出て、動画・無料相談の流れ・費用・3ステップの予約フォームまでを1ページに。→ [下の説明](#youtube-をご覧の方向けページ栄院youtube-lp)） |
 
 ## ファイル構成
@@ -111,13 +112,14 @@ npm run serve:youtube  # 栄院 YouTube をご覧の方向けページを http:/
 npm test               # HTML検証 + 受信スクリプトのテスト + ブラウザテスト（アクセシビリティ検査を含む）
 npm run build:images   # OGP画像・ホーム画面アイコンを再生成（youtube-lp/ は build:images:youtube）
 npm run sync:shared    # lp/ の main.js・style.css などを youtube-lp/ にコピー
+npm run build:youtube-assets  # YouTube 動画用のQRコード素材を youtube-assets/ に作る
 npm run build:preview  # 1ファイル版の確認用プレビュー（dist/preview.html。youtube-lp/ は build:preview:youtube）
 ```
 
 ### 品質チェックの結果（2026年9月時点）
 
 - HTML検証（html-validate）：エラーなし
-- 自動テスト：受信スクリプト 12件、ブラウザ操作 39件（名駅歯科LP 20件・栄院 YouTube ページ 19件）すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
+- 自動テスト：受信スクリプト 12件、ブラウザ操作 44件（名駅歯科LP 20件・栄院 YouTube ページ 19件・動画用QR素材 5件）すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
 - アクセシビリティ（axe-core）：重大・深刻な問題なし
 - Lighthouse（モバイル、3回計測）：パフォーマンス 84〜97（計測ごとのばらつきあり。3回中2回は97）／アクセシビリティ 100／ベストプラクティス 96／SEO 63（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
 
