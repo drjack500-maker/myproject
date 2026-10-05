@@ -12,6 +12,7 @@ const SHARED = [
   'assets/js/main.js',
   'assets/css/style.css',
   'assets/img/doctor-kawai.jpg',
+  'assets/img/doctor-ozaki.jpg',
 ];
 
 module.exports = { SHARED };

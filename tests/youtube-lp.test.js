@@ -210,12 +210,15 @@ test('追従ボタン：最初は非表示、スクロールで表示、フォ�
   await page.context().close();
 });
 
-test('医師・院内の写真が表示される', async () => {
+test('医師（院長・理事長・麻酔医）と院内の写真が表示される', async () => {
   const page = await open();
   for (const sel of ['#doctor .doctor', '#doctor .team', '.rooms']) {
     await page.locator(sel).scrollIntoViewIfNeeded();
     await page.waitForFunction((q) => [...document.querySelectorAll(`${q} img`)].every((i) => i.complete && i.naturalWidth > 0), sel);
   }
+  assert.match(await page.textContent('#doctor .doctor'), /院長北村 隆典/);
+  const team = await page.$$eval('#doctor .member', (els) => els.map((e) => `${e.querySelector('.member__role').textContent} ${e.querySelector('.member__name').textContent}`));
+  assert.deepEqual(team, ['医療法人スマイル 理事長 尾崎 隆', '麻酔医（医療法人スマイル） 河合 温子']);
   await page.context().close();
 });
 
