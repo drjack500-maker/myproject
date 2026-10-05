@@ -14,6 +14,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/youtube-acquisition-plan.md`](docs/youtube-acquisition-plan.md) | **グループ院（アルティメイト栄歯科）の YouTube チャンネルからの集客プラン**（2026年10月5日時点の数字・問い合わせが少ない原因・優先順の施策・KPI・ガイドライン上の注意） |
 | [`docs/youtube-templates.md`](docs/youtube-templates.md) | 上のプランの貼り付け用文面（固定コメント・説明欄・UTMつきURL・動画内の台本・LINE配信・新企画・YouTube 広告の設定・受付での聞き取り） |
 | [`docs/youtube-video-texts.md`](docs/youtube-video-texts.md) | **動画11本それぞれの固定コメント・説明欄・終了画面の設定**（そのまま貼り付けられる完成版。`python3 tools/youtube-texts.py` で生成）と、直したいタイトル・サムネイル |
+| [`docs/youtube-ads-plan.md`](docs/youtube-ads-plan.md) | **栄院の YouTube 広告の設定**（今の広告の実績と見直し、名古屋近郊に絞る2つのキャンペーン、広告文、院長の案内動画の台本、判断の基準） |
 | [`youtube-assets/`](youtube-assets/) | **動画に入れる素材**：QRコード入りの終了画面・重ねるQRコード・電話番号の帯（テレビで見ている人向け。`npm run build:youtube-assets` で生成、QRコードの読み取りはテストで確認） |
 | [`youtube-lp/`](youtube-lp/) | **栄院の「YouTube をご覧の方へ」ページ**（説明欄・固定コメント・YouTube 広告のリンク先。院長の北村が最初の画面に出て、動画・無料相談の流れ・費用・3ステップの予約フォームまでを1ページに。→ [下の説明](#youtube-をご覧の方向けページ栄院youtube-lp)） |
 
