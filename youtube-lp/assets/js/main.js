@@ -97,7 +97,8 @@
      1. 流入元パラメータの保持（フォームの隠し項目へ）
      --------------------------------------------------------- */
   const params = new URLSearchParams(location.search);
-  const ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'gbraid', 'wbraid', 'yclid'];
+  // fbclid は Meta（Facebook・Instagram）広告のクリックID。フォームに同名の隠し項目があるページだけ送信される
+  const ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'gbraid', 'wbraid', 'yclid', 'fbclid'];
   let attribution = {};
   try { attribution = JSON.parse(store.get('lp_attr') || '{}'); } catch (e) { attribution = {}; }
   ATTR_KEYS.forEach((k) => { const v = params.get(k); if (v) attribution[k] = v; });

@@ -74,6 +74,7 @@ const COLUMNS = [
   ['gbraid', 'gbraid'],
   ['wbraid', 'wbraid'],
   ['yclid', 'yclid'],
+  ['fbclid', 'fbclid'],
   ['landing_url', '流入ページ'],
   ['referrer', '参照元'],
 ];

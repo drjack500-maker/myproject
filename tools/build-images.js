@@ -2,7 +2,8 @@
  * OGP画像（SNS共有用）とホーム画面アイコンを生成する
  *   npm run build:images          → lp/assets/img/ogp.png（1200×630）, lp/assets/img/apple-touch-icon.png（180×180）
  *   npm run build:images:youtube  → youtube-lp/assets/img/ogp.png, youtube-lp/assets/img/apple-touch-icon.png
- * 文言を変えたい場合は下の OGP_HTML（YouTube をご覧の方向けページは YT_OGP_HTML）を編集して再実行してください。
+ *   npm run build:images:meta     → meta-lp/assets/img/ogp.png, meta-lp/assets/img/apple-touch-icon.png
+ * 文言を変えたい場合は下の OGP_HTML（栄院のページは sakaeOgpHtml の呼び出し）を編集して再実行してください。
  */
 const path = require('node:path');
 const fs = require('node:fs');
@@ -24,7 +25,9 @@ const viaCurl = async (route) => {
 
 const IMG_DIR = path.join(__dirname, '..', 'lp', 'assets', 'img');
 const YT_IMG_DIR = path.join(__dirname, '..', 'youtube-lp', 'assets', 'img');
+const META_IMG_DIR = path.join(__dirname, '..', 'meta-lp', 'assets', 'img');
 const YOUTUBE = process.argv.includes('--youtube');
+const META = process.argv.includes('--meta');
 const dataUri = (dir, file, type) => `data:${type};base64,${fs.readFileSync(path.join(dir, file)).toString('base64')}`;
 const FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=block">';
 
@@ -72,13 +75,14 @@ const OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${F
 const iconHtml = (dir, bg) => `<!doctype html><html><head><meta charset="utf-8"><style>*{margin:0}body{width:180px;height:180px;background:${bg}}img{width:180px;height:180px;display:block}</style></head>
 <body><img src="${dataUri(dir, 'favicon.svg', 'image/svg+xml')}"></body></html>`;
 
-// 栄院 YouTube をご覧の方向けページ（youtube-lp/）
-const YT_OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${FONT}<style>
+// 栄院のページ（youtube-lp/・meta-lp/）。pre：左上のラベル、title：見出し、sub：その下の一文
+const sakaeOgpHtml = ({ pre, title, sub }) => `<!doctype html><html lang="ja"><head><meta charset="utf-8">${FONT}<style>
   *{box-sizing:border-box;margin:0}
   body{width:1200px;height:630px;font-family:"Noto Sans JP",sans-serif;color:#fff;letter-spacing:.02em;
     background:radial-gradient(700px 420px at 100% 0%,rgba(234,115,49,.22),transparent 60%),linear-gradient(135deg,#072f4a 0%,#0b5584 55%,#126da6 100%);
     display:grid;grid-template-columns:700px 1fr;align-items:center;gap:40px;padding:0 64px 76px;overflow:hidden}
-  .pre{display:inline-flex;align-items:center;gap:12px;background:#c4120c;color:#fff;font-weight:700;font-size:26px;padding:8px 24px 8px 18px;border-radius:999px}
+  .pre{display:inline-flex;align-items:center;gap:12px;background:#fff;color:#0b5584;font-weight:700;font-size:26px;padding:8px 24px;border-radius:999px}
+  .pre--yt{background:#c4120c;color:#fff;padding-left:18px}
   .pre i{display:inline-block;width:34px;height:24px;border-radius:7px;background:#fff;position:relative}
   .pre i::after{content:"";position:absolute;left:13px;top:6px;border-left:11px solid #c4120c;border-top:6px solid transparent;border-bottom:6px solid transparent}
   h1{font-size:56px;line-height:1.38;font-weight:900;margin:24px 0 18px}
@@ -92,13 +96,23 @@ const YT_OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">
   .foot span{color:#cf5317}
 </style></head><body>
   <div>
-    <span class="pre"><i></i>YouTubeをご覧の方へ</span>
-    <h1>動画でお話ししたことを、<br><em>あなたのお口で</em>確かめて<br>みませんか。</h1>
-    <p class="sub">CT撮影込みの無料相談・当日の契約なし</p>
+    ${pre}
+    <h1>${title}</h1>
+    <p class="sub">${sub}</p>
   </div>
   <div class="photo"><img src="${dataUri(YT_IMG_DIR, 'doctor-kitamura-fv.jpg', 'image/jpeg')}"><p><small>院長</small>北村 隆典</p></div>
   <div class="foot"><div><span>名古屋・栄駅 徒歩3分</span></div><div>アルティメイト栄歯科・矯正歯科</div></div>
 </body></html>`;
+const YT_OGP_HTML = sakaeOgpHtml({
+  pre: '<span class="pre pre--yt"><i></i>YouTubeをご覧の方へ</span>',
+  title: '動画でお話ししたことを、<br><em>あなたのお口で</em>確かめて<br>みませんか。',
+  sub: 'CT撮影込みの無料相談・当日の契約なし',
+});
+const META_OGP_HTML = sakaeOgpHtml({
+  pre: '<span class="pre">名古屋・栄のインプラント相談</span>',
+  title: '入れ歯・インプラントで<br>迷ったら、<em>CT撮影込みの<br>無料相談</em>から。',
+  sub: '当日の契約なし・ご家族の同席歓迎',
+});
 
 (async () => {
   const browser = await chromium.launch();
@@ -117,7 +131,10 @@ const YT_OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">
     await page.close();
     console.log('wrote', path.relative(path.join(__dirname, '..'), path.join(dir, file)));
   };
-  if (YOUTUBE) {
+  if (META) {
+    await render(META_OGP_HTML, 1200, 630, 'ogp.png', META_IMG_DIR);
+    await render(iconHtml(META_IMG_DIR, '#0b5584'), 180, 180, 'apple-touch-icon.png', META_IMG_DIR);
+  } else if (YOUTUBE) {
     await render(YT_OGP_HTML, 1200, 630, 'ogp.png', YT_IMG_DIR);
     await render(iconHtml(YT_IMG_DIR, '#0b5584'), 180, 180, 'apple-touch-icon.png', YT_IMG_DIR);
   } else {

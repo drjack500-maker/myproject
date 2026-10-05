@@ -1,7 +1,8 @@
 /*
- * lp/（または youtube-lp/）を配信するだけの小さな静的サーバー（依存なし）
+ * lp/・youtube-lp/・meta-lp/ を配信するだけの小さな静的サーバー（依存なし）
  *   npm run serve          → http://localhost:8000/（名駅歯科 オールオン4 LP）
  *   npm run serve:youtube  → http://localhost:8001/（栄院 YouTube をご覧の方向けページ）
+ *   npm run serve:meta     → http://localhost:8002/（栄院 Meta 広告用ページ）
  */
 const http = require('node:http');
 const fs = require('node:fs');
@@ -9,6 +10,7 @@ const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..', 'lp');
 const YOUTUBE_ROOT = path.join(__dirname, '..', 'youtube-lp');
+const META_ROOT = path.join(__dirname, '..', 'meta-lp');
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp',
@@ -36,10 +38,11 @@ function createServer(root = ROOT) {
   });
 }
 
-module.exports = { createServer, ROOT, YOUTUBE_ROOT };
+module.exports = { createServer, ROOT, YOUTUBE_ROOT, META_ROOT };
 
 if (require.main === module) {
-  const youtube = process.argv.includes('--youtube');
-  const port = Number(process.env.PORT || (youtube ? 8001 : 8000));
-  createServer(youtube ? YOUTUBE_ROOT : ROOT).listen(port, () => console.log(`${youtube ? 'YouTube LP' : 'LP'}: http://localhost:${port}/`));
+  const [name, root, defaultPort] = process.argv.includes('--youtube') ? ['YouTube LP', YOUTUBE_ROOT, 8001]
+    : process.argv.includes('--meta') ? ['Meta LP', META_ROOT, 8002] : ['LP', ROOT, 8000];
+  const port = Number(process.env.PORT || defaultPort);
+  createServer(root).listen(port, () => console.log(`${name}: http://localhost:${port}/`));
 }

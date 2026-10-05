@@ -139,6 +139,21 @@ test('clinic details, page label and watched video come from settings and the fo
   assert.doesNotMatch(mails[1].body, /名駅/);
 });
 
+test('Meta ad click id (fbclid) is saved, and an older ledger gets the column appended', () => {
+  const { api, sheets, mails, ctx } = load();
+  Object.assign(api.SETTINGS, { notifyTo: 'sakae@clinic.test', formLabel: '栄院 Meta広告' });
+  // 旧版の台帳：fbclid の列がない
+  const sheet = ctx.SpreadsheetApp.getActive().insertSheet(api.SETTINGS.sheetName);
+  sheet.rows.push(api.COLUMNS.filter(([k]) => k !== 'fbclid').map(([, l]) => l));
+  post(api, { ...VALID, name: '栄 花子', gclid: '', utm_source: 'instagram', utm_medium: 'paid_social', utm_campaign: 'sakae_implant', utm_term: '', utm_content: 'reel_a', fbclid: 'IwAR0abc_DEF-123' });
+  const header = sheet.rows[0];
+  assert.equal(header[header.length - 1], 'fbclid', 'missing column appended at the end');
+  assert.equal(sheet.rows[1][header.indexOf('fbclid')], 'IwAR0abc_DEF-123');
+  assert.equal(sheets[api.SETTINGS.sheetName].rows[1][colOf(api, sheet, 'utm_source')], 'instagram');
+  assert.match(mails[0].subject, /^【栄院 Meta広告】/);
+  assert.match(mails[0].body, /流入：instagram \/ sakae_implant \/ reel_a/);
+});
+
 test('notification omits the video line when none was chosen', () => {
   const { api, mails } = load();
   api.SETTINGS.notifyTo = 'reception@clinic.test';

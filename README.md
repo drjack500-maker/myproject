@@ -17,6 +17,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/youtube-ads-plan.md`](docs/youtube-ads-plan.md) | **栄院の YouTube 広告の設定**（今の広告の実績と見直し、名古屋近郊に絞る2つのキャンペーン、広告文、院長の案内動画の台本、判断の基準） |
 | [`youtube-assets/`](youtube-assets/) | **動画に入れる素材**：QRコード入りの終了画面・重ねるQRコード・電話番号の帯（テレビで見ている人向け。`npm run build:youtube-assets` で生成、QRコードの読み取りはテストで確認） |
 | [`youtube-lp/`](youtube-lp/) | **栄院の「YouTube をご覧の方へ」ページ**（説明欄・固定コメント・YouTube 広告のリンク先。院長の北村が最初の画面に出て、動画・無料相談の流れ・費用・3ステップの予約フォームまでを1ページに。→ [下の説明](#youtube-をご覧の方向けページ栄院youtube-lp)） |
+| [`meta-lp/`](meta-lp/) | **栄院の Meta（Facebook・Instagram）広告の遷移先**（上のページをコンパクトにした版。長さは約半分、動画は1本、広告のクリックID `fbclid` を予約台帳に記録。→ [下の説明](#meta-広告用ページ栄院meta-lp)） |
 
 ## ファイル構成
 
@@ -104,23 +105,58 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 
 医院の方に見てもらうときは、`npm run build:preview:youtube` で作る1ファイル版（`dist/youtube-preview.html`、フォームは送信されません）を共有できます。
 
+## Meta 広告用ページ（栄院・`meta-lp/`）
+
+上の YouTube をご覧の方向けページを、**Meta（Facebook・Instagram）広告の遷移先**としてコンパクトにした版です。広告からは「院長の動画を見たことがない人」が来るため、動画の続きではなく「お悩み → 無料相談でやること → 費用 → 予約」を短く伝えます。
+
+- 最初の画面：「入れ歯・インプラントで迷ったら、CT撮影込みの無料相談から。」、院長の写真と名前、「当日の契約なし・ご家族の同席歓迎・相談だけでもOK」、予約・LINE・電話のボタン（スマホ 375×667 の最初の画面に収まる）。YouTube の赤い帯はやめて医院の青に
+- こんなお悩みの方へ（4つ）＋無料相談で行うこと（4ステップ）→ 医師（院長・理事長・麻酔医）と当院の特長4つ・動画1本 → 費用 → よくある質問（5問）→ LINE → 予約フォーム → アクセス → リスク・副作用
+- スマホでの長さは約6,900px（YouTube 向けページ 約14,500px の約半分。テストで6割以下を確認）。院内写真・院長メッセージ・動画8本・「ご覧になった動画」の欄は省いた
+- 広告のクリックID（`fbclid`）と UTM を、ページ内を移動しても保持し、予約フォームと一緒に送る（台帳の「fbclid」の列）
+- 共通ファイル：`main.js`・`style.css` は `lp/` から、`youtube.css`・`youtube.js`・院長の写真などは `youtube-lp/` から `npm run sync:shared` でコピー。この版だけの見た目は `meta.css`
+
+### 公開までの手順
+
+1. **予約フォームの受け皿**：YouTube のページと同じURLでよい（[`server/gas/README.md`](server/gas/README.md#栄院の-meta-広告用ページmeta-lpでも使う場合)）。`meta-lp/index.html` の最後にある `window.LP_CONFIG` の `formEndpoint` に設定
+2. **LINE**：L-Message で「栄院Meta広告ページ用」の流入経路を作り、同じ場所の `lineUrl` を差し替え（今は「栄院広告LP Google、META」の経路 `dPTarC`）
+3. **内容の確認**（`index.html` 内の `【要確認】`）：無料相談の流れ、費用の別途費用、栄駅からの徒歩分数、`privacy.html`（Meta ピクセルの利用を記載したひな形）
+4. **公開URL**：`meta-lp/` の中身を、例えば `https://www.ultimate-dental.com/meta/` にアップロードし、`index.html` の `og:url`・`og:image` を合わせる
+5. **計測（GTM `GTM-TKQ2RFV` で Meta ピクセルを設定）**
+   | Meta ピクセルのイベント | GTM のトリガー |
+   |---|---|
+   | `PageView` | `/meta/` のページの表示 |
+   | `Lead`（広告の最適化に使う） | カスタムイベント `reservation_complete` かつ データレイヤー変数 `lp_name` が `sakae_meta` |
+   | `Contact` | カスタムイベント `line_click`・`tel_click`（`/meta/` のページのみ） |
+   - イベントマネージャの**「自動詳細マッチング」はオフ**にしてください（オンだと、フォームに入力した名前・電話番号などが暗号化して Meta に送られます。`privacy.html` には「入力内容は送らない」と書いています）
+   - 公開後、イベントマネージャの「テストイベント」と GTM のプレビューで、予約1件につき `Lead` が1回だけ届くことを確認
+6. **広告のURL**：Meta 広告の「URLパラメータ」に次を入れる（`fbclid` は Meta が自動で付けます）
+   ```
+   utm_source={{site_source_name}}&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}
+   ```
+   `utm_source` には Facebook なら `fb`、Instagram なら `ig` が入り、台帳と通知メールの「流入」で見分けられます
+7. **広告の文面・画像**：医療広告ガイドライン（[計画書5章](docs/youtube-acquisition-plan.md)）に加えて、Meta の広告ポリシーで「入れ歯でお悩みのあなたへ」のように**見る人の健康状態を決めつける言い方は不可**です。「入れ歯・インプラントのご相談」「CT撮影込みの無料相談」のように、医院側の説明として書いてください。治療前後の写真・体験談は使わないでください
+8. **公開後**：`?utm_source=test&fbclid=test` を付けてスマホでテスト予約を1件送り、台帳の「fbclid」「utm_source」・通知メール・完了ページ・`Lead` を確認
+
+医院の方に見てもらうときは、`npm run build:preview:meta` で作る1ファイル版（`dist/meta-preview.html`、フォームは送信されません）を共有できます。
+
 ## 開発者向け
 
 ```bash
 npm install            # 初回のみ（Playwright のブラウザが無い場合は npx playwright install chromium）
 npm run serve          # http://localhost:8000/ で確認
 npm run serve:youtube  # 栄院 YouTube をご覧の方向けページを http://localhost:8001/ で確認
+npm run serve:meta     # 栄院 Meta 広告用ページを http://localhost:8002/ で確認
 npm test               # HTML検証 + 受信スクリプトのテスト + ブラウザテスト（アクセシビリティ検査を含む）
-npm run build:images   # OGP画像・ホーム画面アイコンを再生成（youtube-lp/ は build:images:youtube）
-npm run sync:shared    # lp/ の main.js・style.css などを youtube-lp/ にコピー
+npm run build:images   # OGP画像・ホーム画面アイコンを再生成（youtube-lp/ は build:images:youtube、meta-lp/ は build:images:meta）
+npm run sync:shared    # lp/ の main.js・style.css などを youtube-lp/・meta-lp/ に、youtube-lp/ の youtube.css などを meta-lp/ にコピー
 npm run build:youtube-assets  # YouTube 動画用のQRコード素材を youtube-assets/ に作る
-npm run build:preview  # 1ファイル版の確認用プレビュー（dist/preview.html。youtube-lp/ は build:preview:youtube）
+npm run build:preview  # 1ファイル版の確認用プレビュー（dist/preview.html。youtube-lp/ は build:preview:youtube、meta-lp/ は build:preview:meta）
 ```
 
 ### 品質チェックの結果（2026年9月時点）
 
 - HTML検証（html-validate）：エラーなし
-- 自動テスト：受信スクリプト 12件、ブラウザ操作 44件（名駅歯科LP 20件・栄院 YouTube ページ 19件・動画用QR素材 5件）すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
+- 自動テスト：受信スクリプト 13件、ブラウザ操作 62件（名駅歯科LP 20件・栄院 YouTube ページ 19件・栄院 Meta 広告用ページ 18件・動画用QR素材 5件）すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
 - アクセシビリティ（axe-core）：重大・深刻な問題なし
 - Lighthouse（モバイル、3回計測）：パフォーマンス 84〜97（計測ごとのばらつきあり。3回中2回は97）／アクセシビリティ 100／ベストプラクティス 96／SEO 63（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
 
@@ -136,5 +172,5 @@ npm run build:preview  # 1ファイル版の確認用プレビュー（dist/prev
 | どなたのご相談か | `who` |
 | 第1希望（必須）／第2希望 | `date1` `time1` / `date2` `time2` |
 | お名前（必須）／電話番号（必須）／電話の希望時間帯／メール／年代／備考 | `name` `tel` `contact_time` `email` `age` `note` |
-| 流入元（自動） | `utm_source` `utm_medium` `utm_campaign` `utm_term` `utm_content` `gclid` `gbraid` `wbraid` `yclid` `lp_variant` `landing_url` `referrer` |
+| 流入元（自動） | `utm_source` `utm_medium` `utm_campaign` `utm_term` `utm_content` `gclid` `gbraid` `wbraid` `yclid` `fbclid` `lp_variant` `landing_url` `referrer`（`fbclid` は隠し項目がある栄院 Meta 広告用ページのみ） |
 | スパム対策（自動） | `elapsed`（ページを開いてから送信までの秒数）、`hp_extra`（人には見えない項目）。疑わしい送信は受信側で「スパム疑い」として台帳に残し、通知メールは送らず、成約としても数えません |

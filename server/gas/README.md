@@ -48,6 +48,14 @@ conversionNames: { visit: '栄院 来院', contract: '栄院 成約' },
 
 台帳の「ご覧になった動画」と「utm_content」（説明欄のURLに入れた動画ID）で、**どの動画から予約が入ったか**が分かります。
 
+### 栄院の Meta 広告用ページ（`meta-lp/`）でも使う場合
+
+YouTube のページと**同じスプレッドシート・同じURL**で受け取れます（栄院の予約を1つの台帳にまとめるため）。`meta-lp/index.html` の最後にある `window.LP_CONFIG` の `formEndpoint` に、YouTube のページと同じURLを貼り付けてください。
+
+- 2つのページで共有するので、`formLabel` は `'栄院 Web予約'` のように、どちらのページにも合う名前にします
+- どちらのページから来たかは、通知メールの「流入」と台帳の `utm_source` で分かります（YouTube の説明欄からは `youtube`、Meta 広告からは `fb`・`ig`。[README の「広告のURL」](../../README.md#meta-広告用ページ栄院meta-lp)）。台帳の **fbclid** の列には Meta 広告のクリックIDが入ります
+- 以前に設置した台帳に fbclid の列がなくても、`Code.gs` を貼り直して［デプロイを管理］から新バージョンにすれば、最初の送信で右端に自動で追加されます
+
 ### 動作確認
 
 - ウェブアプリのURLをブラウザで開くと `ok` と表示されます
