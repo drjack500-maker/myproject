@@ -77,16 +77,22 @@
 }
 
 .mteam { display: grid; gap: 8px; margin-top: 10px; }
+/* 理事長・麻酔医の写真：院長（112×136、PC 180×200）より少し小さく */
 .mteam li {
-  display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; align-items: center;
-  padding: 10px 14px; background: var(--c-tint); border-radius: 12px;
+  display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: center;
+  padding: 12px 14px; background: var(--c-tint); border-radius: 12px;
 }
-.mteam img { display: block; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; background: #fff; }
+.mteam img { display: block; width: 96px; height: 112px; border-radius: 10px; object-fit: cover; object-position: 50% 20%; background: #fff; }
 .mteam p { margin: 0; line-height: 1.45; }
 .mteam span { display: block; font-size: .75rem; font-weight: 700; color: var(--c-primary-2); }
-.mteam b { font-size: 1rem; letter-spacing: .06em; }
-.mteam small { display: block; margin-top: 2px; font-size: .75rem; color: var(--c-ink-2); }
-@media (min-width: 700px) { .mteam { grid-template-columns: 1fr 1fr; gap: 12px; } }
+.mteam b { font-size: 1.125rem; letter-spacing: .06em; }
+.mteam small { display: block; margin-top: 4px; font-size: .75rem; line-height: 1.6; color: var(--c-ink-2); }
+@media (min-width: 700px) {
+  .mteam { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mteam li { grid-template-columns: 140px minmax(0, 1fr); gap: 18px; padding: 16px; }
+  .mteam img { width: 140px; height: 160px; border-radius: 12px; }
+  .mteam small { font-size: .8125rem; }
+}
 
 .mpoints { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .mpoints li {
