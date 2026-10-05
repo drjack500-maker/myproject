@@ -11,6 +11,8 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/measurement-setup.md`](docs/measurement-setup.md) | 計測設定の手順（GTM／GA4／Google 広告、見出しの出し分け用URL） |
 | [`server/gas/README.md`](server/gas/README.md) | 予約フォームの受信設定（Google スプレッドシートの予約台帳・通知メール・広告への成約データ連携） |
 | [`docs/reception-manual.md`](docs/reception-manual.md) | 予約リクエストの受付対応マニュアル（電話のタイミング・トーク例・台帳の更新・リマインド） |
+| [`docs/youtube-acquisition-plan.md`](docs/youtube-acquisition-plan.md) | **グループ院（アルティメイト栄歯科）の YouTube チャンネルからの集客プラン**（2026年10月5日時点の数字・問い合わせが少ない原因・優先順の施策・KPI・ガイドライン上の注意） |
+| [`docs/youtube-templates.md`](docs/youtube-templates.md) | 上のプランの貼り付け用文面（固定コメント・説明欄・UTMつきURL・動画内の台本・LINE配信・新企画・YouTube 広告の設定・受付での聞き取り） |
 
 ## ファイル構成
 
