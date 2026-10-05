@@ -4,13 +4,17 @@
   "description": "オールオン4 LP（名駅歯科クリニック・矯正歯科）",
   "scripts": {
     "serve": "node tools/serve.js",
+    "serve:youtube": "node tools/serve.js --youtube",
     "test": "npm run lint:html && npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/gas.test.js",
-    "test:e2e": "node --test tests/e2e.test.js",
-    "lint:html": "html-validate lp/*.html",
+    "test:e2e": "node --test tests/e2e.test.js tests/youtube-lp.test.js",
+    "lint:html": "html-validate lp/*.html youtube-lp/*.html",
     "build:images": "node tools/build-images.js",
+    "build:images:youtube": "node tools/build-images.js --youtube",
     "build:preview": "node tools/build-preview.js",
-    "build:hotfix": "node tools/build-hotfix.js"
+    "build:preview:youtube": "node tools/build-preview.js --youtube",
+    "build:hotfix": "node tools/build-hotfix.js",
+    "sync:shared": "node tools/sync-shared.js"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",

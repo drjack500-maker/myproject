@@ -21,6 +21,9 @@
 ▼LINEで質問・相談のご予約（24時間受付）
 https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=【固定コメント用の経路コード】
 
+▼Webで無料相談を予約（24時間受付）
+https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=comment&utm_campaign=organic&utm_content=【この動画のID】
+
 ▼お電話（平日9:00〜19:00）
 052-957-3357
 
@@ -83,26 +86,29 @@ Webで予約 → 【下の表の動画ごとのURL】
 - 「栄駅から徒歩2分」（チャンネル説明）と「徒歩3分」（広告用LP）は、どちらかにそろえてください
 - 料金・リスクの記載は、医院の最新の料金表・説明文に合わせてください
 - 動画では、**動画・タイトル・説明欄をひとまとまりとして**、治療内容・標準的な費用・期間と回数・主なリスクを示す必要があります（「詳細はHPで」だけや最低金額だけの表示は不可）。費用に触れる動画は特に、この4項目を必ず説明欄に入れてください
-- YouTube を見た人向けのページができたら、「Webで予約」のURLをそのページに差し替えます（UTM はそのまま）
+- 「Webで予約」のリンク先は YouTube をご覧の方向けページ（[`youtube-lp/`](../youtube-lp/)）です。公開前は下の注意書きのとおり、今の広告用LPを使います
 
-### Web予約リンク（動画ごとの UTM つきURL）
+### Webで予約するリンク（動画ごとの UTM つきURL）
 
-YouTube から来た人を GA4 で区別するための目印です。`utm_content` に動画IDを入れているので、**どの動画から来たか**まで分かります。
+リンク先は、YouTube をご覧の方向けページ（[`youtube-lp/`](../youtube-lp/)）です。`utm_content` に動画IDを入れているので、GA4 と予約台帳で**どの動画から来たか**まで分かります。このページでは、予約フォームの「ご覧になった動画」も自動で選ばれます。
+
+> 公開URLは `https://www.ultimate-dental.com/youtube/` を想定しています。別の場所に置いた場合は、URLの前半を差し替えてください。**ページを公開するまで**は、前半を `https://www.ultimate-dental.com/implant03/`（今の広告用LP）にしておけば、UTM はそのまま使えます。
 
 | 動画 | URL |
 |---|---|
-| オススメしない方10選 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=aXv3-aiTJxQ` |
-| 契約前の必須知識7選 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=MJsd6v8wO54` |
-| 選択肢3つを比較 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=HuC_Anq4oJI` |
-| オールオン4の費用 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=_1oVBw7qt2Q` |
-| 何歳まで可能？ | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=u3ow3aJhjsA` |
-| 入れ歯が合わない方の奥の手7選 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=ksOV_4U09K4` |
-| 治療の裏側TOP10 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=XRWSz4otq_s` |
-| 入れ歯orインプラント7つの選び方 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=CnOpDndYasQ` |
-| オールオン4を徹底解説 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=zrfoEAU_z-E` |
-| チャンネル説明・リンク欄 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=channel&utm_campaign=organic` |
+| オススメしない方10選 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=aXv3-aiTJxQ` |
+| 契約前の必須知識7選 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=MJsd6v8wO54` |
+| 選択肢3つを比較 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=HuC_Anq4oJI` |
+| オールオン4の費用 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=_1oVBw7qt2Q` |
+| 何歳まで可能？ | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=u3ow3aJhjsA` |
+| 入れ歯が合わない方の奥の手7選 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=ksOV_4U09K4` |
+| 治療の裏側TOP10 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=XRWSz4otq_s` |
+| 入れ歯orインプラント7つの選び方 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=CnOpDndYasQ` |
+| オールオン4を徹底解説 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=video&utm_campaign=organic&utm_content=zrfoEAU_z-E` |
+| チャンネル説明・リンク欄 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=channel&utm_campaign=organic` |
+| 固定コメント | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=comment&utm_campaign=organic&utm_content=【動画ID】` |
 
-新しい動画は、`utm_content=` のあとをその動画のIDに変えて使います（動画IDは `youtu.be/` のあとの11文字）。
+新しい動画は、`utm_content=` のあとをその動画のIDに変えて使います（動画IDは `youtu.be/` のあとの11文字）。ページの動画一覧とフォームの選択肢に足す場合は、`youtube-lp/index.html` の動画カード（`data-yt-id`）と「ご覧になった動画」の選択肢（`data-video-id`）の両方に追加してください。
 
 ---
 
@@ -123,7 +129,7 @@ YouTube から来た人を GA4 で区別するための目印です。`utm_conte
 | タイトル | URL |
 |---|---|
 | LINEで質問・無料相談の予約 | `https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=dvdWFh` |
-| Webで無料相談を予約 | `https://www.ultimate-dental.com/implant03/?utm_source=youtube&utm_medium=channel&utm_campaign=organic` |
+| Webで無料相談を予約 | `https://www.ultimate-dental.com/youtube/?utm_source=youtube&utm_medium=channel&utm_campaign=organic` |
 | 公式サイト | `https://ultimatesakae-dental.com/` |
 
 ### チャンネルのホーム（「カスタマイズ」→「レイアウト」）

@@ -1,8 +1,8 @@
 /*
  * OGP画像（SNS共有用）とホーム画面アイコンを生成する
- *   npm run build:images
- * 出力：lp/assets/img/ogp.png（1200×630）, lp/assets/img/apple-touch-icon.png（180×180）
- * 文言を変えたい場合は下の OGP_HTML を編集して再実行してください。
+ *   npm run build:images          → lp/assets/img/ogp.png（1200×630）, lp/assets/img/apple-touch-icon.png（180×180）
+ *   npm run build:images:youtube  → youtube-lp/assets/img/ogp.png, youtube-lp/assets/img/apple-touch-icon.png
+ * 文言を変えたい場合は下の OGP_HTML（YouTube をご覧の方向けページは YT_OGP_HTML）を編集して再実行してください。
  */
 const path = require('node:path');
 const fs = require('node:fs');
@@ -23,6 +23,9 @@ const viaCurl = async (route) => {
 };
 
 const IMG_DIR = path.join(__dirname, '..', 'lp', 'assets', 'img');
+const YT_IMG_DIR = path.join(__dirname, '..', 'youtube-lp', 'assets', 'img');
+const YOUTUBE = process.argv.includes('--youtube');
+const dataUri = (dir, file, type) => `data:${type};base64,${fs.readFileSync(path.join(dir, file)).toString('base64')}`;
 const FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=block">';
 
 const DIAGRAM = `
@@ -66,12 +69,40 @@ const OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${F
   <div class="foot"><div><span>JR名古屋駅 徒歩2分</span></div><div>名駅歯科クリニック・矯正歯科</div></div>
 </body></html>`;
 
-const ICON_HTML = `<!doctype html><html><head><meta charset="utf-8"><style>*{margin:0}body{width:180px;height:180px;background:#0e5a63}img{width:180px;height:180px;display:block}</style></head>
-<body><img src="data:image/svg+xml;base64,${Buffer.from(fs.readFileSync(path.join(IMG_DIR, 'favicon.svg'))).toString('base64')}"></body></html>`;
+const iconHtml = (dir, bg) => `<!doctype html><html><head><meta charset="utf-8"><style>*{margin:0}body{width:180px;height:180px;background:${bg}}img{width:180px;height:180px;display:block}</style></head>
+<body><img src="${dataUri(dir, 'favicon.svg', 'image/svg+xml')}"></body></html>`;
+
+// 栄院 YouTube をご覧の方向けページ（youtube-lp/）
+const YT_OGP_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8">${FONT}<style>
+  *{box-sizing:border-box;margin:0}
+  body{width:1200px;height:630px;font-family:"Noto Sans JP",sans-serif;color:#fff;letter-spacing:.02em;
+    background:radial-gradient(700px 420px at 100% 0%,rgba(234,115,49,.22),transparent 60%),linear-gradient(135deg,#072f4a 0%,#0b5584 55%,#126da6 100%);
+    display:grid;grid-template-columns:700px 1fr;align-items:center;gap:40px;padding:0 64px 76px;overflow:hidden}
+  .pre{display:inline-flex;align-items:center;gap:12px;background:#c4120c;color:#fff;font-weight:700;font-size:26px;padding:8px 24px 8px 18px;border-radius:999px}
+  .pre i{display:inline-block;width:34px;height:24px;border-radius:7px;background:#fff;position:relative}
+  .pre i::after{content:"";position:absolute;left:13px;top:6px;border-left:11px solid #c4120c;border-top:6px solid transparent;border-bottom:6px solid transparent}
+  h1{font-size:56px;line-height:1.38;font-weight:900;margin:24px 0 18px}
+  h1 em{font-style:normal;color:#ffc58f}
+  .sub{font-size:26px;font-weight:700;opacity:.95}
+  .photo{position:relative;align-self:end;height:500px;border-radius:28px 28px 0 0;overflow:hidden;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  .photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0}
+  .photo p{position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,.95);color:#072f4a;font-weight:900;font-size:28px;padding:6px 18px;border-radius:12px;letter-spacing:.08em}
+  .photo p small{font-size:18px;color:#126da6;margin-right:10px;letter-spacing:.02em}
+  .foot{position:absolute;left:0;right:0;bottom:0;height:76px;background:#fff;color:#072f4a;display:flex;align-items:center;justify-content:space-between;padding:0 64px;font-weight:900;font-size:28px;white-space:nowrap}
+  .foot span{color:#cf5317}
+</style></head><body>
+  <div>
+    <span class="pre"><i></i>YouTubeをご覧の方へ</span>
+    <h1>動画でお話ししたことを、<br><em>あなたのお口で</em>確かめて<br>みませんか。</h1>
+    <p class="sub">CT撮影込みの無料相談・当日の契約なし</p>
+  </div>
+  <div class="photo"><img src="${dataUri(YT_IMG_DIR, 'doctor-kitamura-fv.jpg', 'image/jpeg')}"><p><small>院長</small>北村 隆典</p></div>
+  <div class="foot"><div><span>名古屋・栄駅 徒歩3分</span></div><div>アルティメイト栄歯科・矯正歯科</div></div>
+</body></html>`;
 
 (async () => {
   const browser = await chromium.launch();
-  const render = async (html, w, h, file) => {
+  const render = async (html, w, h, file, dir = IMG_DIR) => {
     const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 });
     await page.route(/fonts\.(googleapis|gstatic)\.com/, viaCurl);
     await page.setContent(html, { waitUntil: 'networkidle' });
@@ -82,11 +113,16 @@ const ICON_HTML = `<!doctype html><html><head><meta charset="utf-8"><style>*{mar
     });
     const ok = await page.evaluate(() => [...document.fonts].some((f) => f.family.includes('Noto Sans JP') && f.status === 'loaded'));
     if (!ok && html.includes('Noto+Sans+JP')) console.warn('warning: Noto Sans JP が読み込めませんでした（代替フォントで出力）');
-    await page.screenshot({ path: path.join(IMG_DIR, file) });
+    await page.screenshot({ path: path.join(dir, file) });
     await page.close();
-    console.log('wrote', path.join('lp/assets/img', file));
+    console.log('wrote', path.relative(path.join(__dirname, '..'), path.join(dir, file)));
   };
-  await render(OGP_HTML, 1200, 630, 'ogp.png');
-  await render(ICON_HTML, 180, 180, 'apple-touch-icon.png');
+  if (YOUTUBE) {
+    await render(YT_OGP_HTML, 1200, 630, 'ogp.png', YT_IMG_DIR);
+    await render(iconHtml(YT_IMG_DIR, '#0b5584'), 180, 180, 'apple-touch-icon.png', YT_IMG_DIR);
+  } else {
+    await render(OGP_HTML, 1200, 630, 'ogp.png');
+    await render(iconHtml(IMG_DIR, '#0e5a63'), 180, 180, 'apple-touch-icon.png');
+  }
   await browser.close();
 })();

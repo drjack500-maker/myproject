@@ -13,6 +13,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`docs/reception-manual.md`](docs/reception-manual.md) | 予約リクエストの受付対応マニュアル（電話のタイミング・トーク例・台帳の更新・リマインド） |
 | [`docs/youtube-acquisition-plan.md`](docs/youtube-acquisition-plan.md) | **グループ院（アルティメイト栄歯科）の YouTube チャンネルからの集客プラン**（2026年10月5日時点の数字・問い合わせが少ない原因・優先順の施策・KPI・ガイドライン上の注意） |
 | [`docs/youtube-templates.md`](docs/youtube-templates.md) | 上のプランの貼り付け用文面（固定コメント・説明欄・UTMつきURL・動画内の台本・LINE配信・新企画・YouTube 広告の設定・受付での聞き取り） |
+| [`youtube-lp/`](youtube-lp/) | **栄院の「YouTube をご覧の方へ」ページ**（説明欄・固定コメント・YouTube 広告のリンク先。院長の北村が最初の画面に出て、動画・無料相談の流れ・費用・3ステップの予約フォームまでを1ページに。→ [下の説明](#youtube-をご覧の方向けページ栄院youtube-lp)） |
 
 ## ファイル構成
 
@@ -71,20 +72,51 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 
 `v` がない場合は `utm_term`（または `kw`）の語句から自動判定します（「費用」→ price、「入れ歯」→ denture、「骨」「断られた」→ bone、「痛い」「怖い」→ fear）。Google 広告での設定方法は [`docs/measurement-setup.md`](docs/measurement-setup.md#4-広告の最終ページurlと見出しの出し分け) を参照。
 
+## YouTube をご覧の方向けページ（栄院・`youtube-lp/`）
+
+[YouTube 集客プラン](docs/youtube-acquisition-plan.md)の「B-1」で作った、アルティメイト栄歯科・矯正歯科のページです。動画を見た人が説明欄のリンクを押したときに、**動画の続きとして受け止められる**ことを目的にしています。
+
+- 最初の画面に、動画で解説している**院長 北村**の写真と名前、「当日の契約なし・ご家族の同席歓迎・相談だけでもOK」、予約・LINE・電話のボタン（スマホ 375×667 の最初の画面に収まる）
+- 無料相談で行うこと（4ステップ）→ 動画9本（押したときだけ YouTube を読み込む）→ 医師・院内 → 費用 → よくある質問 → LINE → 予約フォーム → アクセス → リスク・副作用
+- 予約フォームに「**ご覧になった動画**」の欄。説明欄のURLに `utm_content=動画ID` を付けておくと自動で選ばれ、台帳に「どの動画から予約が入ったか」が残る
+- `main.js`・`style.css` は名駅歯科LPと共通。色や専用の部品は `youtube.css`・`youtube.js`。共通ファイルを `lp/` で直したら `npm run sync:shared` で反映（テストで一致を確認）
+- スマホでの長さは約14,400px（広告用LP `implant03` の約半分）
+
+### 公開までの手順
+
+1. **予約フォームの受け皿**：[`server/gas/README.md`](server/gas/README.md#栄院youtube-をご覧の方向けページ-youtube-lpで使う場合) の手順で、栄院用のスプレッドシートを作り、発行されたURLを `youtube-lp/index.html` の最後にある `window.LP_CONFIG` の `formEndpoint` に設定（未設定のままだと、公開サーバーではフォームの代わりに電話の案内を表示）
+2. **LINE**：L-Message で「栄院YouTubeページ用」の流入経路を作り、同じ場所の `lineUrl` を差し替え（今は説明欄と同じ経路 `dvdWFh`）
+3. **内容の確認**（`index.html` 内の `【要確認】`）
+   - 無料相談の流れ、院長が説明を担当できるか（フォームに「院長（北村）の説明を希望」の選択肢あり）
+   - 費用：「手術費用のみ」の内訳（麻酔・最終的な歯などの別途費用）
+   - 栄駅からの徒歩分数（広告用LPは3分、YouTube のチャンネル説明は2分）
+   - 院長の資格表記：認定医・各種ライセンスは、広告できる資格が限られるため載せていない
+   - 院長メッセージの2段落目と、動画カードの見出し・説明文は、このページ用に書いた下書き（院長・動画の内容と合っているか）
+   - 土曜の相談枠をつくる場合は、よくある質問の回答を変更
+   - `privacy.html` は予約フォーム用のひな形
+4. **公開URL**：`youtube-lp/` の中身を、例えば `https://www.ultimate-dental.com/youtube/` にアップロードし、`index.html` の `og:url`・`og:image` を合わせる
+5. **計測**：栄院の広告用LPと同じ GTM（`GTM-TKQ2RFV`）を `ultimate-dental.com`・`ultimatesakae-dental.com` でのみ読み込みます。完了ページは `reservation_complete`（`lp_name: sakae_youtube`）、動画の再生は `video_play` を送ります
+6. **YouTube 側**：説明欄・固定コメント・チャンネルのリンク欄の「Webで予約」をこのページのURLに差し替え（UTM つきURLの一覧：[`docs/youtube-templates.md`](docs/youtube-templates.md#webで予約するリンク動画ごとの-utm-つきurl)）
+7. **公開後**：スマホでテスト予約を1件送り、台帳の「ご覧になった動画」「utm_content」・通知メール・完了ページを確認
+
+医院の方に見てもらうときは、`npm run build:preview:youtube` で作る1ファイル版（`dist/youtube-preview.html`、フォームは送信されません）を共有できます。
+
 ## 開発者向け
 
 ```bash
 npm install            # 初回のみ（Playwright のブラウザが無い場合は npx playwright install chromium）
 npm run serve          # http://localhost:8000/ で確認
+npm run serve:youtube  # 栄院 YouTube をご覧の方向けページを http://localhost:8001/ で確認
 npm test               # HTML検証 + 受信スクリプトのテスト + ブラウザテスト（アクセシビリティ検査を含む）
-npm run build:images   # OGP画像・ホーム画面アイコンを再生成
-npm run build:preview  # 1ファイル版の確認用プレビュー（dist/preview.html）
+npm run build:images   # OGP画像・ホーム画面アイコンを再生成（youtube-lp/ は build:images:youtube）
+npm run sync:shared    # lp/ の main.js・style.css などを youtube-lp/ にコピー
+npm run build:preview  # 1ファイル版の確認用プレビュー（dist/preview.html。youtube-lp/ は build:preview:youtube）
 ```
 
 ### 品質チェックの結果（2026年9月時点）
 
 - HTML検証（html-validate）：エラーなし
-- 自動テスト：受信スクリプト 10件、ブラウザ操作 20件すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
+- 自動テスト：受信スクリプト 12件、ブラウザ操作 39件（名駅歯科LP 20件・栄院 YouTube ページ 19件）すべて合格（375×667 の画面で予約ボタンが最初に見える／幅360pxで横スクロールなし／フォームの入力チェック・送信・送信失敗・スパム対策／見出しの出し分け／送信先が未設定のときの電話案内／送信の時間切れ／第2希望の入力チェック／医療費控除の計算 など）
 - アクセシビリティ（axe-core）：重大・深刻な問題なし
 - Lighthouse（モバイル、3回計測）：パフォーマンス 84〜97（計測ごとのばらつきあり。3回中2回は97）／アクセシビリティ 100／ベストプラクティス 96／SEO 63（広告専用LPとして `noindex` にしているため。自然検索でも集客する場合は `<meta name="robots">` を削除）
 

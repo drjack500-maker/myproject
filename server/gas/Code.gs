@@ -13,6 +13,9 @@
  *   4. ［デプロイ］→［新しいデプロイ］→ 種類「ウェブアプリ」
  *      実行ユーザー：自分 ／ アクセスできるユーザー：全員
  *   5. 表示された「…/exec」のURLを lp/assets/js/main.js の CONFIG.formEndpoint に設定
+ *
+ * 栄院（youtube-lp/）でも使う場合は、医院ごとに別のスプレッドシートで設置し、下の SETTINGS の
+ * clinicName〜formLabel を栄院の内容に変えてください（設定例は server/gas/README.md）
  */
 
 const SETTINGS = {
@@ -21,6 +24,10 @@ const SETTINGS = {
   clinicName: '名駅歯科クリニック・矯正歯科',
   clinicTel: '052-571-3345',
   clinicHours: '電話受付 月〜金 9:00〜19:00',
+  clinicAddress: '〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階',
+  clinicAccess: 'JR・名鉄「名古屋駅」3番出口から徒歩2分',
+  // 通知メールの件名・差出人名に入る、予約を受け付けたページの名前
+  formLabel: 'オールオン4 LP',
   // メールアドレスを入力した方へ自動返信する
   sendAutoReply: true,
   sheetName: '予約台帳',
@@ -52,6 +59,7 @@ const COLUMNS = [
   ['time2', '第2希望時間'],
   ['contact_time', '電話希望時間'],
   ['note', 'ご質問・ご要望'],
+  ['video', 'ご覧になった動画'],
   ['visit_at', '来院日時'],
   ['contract_at', '成約日時'],
   ['contract_value', '成約金額'],
@@ -234,7 +242,7 @@ function notify_(d) {
   if (!SETTINGS.notifyTo || /example\.com$/.test(SETTINGS.notifyTo)) return;
   const url = SpreadsheetApp.getActive().getUrl();
   const body = [
-    'オールオン4 LP から予約リクエストが届きました。',
+    SETTINGS.formLabel + ' から予約リクエストが届きました。',
     '',
     '【対応手順】',
     '① できるだけ早く（遅くとも当日中に）お電話し、日時を確定',
@@ -250,19 +258,20 @@ function notify_(d) {
     '■ 相談者：' + (d.who || ''),
     '■ 年代：' + (d.age || '（未選択）'),
     '■ ご相談内容：' + (d.concerns || '（未選択）'),
+    ...(d.video ? ['■ ご覧になった動画：' + d.video] : []),
     '■ ご質問・ご要望：',
     d.note || '（なし）',
     '',
-    '■ 流入：' + [d.utm_source, d.utm_campaign, d.utm_term].filter(String).join(' / '),
+    '■ 流入：' + [d.utm_source, d.utm_campaign, d.utm_term, d.utm_content].filter(String).join(' / '),
     '■ 見出しパターン：' + (d.lp_variant || 'default'),
     '',
     '予約台帳：' + url,
   ].join('\n');
   MailApp.sendEmail({
     to: SETTINGS.notifyTo,
-    subject: '【オールオン4 LP】予約リクエスト：' + d.name + ' 様（第1希望 ' + dateLabel_(d.date1) + '）',
+    subject: '【' + SETTINGS.formLabel + '】予約リクエスト：' + d.name + ' 様（第1希望 ' + dateLabel_(d.date1) + '）',
     body: body,
-    name: 'オールオン4 LP',
+    name: SETTINGS.formLabel,
   });
 }
 
@@ -289,8 +298,8 @@ function autoReply_(d) {
     '',
     '――――――――――――――――',
     SETTINGS.clinicName,
-    '〒450-0002 愛知県名古屋市中村区名駅3-13-31 名駅モリシタビル8階',
-    'JR・名鉄「名古屋駅」3番出口から徒歩2分',
+    SETTINGS.clinicAddress,
+    SETTINGS.clinicAccess,
     'TEL ' + SETTINGS.clinicTel + '（' + SETTINGS.clinicHours + '）',
     '――――――――――――――――',
     '※このメールは自動送信です。ご不明な点はお電話でお問い合わせください。',

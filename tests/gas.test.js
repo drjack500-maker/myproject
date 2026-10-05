@@ -115,6 +115,39 @@ test('valid submission is saved, notifies clinic and auto-replies', () => {
   assert.match(mails[1].body, /第1希望：10月2日（金） 午後/);
 });
 
+test('clinic details, page label and watched video come from settings and the form', () => {
+  const { api, sheets, mails } = load();
+  Object.assign(api.SETTINGS, {
+    notifyTo: 'sakae@clinic.test',
+    clinicName: 'アルティメイト栄歯科・矯正歯科',
+    clinicTel: '052-957-3357',
+    clinicAddress: '〒460-0003 愛知県名古屋市中区錦3-15-33 アルティメイト錦大津通3階',
+    clinicAccess: '地下鉄「栄駅」2番出口から徒歩3分',
+    formLabel: '栄院 YouTube',
+  });
+  post(api, { ...VALID, name: '栄 花子', video: 'オールオン4の費用', utm_source: 'youtube', utm_term: '', utm_content: '_1oVBw7qt2Q' });
+  const sheet = sheets[api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'video')], 'オールオン4の費用');
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'utm_content')], '_1oVBw7qt2Q');
+  assert.equal(mails[0].name, '栄院 YouTube');
+  assert.match(mails[0].subject, /^【栄院 YouTube】予約リクエスト：/);
+  assert.match(mails[0].body, /ご覧になった動画：オールオン4の費用/);
+  assert.match(mails[0].body, /流入：youtube \/ _1oVBw7qt2Q/);
+  assert.match(mails[1].subject, /【アルティメイト栄歯科・矯正歯科】/);
+  assert.match(mails[1].body, /中区錦3-15-33/);
+  assert.match(mails[1].body, /052-957-3357/);
+  assert.doesNotMatch(mails[1].body, /名駅/);
+});
+
+test('notification omits the video line when none was chosen', () => {
+  const { api, mails } = load();
+  api.SETTINGS.notifyTo = 'reception@clinic.test';
+  post(api, VALID);
+  assert.doesNotMatch(mails[0].body, /ご覧になった動画/);
+  assert.match(mails[0].subject, /^【オールオン4 LP】/);
+  assert.match(mails[1].body, /名駅3-13-31/);
+});
+
 test('placeholder notify address does not send clinic mail', () => {
   const { api, mails } = load();
   post(api, { ...VALID, email: '' });

@@ -1,0 +1,190 @@
+/* =========================================================
+   YouTube をご覧の方向けページ — アルティメイト栄歯科・矯正歯科
+   style.css（名駅歯科LPと共通）のあとに読み込み、色と専用の部品だけを足す
+   ========================================================= */
+
+/* ---------- 配色：栄院の青系（白文字とのコントラスト比4.5以上） ---------- */
+:root {
+  --c-line: #dbe5ec;
+  --c-tint: #ebf4fb;
+  --c-deep: #072f4a;
+  --c-primary: #0b5584;
+  --c-primary-2: #126da6;
+  --c-yt: #c4120c; /* YouTube を連想させる赤（白文字のコントラスト比5.7） */
+  --shadow: 0 8px 28px rgba(7, 47, 74, .08);
+  --shadow-lg: 0 18px 48px rgba(7, 47, 74, .14);
+}
+.reserve { background: linear-gradient(160deg, #072f4a 0%, #0b5584 55%, #126da6 100%); }
+.section-head--inverse .eyebrow { color: #a9d4f2; }
+.field input:focus, .field select:focus, .field textarea:focus { box-shadow: 0 0 0 4px rgba(18, 109, 166, .15); }
+.thanks { background: linear-gradient(180deg, #eef6fc, #fff); }
+
+/* ---------- First View ---------- */
+.yfv {
+  position: relative; overflow: hidden;
+  padding: 18px 0 28px;
+  background:
+    radial-gradient(900px 420px at 100% 0%, rgba(18, 109, 166, .14), transparent 65%),
+    radial-gradient(700px 360px at 0% 100%, rgba(234, 115, 49, .08), transparent 65%),
+    linear-gradient(180deg, #eef6fc 0%, #ffffff 100%);
+}
+.yfv__grid { display: grid; gap: 20px; }
+.yfv__pre {
+  display: inline-flex; align-items: center; gap: .45em; margin: 0 0 10px; padding: .3em 1em .3em .8em;
+  border-radius: 999px; background: var(--c-yt); color: #fff;
+  font-size: .875rem; font-weight: 700; letter-spacing: .04em;
+}
+.yfv__pre .ic { width: 1.35em; height: 1.35em; }
+.yfv__title {
+  font-size: clamp(1.625rem, 1rem + 3.3vw, 3.125rem);
+  font-weight: 900; line-height: 1.42; letter-spacing: .02em; margin: 0 0 14px;
+}
+.yfv__title mark { color: var(--c-accent); background: linear-gradient(transparent 70%, var(--c-mark) 70%); }
+
+.yfv__doctor { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; }
+.yfv__doctor-photo {
+  flex: none; width: 64px; height: 64px; border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff; box-shadow: 0 4px 14px rgba(7, 47, 74, .18); background: var(--c-tint);
+}
+.yfv__doctor-body { margin: 0; line-height: 1.4; }
+.yfv__doctor-role {
+  display: inline-block; margin-right: .5em; padding: .05em .6em; border-radius: 6px;
+  background: var(--c-primary); color: #fff; font-size: .75rem; font-weight: 700; vertical-align: .15em;
+}
+.yfv__doctor-name { font-size: 1.1875rem; font-weight: 900; letter-spacing: .08em; }
+.yfv__doctor-note { display: block; margin-top: 2px; font-size: .8125rem; font-weight: 700; color: var(--c-primary-2); }
+
+.yfv__lead { font-size: .9375rem; color: var(--c-ink-2); margin-bottom: 12px; }
+.yfv__lead b { color: var(--c-ink); }
+.yfv__assure { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 16px; }
+.yfv__assure li { display: inline-flex; align-items: center; gap: 4px; font-size: .8125rem; font-weight: 700; color: var(--c-ink); }
+.yfv__assure .ic { width: 20px; height: 20px; color: var(--c-accent); }
+
+.yfv__cta { display: grid; gap: 12px; }
+.yfv__cta-sub { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 10px; }
+.yfv__cta-sub .btn { min-height: 54px; padding-inline: .8em; font-size: .9375rem; }
+
+.yfv__photo { display: none; }
+
+@media (min-width: 900px) {
+  .yfv { padding: 48px 0 56px; }
+  .yfv__grid { grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; align-items: center; }
+  .yfv__doctor { display: none; }
+  .yfv__lead { font-size: 1.0625rem; margin-bottom: 16px; }
+  .yfv__assure { margin-bottom: 24px; gap: 8px 20px; }
+  .yfv__assure li { font-size: .9375rem; }
+  .yfv__cta { max-width: 520px; }
+  .yfv__photo {
+    display: block; position: relative; margin: 0;
+    border-radius: var(--radius-lg); overflow: hidden; background: #fff; box-shadow: var(--shadow-lg);
+  }
+  .yfv__photo img { display: block; width: 100%; height: auto; }
+  .yfv__photo figcaption {
+    position: absolute; left: 16px; bottom: 16px; padding: 8px 16px;
+    border-radius: 12px; background: rgba(255, 255, 255, .94); box-shadow: 0 4px 14px rgba(7, 47, 74, .14);
+    font-size: 1.25rem; font-weight: 900; letter-spacing: .08em; color: var(--c-ink);
+  }
+  .yfv__photo-role { margin-right: .5em; font-size: .75rem; color: var(--c-primary-2); letter-spacing: .04em; }
+}
+
+/* ---------- 無料相談で行うこと ---------- */
+.consult { display: grid; gap: 16px; list-style: none; }
+.consult__step {
+  position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 14px; align-items: start;
+  padding: 18px 18px 18px 16px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.consult__no {
+  position: absolute; top: -8px; left: -6px; display: grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%; background: var(--c-accent); color: #fff;
+  font-size: .875rem; font-weight: 900;
+}
+.consult__icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--c-tint); color: var(--c-primary); }
+.consult__icon .ic { width: 28px; height: 28px; }
+.consult__body h3 { margin-bottom: .3em; font-size: 1.0625rem; font-weight: 900; color: var(--c-deep); }
+.consult__body p { font-size: .9375rem; color: var(--c-ink-2); }
+.consult__body b { color: var(--c-ink); }
+@media (min-width: 700px) { .consult { grid-template-columns: 1fr 1fr; gap: 20px; } }
+
+.assure--wide { grid-template-columns: 1fr; margin-top: 20px; }
+.assure--wide li {
+  flex-direction: row; justify-content: flex-start; gap: 10px; padding: 10px 14px;
+  border: 1px solid var(--c-line); background: #fff; color: var(--c-ink); font-size: .875rem; text-align: left;
+}
+.assure--wide .ic { width: 22px; height: 22px; color: var(--c-accent); }
+@media (min-width: 700px) { .assure--wide { grid-template-columns: repeat(3, 1fr); } }
+.consult__bring { margin: 14px 0 0; font-size: .875rem; color: var(--c-ink-2); text-align: center; }
+
+/* ---------- 動画 ---------- */
+.yvideos__group {
+  display: flex; align-items: center; gap: .5em; margin: 32px 0 12px;
+  font-size: 1.125rem; font-weight: 900; color: var(--c-deep);
+}
+.yvideos__group::before { content: ""; width: 5px; height: 1.2em; border-radius: 3px; background: var(--c-yt); }
+.section-head + .yvideos__group { margin-top: 0; }
+.yvideos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.yvideos--featured { grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 700px) {
+  .yvideos { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .yvideos--featured { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+}
+.yvideo { min-width: 0; }
+.yvideo__player {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  aspect-ratio: 16 / 9; padding: 10px 12px; border-radius: 14px; overflow: hidden;
+  background:
+    radial-gradient(160px 120px at 85% 15%, rgba(255, 255, 255, .14), transparent 70%),
+    linear-gradient(135deg, var(--c-deep), var(--c-primary-2));
+  color: #fff; text-decoration: none; text-align: center; box-shadow: var(--shadow);
+  transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+}
+.yvideo__player:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.yvideo__play { display: grid; place-items: center; width: 56px; height: 40px; border-radius: 12px; background: var(--c-yt); box-shadow: 0 4px 12px rgba(0, 0, 0, .25); }
+.yvideo__play .ic { width: 26px; height: 26px; }
+.yvideo__label { font-size: 1.0625rem; font-weight: 900; line-height: 1.45; letter-spacing: .03em; }
+.yvideos:not(.yvideos--featured) .yvideo__player { gap: 6px; padding: 8px; border-radius: 12px; }
+.yvideos:not(.yvideos--featured) .yvideo__play { width: 40px; height: 28px; border-radius: 9px; }
+.yvideos:not(.yvideos--featured) .yvideo__play .ic { width: 20px; height: 20px; }
+.yvideos:not(.yvideos--featured) .yvideo__label { font-size: .75rem; line-height: 1.4; letter-spacing: 0; }
+@media (min-width: 900px) { .yvideos:not(.yvideos--featured) .yvideo__label { font-size: .8125rem; } }
+/* スマホ：小さい動画カードは文字が小さくなりすぎるため、1列の横長の行にする */
+@media (max-width: 699px) {
+  .yvideos:not(.yvideos--featured) { grid-template-columns: 1fr; gap: 10px; }
+  .yvideos:not(.yvideos--featured) .yvideo__player {
+    flex-direction: row; justify-content: flex-start; gap: 14px;
+    aspect-ratio: auto; min-height: 72px; padding: 12px 16px; text-align: left;
+  }
+  .yvideos:not(.yvideos--featured) .yvideo__label { font-size: .9375rem; line-height: 1.5; }
+  .yvideos:not(.yvideos--featured) .yvideo__label br { display: none; }
+  .yvideos:not(.yvideos--featured) .yvideo__play { flex: none; }
+}
+.yvideo__desc { margin: 8px 2px 0; font-size: .875rem; color: var(--c-ink-2); line-height: 1.65; }
+.yvideo__frame { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000; }
+.yvideos__more { margin: 24px 0 0; text-align: center; }
+
+/* ---------- 当院のインプラント治療 ---------- */
+.yabout { margin-top: 24px; padding: 22px 18px; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.yabout__title { font-size: 1.125rem; font-weight: 900; color: var(--c-deep); text-align: center; }
+.yabout__list { margin-top: 12px; }
+@media (min-width: 900px) { .yabout { padding: 28px 32px; } .yabout__list { grid-template-columns: 1fr 1fr; column-gap: 24px; } }
+
+/* ---------- 費用 ---------- */
+.yprice { padding: 6px 18px 18px; background: #fff; border: 2px solid var(--c-line); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+.yprice__table { width: 100%; border-collapse: collapse; }
+.yprice__table th, .yprice__table td { padding: 16px 0; border-bottom: 1px solid var(--c-line); text-align: left; vertical-align: top; }
+.yprice__table th { width: 42%; padding-right: 12px; font-size: .9375rem; font-weight: 700; color: var(--c-deep); }
+.yprice__table th small { display: block; font-size: .75rem; font-weight: 500; color: var(--c-muted); }
+.yprice__value { display: block; font-size: 1rem; font-weight: 900; color: var(--c-deep); }
+.yprice__value .num { font-size: 1.5em; letter-spacing: .02em; color: var(--c-accent); }
+.yprice__value small { font-size: .75rem; }
+.yprice__free .yprice__value { font-size: 1.375rem; color: var(--c-accent); }
+.yprice__tax, .yprice__loan { display: block; font-size: .8125rem; color: var(--c-muted); line-height: 1.6; }
+.yprice__loan { font-weight: 700; color: var(--c-primary-2); }
+.yprice__notes { margin: 14px 0 0; padding-left: 1.2em; font-size: .8125rem; line-height: 1.7; color: var(--c-muted); }
+.yprice__notes li + li { margin-top: 4px; }
+@media (max-width: 599px) {
+  .yprice__table th, .yprice__table td { display: block; width: auto; }
+  .yprice__table th { padding: 14px 0 2px; border-bottom: 0; }
+  .yprice__table td { padding: 0 0 14px; }
+}
+@media (min-width: 900px) { .yprice { padding: 10px 32px 24px; } }
