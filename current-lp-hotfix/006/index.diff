@@ -1,0 +1,326 @@
+--- index.html（現在）
++++ index.html（応急処置版）
+@@ -9,13 +9,13 @@
+ 	<meta name="viewport" content="width=device-width">
+ 	<meta name="format-detection" content="telephone=no">
+ 	<title>名駅歯科クリニック・矯正歯科｜インプラント治療</title>
+-	<meta name="description" content="名駅歯科クリニック・矯正歯科は、1日で完了するオールオンフォー(インプラント)治療を提供している歯科クリニックです。初診無料相談受付中！名古屋駅徒歩2分。">
++	<meta name="description" content="名駅歯科クリニック・矯正歯科は、手術当日に仮歯が入るオールオンフォー(インプラント)治療を提供している歯科クリニックです。初診無料相談受付中！名古屋駅徒歩2分。">
+ 	<meta property="og:locale" content="ja_JP">
+ 	<meta property="og:site_name" content="名駅歯科クリニック・矯正歯科｜インプラント治療">
+ 	<meta property="og:url" content="https://www.meieki-dental.net/all_on_4_006/">
+ 	<meta property="og:type" content="website">
+ 	<meta property="og:title" content="名駅歯科クリニック・矯正歯科｜インプラント治療">
+-	<meta property="og:description" content="名駅歯科クリニック・矯正歯科は、1日で完了するオールオンフォー(インプラント)治療を提供している歯科クリニックです。初診無料相談受付中！名古屋駅徒歩2分。">
++	<meta property="og:description" content="名駅歯科クリニック・矯正歯科は、手術当日に仮歯が入るオールオンフォー(インプラント)治療を提供している歯科クリニックです。初診無料相談受付中！名古屋駅徒歩2分。">
+ 	<meta property="og:image" content="https://www.meieki-dental.net/all_on_4_006/ogp02.jpg">
+ 	<link rel="icon" href="favicon.ico" />
+ 
+@@ -113,7 +113,7 @@
+ 					<nav>
+ 						<ul>
+ 							<li><a href="#sec_mv">ページトップ</a></li>
+-							<li><a href="#sec_intro">インプラント治療でお悩みを解決！</a></li>
++							<li><a href="#sec_intro">インプラント治療でお悩みを改善</a></li>
+ 							<li><a href="#sec_plan01">オールオンフォー治療</a></li>
+ 							<li><a href="#sec_plan02">ザイゴマインプラント</a></li>
+ 							<li><a href="#sec_plan03">1本からできる！インプラント</a></li>
+@@ -132,7 +132,7 @@
+ 			<main>
+ 				<!-- sec_mv -->
+ 				<section id="sec_mv">
+-					<h1><img src="./assets/img/mv_img.jpg?20251203" alt="葉がボロボロ、入れ歯が合わない方へ 名駅歯科クリニック・矯正歯科　オールオンフォー治療で噛める歓びを取り戻す"></h1>
++					<h1><img src="./assets/img/mv_img.jpg?20251203" alt="歯がボロボロ、入れ歯が合わない方へ 名駅歯科クリニック・矯正歯科　オールオンフォー治療で噛める歓びを取り戻す"></h1>
+ 				</section>
+ 				<!-- /sec_mv -->
+ 				<!-- sec_merit -->
+@@ -149,21 +149,21 @@
+ 								<div class="ico"><img src="./assets/img/merit_ico01.png?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+ 									<h3 class="ttl">治療当日に歯が入る</h3>
+-									<p class="txt">キレイな歯を1日でセット可能！</p>
++									<p class="txt">当日に固定式の仮歯をセット</p>
+ 								</div>
+ 							</div>
+ 							<div class="item">
+ 								<div class="ico"><img src="./assets/img/merit_ico02.png?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+ 									<h3 class="ttl">相談だけでもOK</h3>
+-									<p class="txt">他院より難症例のご紹介多数！</p>
++									<p class="txt">他院で断られた方もぜひご相談</p>
+ 								</div>
+ 							</div>
+ 							<div class="item">
+ 								<div class="ico"><img src="./assets/img/merit_ico03.png?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+ 									<h3 class="ttl">痛みを感じにくい</h3>
+-									<p class="txt">麻酔で寝ている間に治療完了！</p>
++									<p class="txt">麻酔医の立ち会いで安心の手術</p>
+ 								</div>
+ 							</div>
+ 						</div>
+@@ -196,20 +196,20 @@
+ 						<div class="solution">
+ 							<h2 class="sec_ttl tac">
+ 								<span class="strong">オールオンフォー治療</span><span class="small">で</span><br>
+-								これら全てのお悩みを<br><span class="bg">解決</span>できます！
++								これらのお悩みの<br><span class="bg">改善</span>を目指せます！
+ 							</h2>
+ 							<div class="box">
+ 								<ul>
+ 									<li>自分で<span class="blue">しっかり噛める歯</span>に！</li>
+ 									<li>口元の<span class="blue">見た目が綺麗に！</span></li>
+ 									<li><span class="blue">メンテナンス</span>も楽にできる！</li>
+-									<li><span class="blue">麻酔で寝ている間</span>に完了できる！</li>
++									<li><span class="blue">麻酔医</span>の立ち会いで安心！</li>
+ 								</ul>
+ 								<div class="illust"><img src="./assets/img/intro_solution_illust.png" alt=""></div>
+ 							</div>
+ 							<div class="message">
+ 								<h3 class="ttl tac"><span class="fukidashi">笑顔で毎日を過ごせるように、<br>そして楽しい食事を行えるように！</span></h3>
+-								<p class="txt">どのようなご状況であっても大丈夫です！<br>まずは、歯の状態を確認させていただき、<br>治療へのご希望をお伺いします。<br>最適な治療法を選ぶお手伝いをします！
++								<p class="txt">どのようなご状況でも、まずはご相談ください！<br>まずは、歯の状態を確認させていただき、<br>治療へのご希望をお伺いします。<br>最適な治療法を選ぶお手伝いをします！
+ 								</p>
+ 								<div class="illust"><img src="./assets/img/intro_message_illust.png" alt=""></div>
+ 							</div>
+@@ -226,7 +226,8 @@
+ 				</section>
+ 				<!-- /sec_intro -->
+ 				<!-- sec_plan -->
+-				<section id="sec_plan" class="bg_light_blue">
++				<!-- sec_plan 【応急処置】術前術後写真は、治療内容・費用・期間・リスクを併記するまで非表示 -->
++				<section id="sec_plan" class="bg_light_blue" hidden style="display:none">
+ 					<div class="plan__inner">
+ 						<p class="sec_subttl min tac">ボロボロ、グラグラの状態…<br>他院で断られた方でも大丈夫！</p>
+ 						<h2 class="sec_ttl min tac"><span class="fukidashi">当院の治療で<br><span class="blue">ここまで変わります！</span></span></h2>
+@@ -248,15 +249,16 @@
+ 				<section id="sec_plan01" class="sec_plan_detail">
+ 					<div class="lead_box">
+ 						<p class="txt">総入れ歯は嫌…でも、今すぐきれいに治したい！</p>
+-						<p class="txt_l"><span class="yellow">たった一日</span>で<br>全ての歯を新しく<span class="yellow">治療</span>する</p>
++						<p class="txt_l"><span class="yellow">手術当日</span>に<br>固定式の<span class="yellow">仮歯</span>が入る</p>
+ 					</div>
+ 					<div class="wrap">
+ 						<h2 class="sec_ttl min tac">オールオンフォー<br>治療</h2>
+ 						<p class="sec_ttl_sub min tac">[ All-on-4 ]</p>
+ 						<div class="box01">
++							<!-- 【応急処置】術前術後写真は、治療内容・費用・期間・リスクを併記するまで非表示
+ 							<div class="img _01">
+ 								<img src="./assets/img/plan01_img01.png" alt="">
+-							</div>
++							</div> -->
+ 							<div class="img _02">
+ 								<img src="./assets/img/plan01_img02.png?20251203" alt="">
+ 							</div>
+@@ -268,7 +270,7 @@
+ 								<h3 class="ttl min tac"><span>オールオンフォー<br>治療</span>とは</h3>
+ 							</div>
+ 							<div class="txt_wrap">
+-								<p class="txt">上下顎に4本ずつのインプラントを埋入し、すべての人工歯を支えることができる治療法です。骨造成などの手術も必要ないため、通常のインプラントと比較して患者さまの身体へのご負担が少ないことが特徴です。抜歯から仮歯の装着までを1日で行うことが可能になるため、その日の夜に簡単な食事を取ることも可能です。静脈内鎮静法を併用し、半分眠っているような状態で（麻酔が効いている状態）で手術が終了します。また、当院では全身麻酔も対応していますのでご安心ください。
++								<p class="txt">上下顎に4本ずつのインプラントを埋入し、すべての人工歯を支えることができる治療法です。骨造成などの手術が不要な場合も多いため、通常のインプラントと比較して患者さまの身体へのご負担が少ないことが特徴です。抜歯から仮歯の装着までを1日で行うことが可能になるため、その日の夜に簡単な食事を取ることも可能です。静脈内鎮静法を併用し、半分眠っているような状態で（麻酔が効いている状態）で手術が終了します。また、当院では全身麻酔も対応していますのでご安心ください。
+ 								</p>
+ 								<div class="list_wrap">
+ 									<ul>
+@@ -296,7 +298,7 @@
+ 									</div>
+ 								</div>
+ 								<div class="item">
+-									<h3 class="ttl min tac">治療期間を大幅に縮小できる</h3>
++									<h3 class="ttl min tac">治療期間を大幅に短縮できる</h3>
+ 									<div class="txt_wrap">
+ 										<p class="txt">オールオンフォーの大きな特徴は、<span class="blue">少ない本数のインプラントで全ての歯を支えることができる</span>という点です。手術回数が少ないため治療期間を大きく短縮できます。通常のインプラント治療では、失った歯の本数分だけインプラントを埋入しなければならないため治療期間が長引きがちです。また、複数回の手術が必要なため、精神的・肉体的負担も避けられません。
+ 										</p>
+@@ -305,7 +307,7 @@
+ 								<div class="item">
+ 									<h3 class="ttl min tac">治療コストを抑えられる</h3>
+ 									<div class="txt_wrap">
+-										<p class="txt">従来、ボロボロの歯を改善するためには、インプラント、矯正、歯周外科手術、審美セラミック治療といった、様々な施術を組み合わせた「総合治療」が必要でした。そのため高額な治療費がかかり、治療期間も数年に及んでいたのです。<br>しかし、オールオンフォーは、1回の手術で歯の状態を改善することができため、総合治療に比べて治療費を最小限にまで削減できます。</p>
++										<p class="txt">従来、ボロボロの歯を改善するためには、インプラント、矯正、歯周外科手術、審美セラミック治療といった、様々な施術を組み合わせた「総合治療」が必要でした。そのため高額な治療費がかかり、治療期間も数年に及んでいたのです。<br>しかし、オールオンフォーは、1回の手術で歯の状態を改善できるため、総合治療に比べて治療費を抑えられます。</p>
+ 									</div>
+ 								</div>
+ 							</div>
+@@ -324,8 +326,7 @@
+ 								</div>
+ 								<br>
+ 								<br>
+-								<section id="sec_mv">
+-								<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++								<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 								<br>
+ 							</div>
+ 						</div>
+@@ -375,8 +376,7 @@
+ 							</div>
+ 							<br>
+ 						<br>
+-						<section id="sec_mv">
+-						<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++						<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 						<br>
+ 						</div>
+ 					</div>
+@@ -400,7 +400,7 @@
+ 								<h3 class="ttl min tac">ノーベルバイオケア<br>「N1システム」を使用</h3>
+ 							</div>
+ 							<div class="txt_wrap">
+-								<p class="txt">当院では<span class="blue">ノーベルバイオケア社</span>のインプラントを使用しています。ノーベルバイオケア社は<span class="blue">世界TOPブランド</span>でありインプラント治療のパイオニア企業です。当院では一番質が高い<span class="blue">「N1インプラント」</span>を導入しています。</p>
++								<p class="txt">当院では<span class="blue">ノーベルバイオケア社</span>のインプラントを使用しています。ノーベルバイオケア社はインプラント治療のパイオニア企業です。当院では<span class="blue">「N1インプラント」</span>を導入しています。</p>
+ 								<div class="img"><img src="./assets/img/plan03_img02.jpg" alt=""></div>
+ 								<div class="list_wrap">
+ 									<p class="ttl tac">N1システムの特徴</p>
+@@ -444,8 +444,7 @@
+ 							</div>
+ 														<br>
+ 						<br>
+-						<section id="sec_mv">
+-						<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++						<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 						<br>
+ 						</div>
+ 					</div>
+@@ -510,7 +509,7 @@
+ 							<div class="item">
+ 								<div class="img"><img src="./assets/img/feature_img01.jpg?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+-									<h3 class="ttl min tac">東海エリアトップクラスの症例数</h3>
++									<h3 class="ttl min tac">オールオンフォー170症例以上（2024年）</h3>
+ 									<p class="txt">当院はオールオンフォー治療のオペをほぼ毎日行っています。<br>症例数が多いということは、それだけの経験を積んでいることの証 となります。</p>
+ 								</div>
+ 							</div>
+@@ -525,7 +524,7 @@
+ 								<div class="img"><img src="./assets/img/feature_img03.jpg?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+ 									<h3 class="ttl min tac">歯科用CTスキャン、インプラント用<br>設備完備</h3>
+-									<p class="txt">インプラント治療用の画像診断ソフトで事前にシミュレーションを行います。最適な場所へのインプラント生入を行います。</p>
++									<p class="txt">インプラント治療用の画像診断ソフトで事前にシミュレーションを行います。最適な場所へのインプラント埋入を行います。</p>
+ 								</div>
+ 							</div>
+ 							<div class="item">
+@@ -538,7 +537,7 @@
+ 							<div class="item">
+ 								<div class="img"><img src="./assets/img/feature_img05.jpg?20251203" alt=""></div>
+ 								<div class="txt_wrap">
+-									<h3 class="ttl min tac">麻酔で眠っている間に終了</h3>
++									<h3 class="ttl min tac">麻酔医の立ち会いで安心の手術</h3>
+ 									<p class="txt">すべての手術に麻酔医が立ち合い、静脈内鎮静法により半分眠っているような状態で手術を行います。全身麻酔の場合もあります。安心・安全な環境で、患者さまの恐怖心や不安を和らげます。</p>
+ 								</div>
+ 							</div>
+@@ -593,11 +592,13 @@
+ 							<div class="item _01">
+ 								<h3 class="ttl tac">オールオンフォー（片顎）</h3>
+ 								<p class="price tac"><img src="./assets/img/price_txt01.svg" alt="1,750,000円(税別)"></p>
++								<p class="txt tac" style="font-weight:bold;">税込 1,925,000円</p>
+ 								<p class="txt tac">月額19,000円台～も可</p>
+ 							</div>
+ 							<div class="item _02">
+ 								<h3 class="ttl tac">インプラント(1本)</h3>
+ 								<p class="price tac"><img src="./assets/img/price_txt02.svg" alt="290,000円(税別)"></p>
++								<p class="txt tac" style="font-weight:bold;">税込 319,000円</p>
+ 								<p class="txt tac">月額4,600円台～も可</p>
+ 							</div>
+ 						</div>
+@@ -605,14 +606,18 @@
+ 						<p class="txt">上記の費用は<span class="blue">手術料のみ</span>となります。<br><span style="color: red;">別途麻酔や上部構造等の諸費用が掛かります。</span></p>
+ 						
+ 						<p class="note">※CT撮影・画像診断費用も含まれます ※手術費用のみとなります ※治療費用は目安です。また、自由診療となります。患者様の状態により治療費用の総額が変動します。正確な金額については、患者様ごとに診査・診断をさせて頂いた結果をふまえて、治療前に事前にご説明させていただいております。</p>
++						<div class="note" style="margin-top:1.5em;line-height:1.8;">
++							<p><strong>【治療に伴う主なリスク・副作用】</strong></p>
++							<p>・外科手術を伴うため、術後に痛み・腫れ・内出血などが生じることがあります。<br>・骨の量や全身の状態によっては治療を受けられない場合や、追加の処置が必要になる場合があります。<br>・骨の状態などにより、手術当日に仮歯を装着できない場合があります。<br>・糖尿病などの全身疾患や喫煙は、治療の経過に影響する可能性があります。<br>・インプラント周囲炎を防ぐため、毎日のセルフケアと定期的なメンテナンスが必要です。<br>・静脈内鎮静法・全身麻酔では、まれに血圧の変動や呼吸抑制などが起こる可能性があります。</p>
++						</div>
+ 						<div class="box01">
+ 							<h3 class="ttl tac">分割払いについて</h3>
+-							<p class="txt">分割払いをご用意しています。均等払い、ボーナス併用など、ご都合に会わせて支払い方法を選択いただけます。その他クレジットカード、デンタルローンなどをご用意しております。</p>
++							<p class="txt">分割払いをご用意しています。均等払い、ボーナス併用など、ご都合に合わせて支払い方法を選択いただけます。その他クレジットカード、デンタルローンなどをご用意しております。</p>
+ 							<div class="card_img"><img src="./assets/img/price_card_img.png" alt=""></div>
+ 						</div>
+ 						<div class="box01">
+ 							<h3 class="ttl tac">医療費控除について</h3>
+-							<p class="txt">インプラント治療の治療費は、医療費控除の対象にすることが可能です。確定申告で医療費控除の申請をすると、所得に応じて、1年間で一家族200万円まで控除を受けることができます。（実質的に1割近く税金が控除されます。）</p>
++							<p class="txt">インプラント治療の治療費は、医療費控除の対象にすることが可能です。確定申告で医療費控除の申請をすると、所得に応じて、1年間で一家族200万円まで控除を受けることができます。（戻る金額は、所得や医療費の額によって異なります。）</p>
+ 							<div class="about">
+ 								<h4 class="ttl_s min tac">医療費控除とは</h4>
+ 								<p class="txt">確定申告で医療費控除の申請をすることで支払った金額の一部が戻ってきます。インプラントを行った場合には忘れずに確定申告で医療費控除の申請手続きをしましょう。
+@@ -631,7 +636,7 @@
+ 						</h2>
+ 						<div class="caution_list">
+ 							<div class="item">
+-								<h3 class="ttl min tac">激安インプラントは大丈夫？</h3>
++								<h3 class="ttl min tac">インプラントの医院選びで大切なこと</h3>
+ 								<p class="txt">インプラント治療は歯科医師だけでオペをするわけではありません、麻酔医や歯科衛生士などの多くの人が携わります。クリニックとしてオペの症例数が多いからこそ様々な症例を経験しています。</p>
+ 								<div class="img"><img src="./assets/img/caution_img01.jpg" alt=""></div>
+ 							</div>
+@@ -721,7 +726,7 @@
+ 								</div>
+ 								<div class="block">
+ 									<h3 class="ttl min blue2">メッセージ</h3>
+-									<p class="txt">はじめまして。麻酔医の河合温子です。<br>患者さんが「やって良かった」と思っていただく治療を心がけております。初めて私が当院でインプラント手術に携わらせて頂いた時、泣いて喜んでいる患者さんにとても感動しました。これからも患者さんに喜んで貰いたいという思いは「ぶらしたくない」仕事のこだわりです。毎日インプラント手術があることにより当院のDr・スタッフの経験豊富な知識・技術力は間違いなく素晴らしいです。Drとスタッフの連携の良さが患者さんに負担がなく、安心しておすすめできます。口腔内は身体の入り口です。咀嚼の大切さ食べる喜びを感じてより健康な生活が送れると考えております。お口のことで悩まれている方はぜひ一度当院にいらしてください。</p>
++									<p class="txt">はじめまして。麻酔医の河合温子です。<br>患者さんが「やって良かった」と思っていただく治療を心がけております。初めて私が当院でインプラント手術に携わらせて頂いた時、泣いて喜んでいる患者さんにとても感動しました。これからも患者さんに喜んで貰いたいという思いは「ぶらしたくない」仕事のこだわりです。Drとスタッフの連携の良さが患者さんに負担がなく、安心しておすすめできます。口腔内は身体の入り口です。咀嚼の大切さ食べる喜びを感じてより健康な生活が送れると考えております。お口のことで悩まれている方はぜひ一度当院にいらしてください。</p>
+ 								</div>
+ 							</div>
+ 						</div>
+@@ -738,15 +743,14 @@
+ 							</div>
+ 						<br>
+ 						<br>
+-						<section id="sec_mv">
+-						<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++						<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 						<br>
+ 						</div>
+ 					</div>
+ 				</section>
+ 				<!-- /sec_message -->
+-				<!-- sec_voice -->
+-				<section id="sec_voice">
++				<!-- sec_voice 【応急処置】体験談は医療広告ガイドライン上掲載できないため非表示 -->
++				<section id="sec_voice" hidden style="display:none">
+ 					<div class="wrap">
+ 						<h2 class="sec_ttl min tac">患者さまの声</h2>
+ 						<div class="voice_list">
+@@ -804,7 +808,7 @@
+ 								<p class="step min tac">STEP 05</p>
+ 								<div class="txt_wrap">
+ 									<h3 class="ttl min tac">インプラントの埋め込み手術・<br>仮歯装着</h3>
+-									<p class="txt">口腔内クリーニングと局所麻酔を行った後、約30分$301C3時間ほどかけて手術をします。時間は、埋入する本数や骨の状態によって、個人差があります。インプラント治療後は、仮歯をインプラントに固定して、帰宅して頂きます。仮歯装着後、いつも通りの食事や会話を楽しむことができます。
++									<p class="txt">口腔内クリーニングと局所麻酔を行った後、約30分〜3時間ほどかけて手術をします。時間は、埋入する本数や骨の状態によって、個人差があります。インプラント治療後は、仮歯をインプラントに固定して、帰宅して頂きます。仮歯装着後は、やわらかいお食事から始めていただけます。
+ 									</p>
+ 								</div>
+ 							</div>
+@@ -831,8 +835,7 @@
+ 							</div>
+ 						<br>
+ 						<br>
+-						<section id="sec_mv">
+-						<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++						<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 						<br>
+ 						</div>
+ 					</div>
+@@ -845,7 +848,7 @@
+ 						<div class="faq_list">
+ 							<div class="item">
+ 								<h3 class="ttl min">インプラントは<br>何年ぐらい持ちますか？</h3>
+-								<p class="txt">定期的にメンテナンスを受けていれば、生涯にわたってインプラントを使っていくことはできます。</p>
++								<p class="txt">定期的にメンテナンスを受けていただくことで、長くお使いいただけます。</p>
+ 							</div>
+ 							<div class="item">
+ 								<h3 class="ttl min">インプラントが<br>抜けてしまうことはありますか？</h3>
+@@ -942,8 +945,7 @@
+ 							</div>
+ 														<br>
+ 						<br>
+-						<section id="sec_mv">
+-						<h1><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank"><img src="./assets/img/line001.png" alt="ライン登録"></a></h1>
++						<p class="line_bnr"><a href="https://s.lmes.jp/landing-qr/2009474189-L4Gp5PRA?uLand=5Llfco" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>
+ 						<br>
+ 						</div>
+ 					</div>
+@@ -995,7 +997,7 @@
+ 				</div>
+ 			</div>
+ 		</div>
+-		<p class="copyright tac">Copyright &copy; 名駅歯科クリニック・矯正歯科 All Rights Reserverd.</p>
++		<p class="copyright tac">Copyright &copy; 名駅歯科クリニック・矯正歯科 All Rights Reserved.</p>
+ 	</footer>
+ 
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

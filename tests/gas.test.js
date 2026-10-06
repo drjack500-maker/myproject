@@ -39,9 +39,10 @@ function makeSheet(name) {
   return api;
 }
 
-function load() {
+function load({ props = {}, fetchResponse = { code: 200, body: '{"events_received":1}' } } = {}) {
   const sheets = {};
   const mails = [];
+  const fetches = [];
   const cache = new Map();
   const chain = () => new Proxy({}, { get: (t, k) => (k === 'build' ? () => ({}) : () => chain()) });
   const ctx = {
@@ -70,11 +71,22 @@ function load() {
         const p = (n) => String(n).padStart(2, '0');
         return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
       },
+      // Apps Script と同じく、符号つきバイト（-128〜127）の配列を返す
+      computeDigest: (alg, text) => Array.from(require('node:crypto').createHash('sha256').update(text, 'utf8').digest()).map((b) => (b > 127 ? b - 256 : b)),
+      DigestAlgorithm: { SHA_256: 'SHA_256' },
+      Charset: { UTF_8: 'UTF_8' },
+    },
+    PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => props[k] || null }) },
+    UrlFetchApp: {
+      fetch: (url, opts) => {
+        fetches.push({ url, opts, payload: JSON.parse(opts.payload) });
+        return { getResponseCode: () => fetchResponse.code, getContentText: () => fetchResponse.body };
+      },
     },
   };
   vm.createContext(ctx);
   vm.runInContext(`${SRC}\n;this.__api = { doPost, doGet, setup, buildConversionSheet, SETTINGS, COLUMNS };`, ctx);
-  return { api: ctx.__api, sheets, mails, cache, ctx };
+  return { api: ctx.__api, sheets, mails, fetches, cache, ctx };
 }
 
 // 見出し名から列の位置を求める（台帳は見出し名で対応づけるため）
@@ -111,6 +123,7 @@ test('valid submission is saved, notifies clinic and auto-replies', () => {
   assert.match(mails[0].subject, /予約リクエスト：名駅 花子 様（第1希望 10月2日（金））/);
   assert.match(mails[0].body, /お電話のご希望時間帯：夕方/);
   assert.match(mails[0].body, /予約システム（Apotool）に予約を登録/);
+  assert.match(mails[0].body, /■ 流入ページ：\n/, 'landing_url がなくても空欄で表示');
   assert.equal(mails[1].to, 'hanako@example.jp');
   assert.match(mails[1].body, /第1希望：10月2日（金） 午後/);
 });
@@ -203,4 +216,86 @@ test('setup runs without the spreadsheet UI', () => {
   assert.doesNotThrow(() => api.setup());
   assert.ok(sheets[api.SETTINGS.sheetName]);
   assert.ok(sheets[api.SETTINGS.conversionSheetName]);
+});
+
+/* ---------------- Meta コンバージョンAPI ---------------- */
+const sha = (t) => require('node:crypto').createHash('sha256').update(t).digest('hex');
+const META = { ...VALID, gclid: '', utm_source: 'meta', fbclid: 'IwAR_TEST', fbc: 'fb.1.1760000000000.IwAR_TEST', fbp: 'fb.1.1759999999999.123456789', event_id: 'evt-123', client_ua: 'Mozilla/5.0 (iPhone) Instagram', landing_url: 'https://www.meieki-dental.net/all_on_4_006/?utm_source=meta&fbclid=IwAR_TEST' };
+
+test('Meta: pixelId 未設定なら送信しない', () => {
+  const { api, sheets, fetches } = load({ props: { META_ACCESS_TOKEN: 'TOKEN' } });
+  post(api, META);
+  assert.equal(fetches.length, 0);
+  const sheet = sheets[api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'meta_capi')], '');
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'fbclid')], 'IwAR_TEST');
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'event_id')], 'evt-123');
+});
+
+test('Meta: Lead を event_id・fbc・fbp つきで送り、連絡先は送らない（初期設定）', () => {
+  const { api, sheets, fetches } = load({ props: { META_ACCESS_TOKEN: 'TOKEN' } });
+  api.SETTINGS.meta.pixelId = '1234567890';
+  assert.deepEqual(post(api, META), { ok: true });
+  assert.equal(fetches.length, 1);
+  const { url, opts, payload } = fetches[0];
+  assert.equal(url, 'https://graph.facebook.com/v26.0/1234567890/events?access_token=TOKEN');
+  assert.equal(opts.method, 'post');
+  assert.equal(opts.muteHttpExceptions, true);
+  const ev = payload.data[0];
+  assert.equal(ev.event_name, 'Lead');
+  assert.equal(ev.event_id, 'evt-123');
+  assert.equal(ev.action_source, 'website');
+  assert.equal(ev.event_source_url, META.landing_url);
+  assert.ok(Math.abs(ev.event_time - Date.now() / 1000) < 60);
+  assert.deepEqual(ev.user_data, { client_user_agent: META.client_ua, fbc: META.fbc, fbp: META.fbp });
+  assert.equal(payload.test_event_code, undefined);
+  const sheet = sheets[api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'meta_capi')], '送信済み');
+});
+
+test('通知メールに、どちらのLPからの予約か（流入ページ）を表示する', () => {
+  const { api, mails } = load();
+  api.SETTINGS.notifyTo = 'reception@clinic.test';
+  post(api, { ...META, email: '' });
+  assert.match(mails[0].body, /■ 流入ページ：https:\/\/www\.meieki-dental\.net\/all_on_4_006\/\n/);
+  assert.match(mails[0].body, /■ 流入：meta \//);
+});
+
+test('Meta: sendHashedContact のときは電話番号（国番号つき）とメールを SHA-256 で送る', () => {
+  const { api, fetches } = load({ props: { META_ACCESS_TOKEN: 'TOKEN' } });
+  Object.assign(api.SETTINGS.meta, { pixelId: '1', sendHashedContact: true, testEventCode: 'TEST1' });
+  post(api, { ...META, email: ' Hanako@Example.JP ' });
+  const { payload } = fetches[0];
+  assert.deepEqual(payload.data[0].user_data.ph, [sha('819012345678')]);
+  assert.deepEqual(payload.data[0].user_data.em, [sha('hanako@example.jp')]);
+  assert.deepEqual(payload.data[0].user_data.country, [sha('jp')]);
+  assert.equal(payload.test_event_code, 'TEST1');
+});
+
+test('Meta: スパム疑い・照合情報なしは送らない／トークン未設定・エラーは台帳に記録', () => {
+  let ctx = load({ props: { META_ACCESS_TOKEN: 'TOKEN' } });
+  ctx.api.SETTINGS.meta.pixelId = '1';
+  post(ctx.api, { ...META, hp_extra: 'x' });
+  post(ctx.api, { ...META, tel: '080-1111-2222', fbc: '', fbp: '' });
+  assert.equal(ctx.fetches.length, 0);
+
+  ctx = load();
+  ctx.api.SETTINGS.meta.pixelId = '1';
+  post(ctx.api, META);
+  let sheet = ctx.sheets[ctx.api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(ctx.api, sheet, 'meta_capi')], '未設定（アクセストークンなし）');
+
+  ctx = load({ props: { META_ACCESS_TOKEN: 'BAD' }, fetchResponse: { code: 400, body: '{"error":{"message":"Invalid OAuth access token."}}' } });
+  ctx.api.SETTINGS.meta.pixelId = '1';
+  assert.deepEqual(post(ctx.api, META), { ok: true }, '予約の受付は成功のまま');
+  sheet = ctx.sheets[ctx.api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(ctx.api, sheet, 'meta_capi')], 'エラー 400：Invalid OAuth access token.');
+});
+
+test('フォームから送られた値で、スクリプトが書く列（Meta送信）を上書きできない', () => {
+  const { api, sheets } = load();
+  post(api, { ...VALID, meta_capi: '送信済み', status: '成約' });
+  const sheet = sheets[api.SETTINGS.sheetName];
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'meta_capi')], '');
+  assert.equal(sheet.rows[1][colOf(api, sheet, 'status')], '未対応');
 });

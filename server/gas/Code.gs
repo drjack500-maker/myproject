@@ -5,6 +5,7 @@
  *   - LPの予約リクエストをスプレッドシート（予約台帳）に保存
  *   - 医院の担当者へ通知メール、メールアドレスを入力した方へ自動返信
  *   - 来院・成約を台帳に記入すると、Google 広告の「オフライン コンバージョン」取り込み用シートを作成
+ *   - Meta 広告（Instagram・Facebook）のコンバージョンAPIに予約（Lead）を送信（設定したときだけ）
  *
  * 設置手順（詳しくは server/gas/README.md）
  *   1. Google スプレッドシートを新規作成 →［拡張機能］→［Apps Script］
@@ -12,7 +13,7 @@
  *   3. 関数「setup」を1回実行（シートの作成・権限の承認）
  *   4. ［デプロイ］→［新しいデプロイ］→ 種類「ウェブアプリ」
  *      実行ユーザー：自分 ／ アクセスできるユーザー：全員
- *   5. 表示された「…/exec」のURLを lp/assets/js/main.js の CONFIG.formEndpoint に設定
+ *   5. 表示された「…/exec」のURLを lp/assets/js/main.js の CONFIG.formEndpoint に設定（npm run sync:006 で lp-006 にも反映）
  */
 
 const SETTINGS = {
@@ -34,6 +35,18 @@ const SETTINGS = {
   duplicateWindowSec: 120,
   // ページを開いてから送信までがこれより短い場合はロボットとみなす（秒）
   minElapsedSec: 5,
+  // Meta（Instagram・Facebook広告）のコンバージョンAPI。pixelId を入れたときだけ送信する【任意】
+  // アクセストークンはコードに書かず、［プロジェクトの設定］→［スクリプト プロパティ］に
+  // META_ACCESS_TOKEN という名前で保存する（手順は server/gas/README.md）
+  meta: {
+    pixelId: '',
+    apiVersion: 'v26.0',
+    // イベントマネージャの［テストイベント］で確認するときだけ入れる（例：TEST12345）。確認後は空に戻す
+    testEventCode: '',
+    // true にすると電話番号・メールアドレスをハッシュ化（SHA-256）して送り、広告との照合精度を上げる。
+    // 個人情報の第三者提供にあたるため、個人情報の取り扱い（privacy.html）への明記と同意の取得が必要。初期値は送らない
+    sendHashedContact: false,
+  },
 };
 
 // 台帳の列（key はフォームの name 属性）
@@ -66,10 +79,17 @@ const COLUMNS = [
   ['gbraid', 'gbraid'],
   ['wbraid', 'wbraid'],
   ['yclid', 'yclid'],
+  ['fbclid', 'fbclid'],
+  ['fbc', 'fbc'],
+  ['fbp', 'fbp'],
+  ['event_id', 'イベントID'],
+  ['meta_capi', 'Meta送信'],
   ['landing_url', '流入ページ'],
   ['referrer', '参照元'],
 ];
 const STAFF_COLUMNS = ['status', 'visit_at', 'contract_at', 'contract_value', 'memo'];
+// フォームからは受け取らず、スクリプトが書き込む列
+const SYSTEM_COLUMNS = ['received_at', 'status', 'meta_capi'];
 const STATUS_OPTIONS = ['未対応', '連絡済み', '予約確定', '来院', '成約', '失注', 'キャンセル', 'スパム疑い'];
 const SPAM_STATUS = 'スパム疑い';
 const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
@@ -95,6 +115,9 @@ function doPost(e) {
       return json_({ ok: false, error: 'invalid' });
     }
 
+    let sheet;
+    let cols;
+    let rowIndex;
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
@@ -103,19 +126,20 @@ function doPost(e) {
       const dupKey = 'tel_' + telDigits;
       if (cache.get(dupKey)) return json_({ ok: true, duplicate: true });
 
-      const sheet = getSheet_();
+      sheet = getSheet_();
       // 列は位置ではなく見出し名で対応づける（列の追加・並べ替えがあってもずれない）
-      const cols = ensureColumns_(sheet);
+      cols = ensureColumns_(sheet);
       const row = new Array(sheet.getLastColumn()).fill('');
       COLUMNS.forEach(([key]) => {
         let v;
         if (key === 'received_at') v = new Date();
         else if (key === 'status') v = suspicious ? SPAM_STATUS : STATUS_OPTIONS[0];
-        else if (STAFF_COLUMNS.indexOf(key) !== -1) v = '';
+        else if (STAFF_COLUMNS.indexOf(key) !== -1 || SYSTEM_COLUMNS.indexOf(key) !== -1) v = '';
         else v = asText_(data[key]);
         row[cols[key] - 1] = v;
       });
       sheet.appendRow(row);
+      rowIndex = sheet.getLastRow();
       ensureCapacity_(sheet, cols);
       cache.put(dupKey, '1', SETTINGS.duplicateWindowSec);
     } finally {
@@ -123,6 +147,12 @@ function doPost(e) {
     }
 
     if (suspicious) return json_({ ok: true, flagged: true });
+
+    // Meta コンバージョンAPI（設定時のみ）。失敗しても予約の受付には影響させない
+    try {
+      const result = sendMetaLead_(data, p);
+      if (result) sheet.getRange(rowIndex, cols.meta_capi).setValue(result);
+    } catch (err) { console.error('meta capi failed', err); }
 
     // 台帳への保存は完了しているため、メール送信の失敗は記録のみ（利用者にはエラーを返さない）
     try { notify_(data); } catch (err) { console.error('notify failed', err); }
@@ -228,6 +258,68 @@ function buildConversionSheet() {
 }
 
 /* ----------------------------------------------------------------
+   Meta コンバージョンAPI（Instagram・Facebook 広告）
+   ブラウザのピクセルと同じ event_id で送るため、両方で届いても1件として数えられる。
+   初期設定では、広告クリックID（fbc）・ブラウザID（fbp）・ブラウザ情報だけを送り、
+   お名前・電話番号などの入力内容は送らない（sendHashedContact を true にした場合のみ、ハッシュ化して送る）
+   ---------------------------------------------------------------- */
+function sendMetaLead_(d, p) {
+  const m = SETTINGS.meta || {};
+  if (!m.pixelId) return '';
+  const token = PropertiesService.getScriptProperties().getProperty('META_ACCESS_TOKEN');
+  if (!token) return '未設定（アクセストークンなし）';
+  // 広告と照合できる情報（クリックID・ブラウザID・ハッシュ化した連絡先）がなければ送らない。
+  // どの広告の成果かは Meta 側で判定される（ブラウザのピクセルと同じ考え方）
+  if (!d.fbc && !d.fbp && !m.sendHashedContact) return '';
+
+  const userData = { client_user_agent: clean_(p.client_ua, 400) };
+  if (d.fbc) userData.fbc = d.fbc;
+  if (d.fbp) userData.fbp = d.fbp;
+  if (m.sendHashedContact) {
+    const ph = normalizePhone_(d.tel);
+    if (ph) userData.ph = [sha256_(ph)];
+    if (isEmail_(d.email)) userData.em = [sha256_(d.email.trim().toLowerCase())];
+    userData.country = [sha256_('jp')];
+  }
+  const event = {
+    event_name: 'Lead',
+    event_time: Math.floor(Date.now() / 1000),
+    action_source: 'website',
+    event_source_url: d.landing_url || '',
+    user_data: userData,
+  };
+  if (d.event_id) event.event_id = d.event_id;
+  const payload = { data: [event] };
+  if (m.testEventCode) payload.test_event_code = m.testEventCode;
+
+  const url = 'https://graph.facebook.com/' + m.apiVersion + '/' + encodeURIComponent(m.pixelId) + '/events?access_token=' + encodeURIComponent(token);
+  const res = UrlFetchApp.fetch(url, {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true,
+  });
+  const code = res.getResponseCode();
+  if (code >= 200 && code < 300) return '送信済み';
+  let message = '';
+  try { message = JSON.parse(res.getContentText()).error.message; } catch (e) { message = res.getContentText(); }
+  console.error('meta capi error', code, message);
+  return ('エラー ' + code + '：' + String(message || '')).slice(0, 200);
+}
+
+// 日本の電話番号を国番号つきの数字だけにする（090-1234-5678 → 819012345678）
+function normalizePhone_(tel) {
+  const digits = String(tel || '').replace(/[^\d]/g, '');
+  if (/^0\d{9,10}$/.test(digits)) return '81' + digits.slice(1);
+  return '';
+}
+
+function sha256_(text) {
+  const bytes = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, text, Utilities.Charset.UTF_8);
+  return bytes.map((b) => ('0' + (b & 0xff).toString(16)).slice(-2)).join('');
+}
+
+/* ----------------------------------------------------------------
    メール
    ---------------------------------------------------------------- */
 function notify_(d) {
@@ -253,7 +345,8 @@ function notify_(d) {
     '■ ご質問・ご要望：',
     d.note || '（なし）',
     '',
-    '■ 流入：' + [d.utm_source, d.utm_campaign, d.utm_term].filter(String).join(' / '),
+    '■ 流入：' + [d.utm_source, d.utm_campaign, d.utm_content, d.utm_term].filter(String).join(' / '),
+    '■ 流入ページ：' + (d.landing_url || '').split('?')[0],
     '■ 見出しパターン：' + (d.lp_variant || 'default'),
     '',
     '予約台帳：' + url,

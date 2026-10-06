@@ -1,17 +1,16 @@
 /*
- * 現LP（https://www.meieki-dental.net/all_on_4_004/）への応急処置版を作る
+ * 現LPへの応急処置版を作る
  *   npm run build:hotfix
- * 入力：current-lp-hotfix/index.original.html（2026年9月30日に取得した現LPのHTML）
- * 出力：current-lp-hotfix/index.html（そのまま差し替えられるHTML）
+ *   - all_on_4_004（検索広告）… current-lp-hotfix/index.original.html（2026年9月30日取得）→ index.html
+ *   - all_on_4_006（Meta広告）… current-lp-hotfix/006/index.original.html（2026年10月6日取得）→ 006/index.html
  *
- * 修正は下の FIXES に書いた箇所だけ。見つからない／複数見つかる場合は停止する
+ * 修正は下の FIXES に書いた箇所だけ。見つからない／想定と違う件数見つかる場合は停止する
  * （現LPが更新されていたら、index.original.html を取り直してから実行してください）。
  */
 const fs = require('node:fs');
 const path = require('node:path');
 
-const DIR = path.join(__dirname, '..', 'current-lp-hotfix');
-let html = fs.readFileSync(path.join(DIR, 'index.original.html'), 'utf8');
+const ROOT = path.join(__dirname, '..', 'current-lp-hotfix');
 
 const RISKS = `
 						<div class="note" style="margin-top:1.5em;line-height:1.8;">
@@ -19,8 +18,8 @@ const RISKS = `
 							<p>・外科手術を伴うため、術後に痛み・腫れ・内出血などが生じることがあります。<br>・骨の量や全身の状態によっては治療を受けられない場合や、追加の処置が必要になる場合があります。<br>・骨の状態などにより、手術当日に仮歯を装着できない場合があります。<br>・糖尿病などの全身疾患や喫煙は、治療の経過に影響する可能性があります。<br>・インプラント周囲炎を防ぐため、毎日のセルフケアと定期的なメンテナンスが必要です。<br>・静脈内鎮静法・全身麻酔では、まれに血圧の変動や呼吸抑制などが起こる可能性があります。</p>
 						</div>`;
 
-// [説明, 置き換え前, 置き換え後, 出現回数（既定1）]
-const FIXES = [
+// [説明, 置き換え前（文字列または正規表現）, 置き換え後, 出現回数（既定1）]
+const FIXES_004 = [
   // --- 誤認のおそれがある表現（医療広告ガイドライン） ---
   ['説明文：1日で完了', '1日で完了するオールオンフォー(インプラント)治療', '手術当日に仮歯が入るオールオンフォー(インプラント)治療', 2],
   ['メニュー：解決', '<li><a href="#sec_intro">インプラント治療でお悩みを解決！</a></li>', '<li><a href="#sec_intro">インプラント治療でお悩みを改善</a></li>'],
@@ -60,16 +59,39 @@ const FIXES = [
   ['誤字：縮小', '治療期間を大幅に縮小できる', '治療期間を大幅に短縮できる'],
 ];
 
-const report = [];
-for (const [label, from, to, times = 1] of FIXES) {
-  const count = html.split(from).length - 1;
-  if (count !== times) {
-    console.error(`停止：「${label}」の置き換え前の文字列が ${count} 件見つかりました（想定 ${times} 件）`);
-    process.exit(1);
+// all_on_4_006：004 と共通の修正（006 に無い2か所を除く）＋ 006 で増えた箇所
+const NOT_IN_006 = ['一覧：治療可能', 'プラン：たった1日'];
+const FIXES_006 = [
+  ...FIXES_004.filter(([label]) => !NOT_IN_006.includes(label)),
+
+  // --- 006 で増えた箇所 ---
+  ['メイン画像の説明：葉がボロボロ（誤字）', '葉がボロボロ', '歯がボロボロ'],
+  ['特長：東海エリアトップクラス（根拠の示せない比較表現）', '<h3 class="ttl min tac">東海エリアトップクラスの症例数</h3>', '<h3 class="ttl min tac">オールオンフォー170症例以上（2024年）</h3>'],
+  ['説明のない術前術後写真4組（ここまで変わります）を非表示', '<section id="sec_plan" class="bg_light_blue">',
+    '<!-- sec_plan 【応急処置】術前術後写真は、治療内容・費用・期間・リスクを併記するまで非表示 -->\n\t\t\t\t<section id="sec_plan" class="bg_light_blue" hidden style="display:none">'],
+  // LINEバナーが見出し（h1）と閉じていない section で囲まれている → 段落に。画像の説明も内容がわかるものに
+  ['LINEバナー：h1・閉じていない section をやめ、画像の説明を追加',
+    /<section id="sec_mv">\s*<h1><a href="(https:\/\/s\.lmes\.jp[^"]*)" target="_blank"><img src="\.\/assets\/img\/line001\.png" alt="ライン登録"><\/a><\/h1>/g,
+    '<p class="line_bnr"><a href="$1" target="_blank" rel="noopener"><img src="./assets/img/line001.png" alt="小冊子「知らないと後悔するインプラント治療の真実」をLINEで受け取る"></a></p>', 6],
+  ['誤字：Reserverd', 'All Rights Reserverd.', 'All Rights Reserved.'],
+];
+
+function build(dir, fixes) {
+  let html = fs.readFileSync(path.join(dir, 'index.original.html'), 'utf8');
+  const report = [];
+  for (const [label, from, to, times = 1] of fixes) {
+    const count = typeof from === 'string' ? html.split(from).length - 1 : (html.match(from) || []).length;
+    if (count !== times) {
+      console.error(`停止：「${label}」の置き換え前の文字列が ${count} 件見つかりました（想定 ${times} 件）`);
+      process.exit(1);
+    }
+    html = typeof from === 'string' ? html.split(from).join(to) : html.replace(from, to);
+    report.push(`- ${label}`);
   }
-  html = html.split(from).join(to);
-  report.push(`- ${label}`);
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  console.log(`wrote ${path.relative(path.join(ROOT, '..'), path.join(dir, 'index.html'))}（${fixes.length}か所を修正）`);
+  console.log(report.join('\n'));
 }
-fs.writeFileSync(path.join(DIR, 'index.html'), html);
-console.log(`wrote current-lp-hotfix/index.html（${FIXES.length}か所を修正）`);
-console.log(report.join('\n'));
+
+build(ROOT, FIXES_004);
+build(path.join(ROOT, '006'), FIXES_006);

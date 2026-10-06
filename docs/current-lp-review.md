@@ -1,5 +1,7 @@
 # 現LP 診断レポート
 
+> Meta 広告用LP（all_on_4_006）の診断は [`lp-006-review.md`](lp-006-review.md) にあります。
+
 対象：https://www.meieki-dental.net/all_on_4_004/
 確認日：2026年9月30日
 確認方法：スマホ（iPhone相当 390×844）とPC（1366×860）で表示し、全文と画像の代替テキストを抽出。Web予約（Apotool & Box）の入口ページも確認（予約は送信していません）。
