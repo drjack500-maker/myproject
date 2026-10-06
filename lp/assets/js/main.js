@@ -171,6 +171,38 @@
   }
 
   /* ---------------------------------------------------------
+     4-2. 記入が必要な空欄（<span class="blank">）
+     data-fill の付いた要素は、中に空欄が残っている間は表示しない（公開しても空欄が見えない）。
+     data-fill-group は、中の data-fill が1つでも表示されるときだけ表示する。
+     下書き表示（LP_CONFIG.draft、または手元の確認で ?draft=1）では、空欄も含めてすべて表示する
+     --------------------------------------------------------- */
+  const draft = CONFIG.draft === true || (LOCAL_HOSTS.includes(location.hostname) && params.get('draft') === '1');
+  $$('[data-fill]').forEach((el) => { el.hidden = !draft && !!$('.blank', el); });
+  $$('[data-fill-group]').forEach((g) => { g.hidden = !draft && !$$('[data-fill]', g).some((el) => !el.hidden); });
+  if (draft) {
+    document.documentElement.classList.add('is-draft');
+    const blanks = $$('.blank');
+    const bar = document.createElement('div');
+    bar.className = 'draft-bar';
+    bar.innerHTML = `<p><b>下書き表示</b>黄色の枠は、医院で記入が必要な空欄です（${blanks.length}か所）。空欄が残っている項目は、公開時には表示されません。</p>`;
+    document.body.prepend(bar);
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'draft-next';
+    nextBtn.textContent = `次の空欄へ（全${blanks.length}か所）`;
+    let bi = -1;
+    nextBtn.addEventListener('click', () => {
+      if (!blanks.length) return;
+      blanks.forEach((el) => el.classList.remove('is-current'));
+      bi = (bi + 1) % blanks.length;
+      blanks[bi].classList.add('is-current');
+      blanks[bi].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      nextBtn.textContent = `次の空欄へ（${bi + 1}／${blanks.length}）`;
+    });
+    document.body.append(nextBtn);
+  }
+
+  /* ---------------------------------------------------------
      5. クリック計測（data-track / tel:）
      --------------------------------------------------------- */
   document.addEventListener('click', (e) => {

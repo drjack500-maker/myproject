@@ -4,11 +4,11 @@
   "description": "オールオン4 LP（名駅歯科クリニック・矯正歯科）：検索広告用 lp/・SNS広告用 lp-006/",
   "scripts": {
     "serve": "node tools/serve.js",
-    "sync:006": "node tools/sync-006.js",
+    "sync:006": "node tools/sync-006.js && node tools/build-preview.js",
     "test": "npm run lint:html && npm run test:unit && npm run test:e2e",
     "test:unit": "node --test tests/gas.test.js",
     "test:e2e": "node --test tests/e2e.test.js",
-    "lint:html": "html-validate lp/*.html lp-006/*.html",
+    "lint:html": "html-validate lp/*.html lp-006/*.html preview/*.html",
     "build:images": "node tools/build-images.js",
     "build:preview": "node tools/build-preview.js",
     "build:hotfix": "node tools/build-hotfix.js"

@@ -386,11 +386,12 @@
 </section>
 
 <!-- ================= Cases =================
-  【公開前に必ず記入】現LP（all_on_4_006）の「当院の治療でここまで変わります！」の術前・術後写真4組をセット済みです。
+  現LP（all_on_4_006）の「当院の治療でここまで変わります！」の術前・術後写真4組をセット済みです。
   医療広告ガイドラインにより、術前・術後写真は「治療内容」「費用」「治療期間・回数」「リスク・副作用」を同じ場所に書かないと掲載できません。
-  各症例の【要記入】を実際の内容に書き換えてから、下の section の hidden 属性を外してください（記入できない症例は article ごと削除）。
-  ※【要記入】が残ったまま表示されると自動テスト（npm test）が失敗します。 -->
-<section class="section" id="cases" aria-labelledby="cases-title" hidden>
+  【記入のしかた】各症例の <span class="blank">…</span> を、中身ごと実際の内容に書き換えてください。
+  空欄（class="blank"）が1つでも残っている症例は、公開時に自動で非表示になります（全部記入した症例だけが表示されます）。
+  掲載しない症例は article ごと削除してください。 -->
+<section class="section" id="cases" aria-labelledby="cases-title" data-fill-group hidden>
   <div class="container">
     <header class="section-head">
       <p class="eyebrow">CASES</p>
@@ -399,63 +400,63 @@
     </header>
 
     <div class="cases">
-      <article class="case reveal">
+      <article class="case reveal" data-fill hidden>
         <div class="case__photos case__photos--ab">
           <figure><img src="assets/img/case1-before.jpg" alt="症例1 治療前の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療前</figcaption></figure>
           <span class="case__arrow" aria-hidden="true"></span>
           <figure><img src="assets/img/case1-after.jpg" alt="症例1 治療後の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療後</figcaption></figure>
         </div>
-        <h3 class="case__title">症例1：【要記入】オールオン4（○○代 ○性）</h3>
+        <h3 class="case__title">症例1：<span class="blank">上あご／下あご／上下</span>のオールオン4（<span class="blank">年代・性別</span>）</h3>
         <dl class="case__data">
-          <div><dt>お悩み</dt><dd>【要記入】（例）入れ歯が合わず、食事のたびに痛みがあった</dd></div>
-          <div><dt>治療内容</dt><dd>【要記入】（例）残存歯の抜歯、オールオン4（インプラント4本）、当日仮歯装着</dd></div>
-          <div><dt>治療期間</dt><dd>【要記入】（例）約○か月／通院○回</dd></div>
-          <div><dt>費用</dt><dd>【要記入】（例）○,○○○,○○○円（税込）</dd></div>
+          <div><dt>お悩み</dt><dd><span class="blank">例：入れ歯が合わず、食事のたびに痛みがあった</span></dd></div>
+          <div><dt>治療内容</dt><dd><span class="blank">例：残存歯の抜歯、インプラント4本の埋入、当日に固定式の仮歯を装着</span></dd></div>
+          <div><dt>治療期間</dt><dd>約<span class="blank">　</span>か月／通院<span class="blank">　</span>回</dd></div>
+          <div><dt>費用</dt><dd><span class="blank">　　　　　</span>円（税込）<small>（麻酔・上部構造を含む総額）</small></dd></div>
           <div><dt>リスク・副作用</dt><dd>術後の腫れ・痛み・内出血、インプラント周囲炎など。詳しくは<a href="#risk">リスク・副作用</a>をご覧ください。</dd></div>
         </dl>
       </article>
-      <article class="case reveal">
+      <article class="case reveal" data-fill hidden>
         <div class="case__photos case__photos--ab">
           <figure><img src="assets/img/case2-before.jpg" alt="症例2 治療前の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療前</figcaption></figure>
           <span class="case__arrow" aria-hidden="true"></span>
           <figure><img src="assets/img/case2-after.jpg" alt="症例2 治療後の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療後</figcaption></figure>
         </div>
-        <h3 class="case__title">症例2：【要記入】オールオン4（○○代 ○性）</h3>
+        <h3 class="case__title">症例2：<span class="blank">上あご／下あご／上下</span>のオールオン4（<span class="blank">年代・性別</span>）</h3>
         <dl class="case__data">
-          <div><dt>お悩み</dt><dd>【要記入】（例）入れ歯が合わず、食事のたびに痛みがあった</dd></div>
-          <div><dt>治療内容</dt><dd>【要記入】（例）残存歯の抜歯、オールオン4（インプラント4本）、当日仮歯装着</dd></div>
-          <div><dt>治療期間</dt><dd>【要記入】（例）約○か月／通院○回</dd></div>
-          <div><dt>費用</dt><dd>【要記入】（例）○,○○○,○○○円（税込）</dd></div>
+          <div><dt>お悩み</dt><dd><span class="blank">例：入れ歯が合わず、食事のたびに痛みがあった</span></dd></div>
+          <div><dt>治療内容</dt><dd><span class="blank">例：残存歯の抜歯、インプラント4本の埋入、当日に固定式の仮歯を装着</span></dd></div>
+          <div><dt>治療期間</dt><dd>約<span class="blank">　</span>か月／通院<span class="blank">　</span>回</dd></div>
+          <div><dt>費用</dt><dd><span class="blank">　　　　　</span>円（税込）<small>（麻酔・上部構造を含む総額）</small></dd></div>
           <div><dt>リスク・副作用</dt><dd>術後の腫れ・痛み・内出血、インプラント周囲炎など。詳しくは<a href="#risk">リスク・副作用</a>をご覧ください。</dd></div>
         </dl>
       </article>
-      <article class="case reveal">
+      <article class="case reveal" data-fill hidden>
         <div class="case__photos case__photos--ab">
           <figure><img src="assets/img/case3-before.jpg" alt="症例3 治療前の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療前</figcaption></figure>
           <span class="case__arrow" aria-hidden="true"></span>
           <figure><img src="assets/img/case3-after.jpg" alt="症例3 治療後の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療後</figcaption></figure>
         </div>
-        <h3 class="case__title">症例3：【要記入】オールオン4（○○代 ○性）</h3>
+        <h3 class="case__title">症例3：<span class="blank">上あご／下あご／上下</span>のオールオン4（<span class="blank">年代・性別</span>）</h3>
         <dl class="case__data">
-          <div><dt>お悩み</dt><dd>【要記入】（例）入れ歯が合わず、食事のたびに痛みがあった</dd></div>
-          <div><dt>治療内容</dt><dd>【要記入】（例）残存歯の抜歯、オールオン4（インプラント4本）、当日仮歯装着</dd></div>
-          <div><dt>治療期間</dt><dd>【要記入】（例）約○か月／通院○回</dd></div>
-          <div><dt>費用</dt><dd>【要記入】（例）○,○○○,○○○円（税込）</dd></div>
+          <div><dt>お悩み</dt><dd><span class="blank">例：入れ歯が合わず、食事のたびに痛みがあった</span></dd></div>
+          <div><dt>治療内容</dt><dd><span class="blank">例：残存歯の抜歯、インプラント4本の埋入、当日に固定式の仮歯を装着</span></dd></div>
+          <div><dt>治療期間</dt><dd>約<span class="blank">　</span>か月／通院<span class="blank">　</span>回</dd></div>
+          <div><dt>費用</dt><dd><span class="blank">　　　　　</span>円（税込）<small>（麻酔・上部構造を含む総額）</small></dd></div>
           <div><dt>リスク・副作用</dt><dd>術後の腫れ・痛み・内出血、インプラント周囲炎など。詳しくは<a href="#risk">リスク・副作用</a>をご覧ください。</dd></div>
         </dl>
       </article>
-      <article class="case reveal">
+      <article class="case reveal" data-fill hidden>
         <div class="case__photos case__photos--ab">
           <figure><img src="assets/img/case4-before.jpg" alt="症例4 治療前の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療前</figcaption></figure>
           <span class="case__arrow" aria-hidden="true"></span>
           <figure><img src="assets/img/case4-after.jpg" alt="症例4 治療後の口元" width="294" height="140" loading="lazy" decoding="async"><figcaption>治療後</figcaption></figure>
         </div>
-        <h3 class="case__title">症例4：【要記入】オールオン4（○○代 ○性）</h3>
+        <h3 class="case__title">症例4：<span class="blank">上あご／下あご／上下</span>のオールオン4（<span class="blank">年代・性別</span>）</h3>
         <dl class="case__data">
-          <div><dt>お悩み</dt><dd>【要記入】（例）入れ歯が合わず、食事のたびに痛みがあった</dd></div>
-          <div><dt>治療内容</dt><dd>【要記入】（例）残存歯の抜歯、オールオン4（インプラント4本）、当日仮歯装着</dd></div>
-          <div><dt>治療期間</dt><dd>【要記入】（例）約○か月／通院○回</dd></div>
-          <div><dt>費用</dt><dd>【要記入】（例）○,○○○,○○○円（税込）</dd></div>
+          <div><dt>お悩み</dt><dd><span class="blank">例：入れ歯が合わず、食事のたびに痛みがあった</span></dd></div>
+          <div><dt>治療内容</dt><dd><span class="blank">例：残存歯の抜歯、インプラント4本の埋入、当日に固定式の仮歯を装着</span></dd></div>
+          <div><dt>治療期間</dt><dd>約<span class="blank">　</span>か月／通院<span class="blank">　</span>回</dd></div>
+          <div><dt>費用</dt><dd><span class="blank">　　　　　</span>円（税込）<small>（麻酔・上部構造を含む総額）</small></dd></div>
           <div><dt>リスク・副作用</dt><dd>術後の腫れ・痛み・内出血、インプラント周囲炎など。詳しくは<a href="#risk">リスク・副作用</a>をご覧ください。</dd></div>
         </dl>
       </article>
@@ -599,14 +600,31 @@
       <p class="price-main__note">麻酔（静脈内鎮静法・全身麻酔）や上部構造（最終的な歯）などの費用が別途かかります。<br>お口の状態によって総額が変わるため、<b>診査・診断の結果をもとに、治療を始める前に総額をご説明します。</b>ご納得いただいてから治療を始めます。</p>
     </div>
 
+    <!-- 費用の内訳（目安）：「別途」の金額がわかると、総額への不安が減ります。
+         <span class="blank">…</span> を金額に書き換えた行だけが表示されます（空欄のままの行は表示されません） -->
+    <div class="price-table-wrap reveal" data-fill-group hidden>
+      <table class="price-table">
+        <caption>費用の内訳（片あご・税込の目安）</caption>
+        <tbody>
+          <tr><th scope="row">オールオン4 手術費用<small>CT撮影・画像診断を含む</small></th><td><b>1,925,000円</b></td></tr>
+          <tr data-fill hidden><th scope="row">静脈内鎮静法</th><td><span class="blank">　　　　</span>円</td></tr>
+          <tr data-fill hidden><th scope="row">全身麻酔</th><td><span class="blank">　　　　</span>円</td></tr>
+          <tr data-fill hidden><th scope="row">上部構造（最終的な歯）</th><td><span class="blank">　　　　</span>円〜</td></tr>
+          <tr data-fill hidden><th scope="row">手術当日の固定式の仮歯</th><td><span class="blank">手術費用に含む／○○円</span></td></tr>
+          <tr class="price-table__total" data-fill hidden><th scope="row">総額の目安（片あご）</th><td><b><span class="blank">　　　　　</span>円〜</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note">※お口の状態・使用する材料により異なります。正確な金額は、診査・診断のうえ治療前にご説明します。</p>
+    </div>
+
     <p class="pay-methods">お支払い方法：現金／クレジットカード（VISA・Mastercard・JCB・American Express・Diners Club）／デンタルローン（均等払い・ボーナス併用）</p>
 
     <div class="pay-grid pay-grid--3">
       <div class="pay-card reveal">
         <p class="pay-card__label">デンタルローン</p>
         <p class="pay-card__value">月々<span class="num">19,000</span>円台〜</p>
-        <!-- 【要確認】分割の最大回数 -->
-        <p class="pay-card__sub">最大120回払いに対応</p>
+        <!-- 分割の最大回数（未確認のため空欄。記入すると表示されます） -->
+        <p class="pay-card__sub" data-fill hidden>最大<span class="blank">　　</span>回払いに対応</p>
         <p class="note">※ローン会社の審査があります。月々のお支払額は、お支払い回数・金利・頭金などにより異なります。</p>
       </div>
       <div class="pay-card reveal">
@@ -723,6 +741,8 @@
         </div>
       </li>
     </ol>
+    <!-- 標準的な治療期間・通院回数（自由診療の掲載で求められる情報。記入すると表示されます） -->
+    <p class="flow-std" data-fill hidden><b>標準的な治療期間</b>約<span class="blank">　</span>か月<span aria-hidden="true">／</span><b>通院回数</b>約<span class="blank">　</span>回<small>ご相談から最終的な歯の装着まで。骨の状態により異なります。</small></p>
     <p class="note">※骨の状態などにより、当日に仮歯を装着できない場合があります。</p>
   </div>
 </section>
@@ -775,6 +795,8 @@
         <div class="member__body">
           <p class="member__role">医療法人スマイル 理事長</p>
           <p class="member__name">尾崎 隆</p>
+          <!-- 理事長のメッセージ（インプラント治療について2〜3文。現LPのメッセージは矯正歯科の内容のため新たに必要）。記入すると表示されます -->
+          <p class="member__msg" data-fill hidden>「<span class="blank">理事長のメッセージ（インプラント治療への思い・患者さまへの一言。2〜3文）</span>」</p>
           <ul class="member__career">
             <li>1989年 歯科医師国家資格取得</li>
             <li>1997年 USA Dr.Lee LEVEL1・2</li>
@@ -819,7 +841,7 @@
       </details>
       <details class="faq__item">
         <summary><span class="faq__q">Q</span>分割払いはできますか？</summary>
-        <div class="faq__a"><span class="faq__a-mark">A</span><div><p>デンタルローンで月々19,000円台からの分割払いが可能です（最大120回）。均等払いのほか、ボーナス併用もお選びいただけます。ローン会社の審査があり、月々のお支払額は回数・金利・頭金により異なります。クレジットカード（VISA・Mastercard・JCB・American Express・Diners Club）もご利用いただけます。</p></div></div>
+        <div class="faq__a"><span class="faq__a-mark">A</span><div><p>デンタルローンで月々19,000円台からの分割払いが可能です<span data-fill hidden>（最大<span class="blank">　　</span>回）</span>。均等払いのほか、ボーナス併用もお選びいただけます。ローン会社の審査があり、月々のお支払額は回数・金利・頭金により異なります。クレジットカード（VISA・Mastercard・JCB・American Express・Diners Club）もご利用いただけます。</p></div></div>
       </details>
       <details class="faq__item">
         <summary><span class="faq__q">Q</span>医療費控除は使えますか？</summary>
@@ -827,7 +849,7 @@
       </details>
       <details class="faq__item">
         <summary><span class="faq__q">Q</span>治療期間と通院回数はどのくらいですか？</summary>
-        <div class="faq__a"><span class="faq__a-mark">A</span><div><p>手術は1日で行い、その日に固定式の仮歯を装着します（手術時間は約30分〜3時間。本数や骨の状態により異なります）。その後、インプラントと骨が結合するまでの治癒期間を経て、型取りから約2週間で最終的な歯を装着します。治癒期間や通院回数は骨の状態により異なるため、診断の際にご説明します。</p></div></div>
+        <div class="faq__a"><span class="faq__a-mark">A</span><div><p>手術は1日で行い、その日に固定式の仮歯を装着します（手術時間は約30分〜3時間。本数や骨の状態により異なります）。その後、インプラントと骨が結合するまでの治癒期間を経て、型取りから約2週間で最終的な歯を装着します。<span data-fill hidden>標準的な治療期間は約<span class="blank">　</span>か月、通院回数は約<span class="blank">　</span>回です。</span>治癒期間や通院回数は骨の状態により異なるため、診断の際にご説明します。</p></div></div>
       </details>
       <details class="faq__item">
         <summary><span class="faq__q">Q</span>手術当日から食事はできますか？</summary>
@@ -915,6 +937,8 @@
           </a>
         </div>
         <div class="reserve__bring">
+          <!-- 初回カウンセリングの所要時間（記入すると表示されます） -->
+          <p class="reserve__bring-time" data-fill hidden>初回の所要時間：約<span class="blank">　　</span>分（CT撮影・ご説明を含む）</p>
           <p class="reserve__bring-title">ご来院時にお持ちいただくと便利なもの</p>
           <p>健康保険証／お薬手帳（服用中のお薬がある方）／今お使いの入れ歯</p>
         </div>

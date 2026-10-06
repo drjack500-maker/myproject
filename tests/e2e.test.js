@@ -426,15 +426,74 @@ test('006：Meta 広告のクリックID（fbclid）・event_id を送信し、�
   await page.context().close();
 });
 
-test('006：見出しの出し分け（?v=fear）と、症例は【要記入】が残る間は表示しない', async () => {
+test('006：見出しの出し分け（?v=fear）', async () => {
   const page = await open('006/index.html?v=fear');
   assert.match(await page.textContent('#fv-title'), /うとうとした状態で/);
-  const cases = await page.evaluate(() => {
-    const sec = document.querySelector('#cases');
-    return { hidden: sec.hidden, placeholder: sec.textContent.includes('【要記入】') };
-  });
-  assert.ok(cases.hidden || !cases.placeholder, '術前・術後写真は治療内容・費用・期間・リスクを記入してから表示する');
   await page.context().close();
+});
+
+test('006：記入が必要な空欄は、公開版では項目ごと表示しない（症例・費用の内訳など）', async () => {
+  const page = await open('006/index.html');
+  const visibleBlanks = await page.$$eval('.blank', (els) => els.filter((e) => e.offsetParent !== null).map((e) => e.textContent));
+  assert.deepEqual(visibleBlanks, []);
+  assert.ok(await page.$$eval('.blank', (els) => els.length) > 0, '空欄はHTMLには残っている');
+  assert.equal(await page.$eval('#cases', (e) => e.hidden), true, '術前・術後写真は、治療内容・費用・期間を記入するまで出さない');
+  assert.equal(await page.$eval('.price-table-wrap', (e) => e.hidden), true);
+  assert.equal(await page.isVisible('.draft-bar'), false);
+  await page.context().close();
+});
+
+test('006：空欄をすべて記入した症例・行だけが表示される', async () => {
+  const page = await open('006/index.html', {
+    init: (ctx) => ctx.route(/\/006\/index\.html$/, async (route) => {
+      let html = await (await fetch(route.request().url())).text();
+      // 症例1と「静脈内鎮静法」の行だけ、空欄を記入した状態にする
+      const fill = (part) => part.replace(/<span class="blank">[^<]*<\/span>/g, '記入済み');
+      const c1 = html.indexOf('症例1：');
+      const c1End = html.indexOf('</article>', c1);
+      html = html.slice(0, c1) + fill(html.slice(c1, c1End)) + html.slice(c1End);
+      html = html.replace(/(<th scope="row">静脈内鎮静法<\/th><td>)<span class="blank">[^<]*<\/span>/, '$1110,000');
+      await route.fulfill({ body: html, contentType: 'text/html; charset=utf-8' });
+    }),
+  });
+  assert.equal(await page.$eval('#cases', (e) => e.hidden), false);
+  const shown = await page.$$eval('#cases .case', (els) => els.map((e) => !e.hidden));
+  assert.deepEqual(shown, [true, false, false, false]);
+  assert.equal(await page.$eval('.price-table-wrap', (e) => e.hidden), false);
+  const rows = await page.$$eval('.price-table tr', (els) => els.filter((e) => !e.hidden).map((e) => e.querySelector('th').firstChild.textContent.trim()));
+  assert.deepEqual(rows, ['オールオン4 手術費用', '静脈内鎮静法']);
+  await page.context().close();
+});
+
+test('006：下書き表示（?draft=1）では空欄をすべて表示し、「次の空欄へ」で順に移動できる', async () => {
+  const page = await open('006/index.html?draft=1');
+  const total = await page.$$eval('.blank', (els) => els.length);
+  assert.equal(await page.$$eval('.blank', (els) => els.filter((e) => e.offsetParent !== null).length), total);
+  assert.match(await page.textContent('.draft-bar'), new RegExp(`${total}か所`));
+  assert.equal(await page.$eval('#cases', (e) => e.hidden), false);
+  await page.click('.draft-next');
+  assert.equal(await page.$$eval('.blank.is-current', (els) => els.length), 1);
+  assert.match(await page.textContent('.draft-next'), new RegExp(`1／${total}`));
+  assert.deepEqual(page.errors, []);
+  await page.context().close();
+});
+
+test('006：下書きの1ファイル版（preview/lp-006-draft.html）が最新で、外部ファイルなしで表示できる', async () => {
+  const { build006Draft, DRAFT_006 } = require('../tools/build-preview');
+  assert.equal(fs.readFileSync(DRAFT_006, 'utf8'), build006Draft(), 'npm run sync:006 を実行してください');
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  await ctx.route(EXTERNAL, (r) => r.abort());
+  const page = await ctx.newPage();
+  const errors = [];
+  const local = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('request', (r) => { if (r.url().startsWith('file:') && !r.url().endsWith('lp-006-draft.html')) local.push(r.url()); });
+  await page.goto(`file://${DRAFT_006}`);
+  assert.deepEqual(local, [], '画像・CSS・JSはすべて埋め込み');
+  assert.equal(await page.isVisible('.draft-bar'), true);
+  await page.waitForFunction(() => { const i = document.querySelector('.fvp__photo img'); return i.complete && i.naturalWidth > 0; });
+  assert.deepEqual(errors, []);
+  await ctx.close();
 });
 
 test('ご家族向けの見出し（?v=family）：フォームの「どなたのご相談か」もご家族に。「親知らず」では切り替えない', async () => {

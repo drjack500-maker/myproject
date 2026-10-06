@@ -979,3 +979,47 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .case__photos--ab img { display: block; width: 100%; height: auto; aspect-ratio: 294 / 140; object-fit: cover; border-radius: 10px; background: var(--c-tint); }
 .case__arrow { width: 0; height: 0; justify-self: center; border-style: solid; border-width: 10px 0 10px 12px; border-color: transparent transparent transparent var(--c-primary-2); }
 .case__data dd .req-fill { color: var(--c-error); font-weight: 700; }
+
+/* =========================================================
+   記入が必要な空欄（下書き表示でのみ見える）・費用の内訳
+   ========================================================= */
+.blank {
+  display: inline-block; min-width: 3.5em; margin: 0 .15em; padding: 0 .5em;
+  border: 2px dashed #d49a14; border-radius: 6px; background: #fff3c4;
+  color: #6b4e00; font-size: .875em; font-weight: 700; line-height: 1.6; text-align: center; vertical-align: baseline;
+}
+.blank.is-current { outline: 3px solid var(--c-accent); outline-offset: 2px; }
+.draft-bar {
+  padding: 8px 16px; background: #fff3c4; border-bottom: 2px solid #d49a14; color: #4d3800;
+  font-size: .8125rem; line-height: 1.6;
+}
+.draft-bar p { margin: 0; }
+.draft-bar b { margin-right: .5em; padding: .05em .5em; border-radius: 4px; background: #6b4e00; color: #fff; }
+.draft-next {
+  position: fixed; left: 12px; bottom: calc(var(--sticky-h) + 12px); z-index: 75;
+  min-height: 44px; padding: 0 16px; border: 0; border-radius: 999px; box-shadow: 0 6px 16px rgba(0, 0, 0, .2);
+  background: #6b4e00; color: #fff; font: inherit; font-size: .8125rem; font-weight: 700; cursor: pointer;
+}
+
+.price-table-wrap { margin-top: 16px; }
+.price-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); font-size: .9375rem; }
+.price-table caption { padding-bottom: 8px; text-align: left; font-weight: 900; color: var(--c-deep); }
+.price-table th, .price-table td { padding: 12px 14px; border-bottom: 1px solid var(--c-line); vertical-align: middle; }
+.price-table th { text-align: left; font-weight: 700; color: var(--c-ink-2); }
+.price-table th small { display: block; font-size: .75rem; font-weight: 500; color: var(--c-muted); }
+.price-table td { text-align: right; white-space: nowrap; font-feature-settings: "tnum"; }
+.price-table tr:last-child th, .price-table tr:last-child td { border-bottom: 0; }
+.price-table__total { background: var(--c-accent-soft); }
+.price-table__total th { color: var(--c-ink); font-weight: 900; }
+.price-table__total td b { color: var(--c-accent); font-size: 1.15em; }
+@media (max-width: 420px) { .price-table td { white-space: normal; } }
+
+.flow-std {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: .2em .6em;
+  margin: 20px 0 0; padding: 14px 16px; border-radius: var(--radius); background: #fff; box-shadow: var(--shadow);
+  font-size: 1rem; text-align: center;
+}
+.flow-std b { color: var(--c-primary); font-size: .875rem; }
+.flow-std small { flex-basis: 100%; font-size: .75rem; color: var(--c-muted); }
+.reserve__bring-time { margin: 0 0 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255, 255, 255, .4); font-weight: 700; }
+.reserve .blank { color: #6b4e00; }
