@@ -29,8 +29,8 @@ function inline(dir, { config, banner }) {
   // 先読みの指定は、埋め込み後は不要
   html = html.replace(/<link rel="preload" as="image" href="assets\/img\/[^"]+"[^>]*>\n/g, '');
   if (banner) replaceOnce('<body>', `<body>\n<div class="demo-banner">${banner}</div>`);
-  // 写真も埋め込む（1ファイルで表示できるように）
-  html = html.replace(/src="(assets\/img\/[^"]+)"/g, (m, p) => `src="${dataUri(p)}"`);
+  // 写真も埋め込む（1ファイルで表示できるように）。説明コメント内の例など、まだ無いファイルはそのまま
+  html = html.replace(/src="(assets\/img\/[^"]+)"/g, (m, p) => (fs.existsSync(path.join(dir, p)) ? `src="${dataUri(p)}"` : m));
   return html;
 }
 

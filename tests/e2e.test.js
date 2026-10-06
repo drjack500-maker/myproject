@@ -509,3 +509,31 @@ test('ご家族向けの見出し（?v=family）：フォームの「どなた�
   assert.equal(await page.$eval('input[name="who"]:checked', (e) => e.value), '本人');
   await page.context().close();
 });
+
+test('006：オールオン4のイラストは、ノーベル・バイオケア社の画像とクレジットを記入するまで当院作成の図解を表示する', async () => {
+  let page = await open('006/index.html');
+  await page.locator('#about').scrollIntoViewIfNeeded();
+  assert.equal(await page.isVisible('#about .diagram--official'), false);
+  assert.equal(await page.isVisible('#about [data-fill-fallback]'), true, '図解（当院作成）を表示');
+  assert.match(await page.textContent('.site-footer'), /All-on-4®は、ノーベル・バイオケア社（Nobel Biocare）の登録商標です/);
+  await page.context().close();
+
+  // 画像とクレジットを記入した状態（画像は院内写真で代用）
+  page = await open('006/index.html', {
+    init: (ctx) => ctx.route(/\/006\/index\.html$/, async (route) => {
+      let html = await (await fetch(route.request().url())).text();
+      const start = html.indexOf('<figure class="diagram diagram--official');
+      const end = html.indexOf('</figure>', start);
+      const filled = html.slice(start, end)
+        .replace(/<span class="blank blank--image">[\s\S]*?<\/span><\/span>/, '<img src="assets/img/room-ope.jpg" alt="All-on-4® 治療コンセプトのイラスト" width="330" height="247">')
+        .replace(/<span class="blank">[^<]*<\/span>/, '画像提供 ノーベル・バイオケア・ジャパン株式会社');
+      html = html.slice(0, start) + filled + html.slice(end);
+      await route.fulfill({ body: html, contentType: 'text/html; charset=utf-8' });
+    }),
+  });
+  await page.locator('#about').scrollIntoViewIfNeeded();
+  assert.equal(await page.isVisible('#about .diagram--official img'), true);
+  assert.match(await page.textContent('#about .diagram__credit'), /画像提供 ノーベル・バイオケア/);
+  assert.equal(await page.isVisible('#about [data-fill-fallback]'), false, '図解は自動で非表示');
+  await page.context().close();
+});

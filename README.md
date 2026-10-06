@@ -58,7 +58,7 @@ LPはビルド不要の静的ファイルです（外部ライブラリなし。
 5. **写真**：医師3名と院内の写真は現LPのものを使用しています。症例は `#cases` に写真と情報を入れてから `hidden` を外す
 6. **計測**：現LPと同じ GTM（`GTM-TKQ2RFV`）を設定済みで、`meieki-dental.net` / `meieki-dental.com` でのみ読み込みます。予約完了の計測は [`docs/measurement-setup.md`](docs/measurement-setup.md) の手順で追加（Meta 広告は7章：ピクセルの Lead に event_id、コンバージョンAPI）
 7. **公開URL**：`index.html` の `og:url` `og:image` を実際の公開URLに合わせる（`lp-006/` は `all_on_4_006/` に設定済み）
-8. **006 の追加作業**：空欄（症例・費用の内訳・分割回数・治療期間・理事長メッセージ・所要時間）を記入。空欄が残っている項目は公開しても表示されません（一覧は [`docs/lp-006-review.md` の6章](docs/lp-006-review.md#6-医院で記入する空欄)）。広告の文言は [`docs/meta-ads.md`](docs/meta-ads.md)。詳しくは [`docs/lp-006-review.md`](docs/lp-006-review.md#5-公開までの手順006)
+8. **006 の追加作業**：空欄（ノーベル・バイオケア社のAll-on-4®イラスト・症例・費用の内訳・分割回数・治療期間・理事長メッセージ・所要時間）を記入。空欄が残っている項目は公開しても表示されません（一覧は [`docs/lp-006-review.md` の6章](docs/lp-006-review.md#6-医院で記入する空欄)）。広告の文言は [`docs/meta-ads.md`](docs/meta-ads.md)。詳しくは [`docs/lp-006-review.md`](docs/lp-006-review.md#5-公開までの手順006)
 9. **公開後**：スマホでテスト予約を1件送り、台帳への記録・通知メール・完了ページ・GTMのタグ発火を確認（006 は Instagram アプリから開いて確認）
 
 ### 設定を main.js を触らずに変えたい場合

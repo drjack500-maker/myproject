@@ -1023,3 +1023,13 @@ mark { background: linear-gradient(transparent 60%, var(--c-mark) 60%); color: i
 .flow-std small { flex-basis: 100%; font-size: .75rem; color: var(--c-muted); }
 .reserve__bring-time { margin: 0 0 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255, 255, 255, .4); font-weight: 700; }
 .reserve .blank { color: #6b4e00; }
+
+/* メーカー提供のイラスト（ノーベル・バイオケア社）：記入済みなら表示し、当院作成の図解は隠す */
+.diagram--official img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.diagram__credit { margin-top: 10px; font-size: .75rem; color: var(--c-muted); text-align: right; }
+[data-fill]:not([hidden]) + [data-fill-fallback] { display: none !important; }
+.blank--image {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 100%; min-height: 0; aspect-ratio: 16 / 10; margin: 0; padding: 16px; font-size: .875rem; line-height: 1.7;
+}
+.site-footer__tm { margin-top: 12px !important; font-size: .75rem; opacity: .8; }
