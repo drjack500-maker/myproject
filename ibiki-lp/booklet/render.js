@@ -52,7 +52,8 @@
     const tail = b.tail ? `<i class="tail tail-${b.tail}"></i>` : '';
     // 話のタイトルは1行目（第○話）を小さく
     const text = b.k === 'ep' ? b.t.replace(/^([^|]+)\|/, '<small>$1</small>|') : b.t;
-    return `<div class="bb bb--${b.k}${b.h ? ' is-h' : ''}" style="${style.join(';')}">${fmt(text)}${tail}</div>`;
+    const box = b.box ? ` data-box="${b.box.join(',')}"` : '';
+    return `<div class="bb bb--${b.k}${b.h ? ' is-h' : ''}"${box} style="${style.join(';')}">${fmt(text)}${tail}</div>`;
   }
 
   function mangaPage(p) {

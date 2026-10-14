@@ -57,6 +57,20 @@ test('ふきだしと効果音がコマからはみ出さない', async () => {
   assert.deepEqual(out, []);
 });
 
+test('ホワイトボードなど、絵の中の枠に書く文字が枠からはみ出さない', async () => {
+  const out = await page.$$eval('[data-box]', (els) => els.map((b) => {
+    const pr = b.closest('.panel').getBoundingClientRect();
+    const [x0, y0, x1, y1] = b.dataset.box.split(',').map(Number);
+    const box = { left: pr.left + x0 * pr.width, top: pr.top + y0 * pr.height, right: pr.left + x1 * pr.width, bottom: pr.top + y1 * pr.height };
+    const r = b.getBoundingClientRect();
+    const m = 3; // 枠の線にかからない余白
+    const bad = r.left < box.left + m || r.right > box.right - m || r.top < box.top + m || r.bottom > box.bottom - m;
+    return bad ? `${b.closest('.panel').dataset.panel}: ${b.textContent}` : null;
+  }).filter(Boolean));
+  assert.ok((await page.$$('[data-box]')).length > 0);
+  assert.deepEqual(out, []);
+});
+
 test('同じコマのふきだし同士が重ならない', async () => {
   const out = await page.$$eval('.panel', (panels) => panels.flatMap((p) => {
     const rs = [...p.querySelectorAll('.bb')].map((b) => ({ t: b.textContent, r: b.getBoundingClientRect() }));
