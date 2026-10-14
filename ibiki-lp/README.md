@@ -51,8 +51,9 @@ HTML・JS 内の `【要確認】` `【要設定】` `【要差し替え】` `�
    - 未設定のときはボタンが料金欄を指したままになり、手元の確認（localhost・ファイルを直接開いたとき）では「未設定です」と表示します
 7. **特定商取引法に基づく表記**：`tokushoho.html` の各項目を記入
 8. **運営者名**：フッターの `運営：〇〇〇〇`
-9. **OGP**：`index.html` の `og:url` を公開URLに。SNS・LINEで共有する場合は `og:image`（1200×630）も追加
-10. **計測**：Google タグマネージャーを入れる場合は `<head>` に追加。ボタンのクリックは `dataLayer` に `cta_click`（`cta`＝header/hero/sticky/offer/closing、`lp_variant`）として送っています
+9. **ファーストビューの写真**：`assets/img/hero-night.jpg`（PC用 1600×1075）と `hero-night-sm.jpg`（スマホ用 960×645）は、生成AI（Higgsfield）で作ったイメージ写真です。実在の受講者ではないため「※写真はイメージです」と表示しています。撮影した写真や素材写真に替える場合は、同じファイル名・同じ縦横比（3:2）で差し替えてください（人物は右寄り、左側を暗めに空けると見出しが読みやすくなります）
+10. **OGP**：`index.html` の `og:url` を公開URLに。SNS・LINEで共有する場合は `og:image`（1200×630）も追加
+11. **計測**：Google タグマネージャーを入れる場合は `<head>` に追加。ボタンのクリックは `dataLayer` に `cta_click`（`cta`＝header/hero/sticky/offer/closing、`lp_variant`）として送っています
 
 ## 見出しの出し分け（タイトルコンセプト10パターン）
 
