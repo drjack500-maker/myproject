@@ -1,6 +1,7 @@
 /*
  * lp/ を配信するだけの小さな静的サーバー（依存なし）
  *   npm run serve  → http://localhost:8000/
+ *   npm run serve:ibiki → ibiki-lp/（いびき改善LP）を同じURLで配信
  */
 const http = require('node:http');
 const fs = require('node:fs');
@@ -13,7 +14,7 @@ const TYPES = {
   '.avif': 'image/avif', '.ico': 'image/x-icon', '.json': 'application/json',
 };
 
-function createServer() {
+function createServer(root = ROOT) {
   return http.createServer((req, res) => {
     let url;
     try {
@@ -22,8 +23,8 @@ function createServer() {
       res.writeHead(400).end('Bad Request'); // 不正な % エスケープでもサーバーを落とさない
       return;
     }
-    let file = path.join(ROOT, url);
-    const rel = path.relative(ROOT, file);
+    let file = path.join(root, url);
+    const rel = path.relative(root, file);
     if (rel.startsWith('..') || path.isAbsolute(rel)) { res.writeHead(403).end(); return; } // lp/ の外は返さない
     if (url.endsWith('/')) file = path.join(file, 'index.html');
     fs.readFile(file, (err, body) => {
@@ -37,6 +38,7 @@ function createServer() {
 module.exports = { createServer };
 
 if (require.main === module) {
+  const dir = process.argv[2] ? path.resolve(process.argv[2]) : ROOT;
   const port = Number(process.env.PORT || 8000);
-  createServer().listen(port, () => console.log(`LP: http://localhost:${port}/`));
+  createServer(dir).listen(port, () => console.log(`LP: http://localhost:${port}/ (${path.relative(process.cwd(), dir) || '.'})`));
 }

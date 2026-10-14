@@ -12,6 +12,8 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`server/gas/README.md`](server/gas/README.md) | 予約フォームの受信設定（Google スプレッドシートの予約台帳・通知メール・広告への成約データ連携） |
 | [`docs/reception-manual.md`](docs/reception-manual.md) | 予約リクエストの受付対応マニュアル（電話のタイミング・トーク例・台帳の更新・リマインド） |
 
+> このリポジトリには、別案件の **いびき改善プログラムのLP**（[`ibiki-lp/`](ibiki-lp/)）も入っています。内容・公開手順は [`ibiki-lp/README.md`](ibiki-lp/README.md) を参照。
+
 ## ファイル構成
 
 ```
@@ -26,6 +28,7 @@ lp/                       ← 公開するのはこのフォルダの中身だ�
 server/gas/               予約フォームの受信スクリプト（Google Apps Script）
 docs/                     提案書・計測手順
 tests/                    自動テスト（受信スクリプト・ブラウザ操作・アクセシビリティ）
+ibiki-lp/                 別案件：いびき改善プログラムのLP（ibiki-lp/README.md）
 tools/                    ローカル確認用サーバー、画像・プレビュー生成
 ```
 

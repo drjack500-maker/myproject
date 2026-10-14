@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- 【要確認】プログラム名「静寂の夜メソッド」は仮称です。変更時は grep -rn "静寂の夜メソッド" ibiki-lp/ で一括確認 -->
+<title>静寂の夜メソッド｜自宅でできる、手術なしのいびき改善プログラム</title>
+<meta name="description" content="家族に指摘されるいびき、別々の寝室、朝の疲れ。寝る姿勢・のどと舌の筋肉・鼻呼吸・夜の習慣を整える、自宅で1日10分のいびき改善プログラム。20代から80代まで、手術や器具なしで今夜から始められます。">
+<!-- 広告専用LPのため検索結果に出さない設定。自然検索でも集客する場合は削除してください -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#121833">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:title" content="静寂の夜メソッド｜自宅でできるいびき改善プログラム">
+<meta property="og:description" content="寝る姿勢・のどと舌の筋肉・鼻呼吸・夜の習慣を整える、1日10分のいびき改善プログラム。">
+<meta property="og:locale" content="ja_JP">
+<!-- 【要設定】公開URLとOGP画像（1200×630）のフルURL -->
+<meta property="og:url" content="https://example.com/ibiki/">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+<script>
+  /* JS有効判定と文字サイズ設定を描画前に適用（レイアウトのズレ防止） */
+  document.documentElement.classList.add('js');
+  try { if (localStorage.getItem('ibiki_fs') === 'lg') document.documentElement.dataset.fs = 'lg'; } catch (e) {}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Webフォントは表示を止めないよう非同期で読み込む（読み込み前は端末の日本語フォントで表示） -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Shippori+Mincho+B1:wght@600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Shippori+Mincho+B1:wght@600;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Shippori+Mincho+B1:wght@600;800&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="assets/js/main.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">本文へ移動</a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="#top" aria-label="静寂の夜メソッド（ページの先頭へ）">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M20.5 4.5a12 12 0 1 0 7 21.4A10 10 0 0 1 20.5 4.5Z" fill="currentColor"/></svg>
+      <span class="brand__name">静寂の夜メソッド</span>
+    </a>
+    <div class="site-header__tools">
+      <button class="fs-toggle" type="button" id="fs-toggle" aria-pressed="false">文字を大きく</button>
+      <a class="btn btn--sun btn--sm site-header__cta" href="#offer" data-cta="header">お申し込み</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ ファーストビュー（見出しは main.js の HEADLINES で出し分け） ============ -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <p class="hero__pre" id="hero-pre">いびきに悩むご本人と、隣で眠るご家族へ</p>
+        <h1 class="hero__title" id="hero-title"><span class="ph">妻に<em>「もう別の部屋で寝て」</em>と</span><span class="ph">言われたあの夜から</span><span class="ph">卒業する方法</span></h1>
+        <p class="hero__lead" id="hero-lead">手術や器具に頼らず、自宅の寝室で今夜から。寝る姿勢・のどと舌の筋肉・鼻呼吸を整える、1日10分のいびき改善プログラムです。</p>
+        <div class="hero__action">
+          <a class="btn btn--sun btn--lg" href="#offer" data-cta="hero" id="hero-cta">今夜から始める<small>内容と料金を見る</small></a>
+          <p class="note">※効果には個人差があります。</p>
+        </div>
+        <!-- 【要確認】「1日10分」「スマホで受講」は講座の実際の仕様に合わせる -->
+        <ul class="hero__chips" aria-label="プログラムの特長">
+          <li>自宅でできる</li>
+          <li>手術・薬・器具なし</li>
+          <li>1日10分</li>
+          <li>スマホで受講</li>
+        </ul>
+      </div>
+
+      <figure class="night-card" aria-labelledby="night-caption">
+        <div class="night-card__head">
+          <p class="night-card__title">寝室の音の記録<span>23:00〜7:00</span></p>
+          <div class="night-card__tabs" role="group" aria-label="表示する夜">
+            <button type="button" class="tab" data-night="snore" aria-pressed="true">いびきの夜</button>
+            <button type="button" class="tab" data-night="quiet" aria-pressed="false">静かな夜</button>
+          </div>
+        </div>
+        <div class="night-card__chart">
+          <canvas id="night-canvas" role="img" aria-label="いびきの夜の記録。一晩に何度も、50デシベルを超える大きな音が続いています。"></canvas>
+        </div>
+        <dl class="night-card__stats">
+          <div><dt>いびき（50dB以上）</dt><dd id="night-snore">約3時間20分</dd></div>
+          <div><dt>いちばん大きな音</dt><dd><span id="night-peak">約77dB</span><small id="night-like">電車の車内くらい</small></dd></div>
+        </dl>
+        <figcaption class="night-card__caption" id="night-caption">いびき録音アプリで一晩を記録したときの画面のイメージです。プログラムの1日目と7日目にも、同じように録音して聞き比べます。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ お悩みセルフチェック ============ -->
+  <section class="section" id="check" aria-labelledby="check-title">
+    <div class="wrap">
+      <p class="eyebrow">セルフチェック</p>
+      <h2 class="h2" id="check-title"><span class="ph">こんな夜が、</span><span class="ph">続いていませんか？</span></h2>
+      <p class="section__lead">当てはまるものを、すべて選んでください。</p>
+
+      <div class="check-layout">
+        <div class="check" id="check-form" role="group" aria-labelledby="check-title" aria-describedby="check-result">
+          <fieldset class="check__group">
+            <legend>いびき・眠りのお悩み</legend>
+            <label class="check__item"><input type="checkbox" name="c" value="told"><span>家族やパートナーから、いびきを指摘される</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="room"><span>いびきが原因で、別々の部屋で寝ている</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="wake"><span>夜中に何度も目が覚める</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="tired"><span>朝起きても、疲れが取れていない</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="day"><span>日中の眠気で、仕事や家事に集中できない</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="goods"><span>いびき対策グッズを試したが、効果を感じなかった</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="age"><span>年齢とともに、いびきが大きくなってきた</span></label>
+            <label class="check__item"><input type="checkbox" name="c" value="partner"><span>隣で眠る家族のいびきで、自分が眠れない</span></label>
+          </fieldset>
+          <fieldset class="check__group check__group--med">
+            <legend>こちらに当てはまる方は、先に医療機関へ</legend>
+            <label class="check__item"><input type="checkbox" name="m" value="apnea"><span>寝ている間に、呼吸が止まっていると言われたことがある</span></label>
+            <label class="check__item"><input type="checkbox" name="m" value="drive"><span>運転中や会議中など、眠ってはいけない場面で眠ってしまう</span></label>
+            <label class="check__item"><input type="checkbox" name="m" value="headache"><span>朝起きたときの頭痛が、何日も続いている</span></label>
+          </fieldset>
+        </div>
+
+        <div class="check-result" id="check-result" role="status" aria-live="polite">
+          <p class="check-result__count"><span id="check-count">0</span><small>/ 8 項目</small></p>
+          <div class="check-result__body" id="check-message">
+            <p>当てはまる項目を選ぶと、ここに結果が表示されます。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 原因 ============ -->
+  <section class="section section--alt" id="cause" aria-labelledby="cause-title">
+    <div class="wrap">
+      <p class="eyebrow">いびきが起こるしくみ</p>
+      <h2 class="h2" id="cause-title"><span class="ph">いびきは、</span><span class="ph">「体質だから」と</span><span class="ph">あきらめなくていい</span></h2>
+      <div class="cause">
+        <div class="cause__text">
+          <p>いびきは、眠っている間にのどの空気の通り道が狭くなり、そこを通る息がのどの粘膜をふるわせて出る音です。</p>
+          <p>通り道を狭くしているのは、毎晩の寝る姿勢や、ゆるんだ筋肉、口呼吸、寝る前の習慣。どれも、自分で見直せるものばかりです。</p>
+        </div>
+        <ul class="cause__list">
+          <li>
+            <h3>あお向けの寝姿勢</h3>
+            <p>あお向けで眠ると、舌のつけ根がのどの奥へ落ち込み、通り道をふさぎやすくなります。</p>
+          </li>
+          <li>
+            <h3>のどと舌の筋肉のゆるみ</h3>
+            <p>年齢とともに、のどや舌を支える筋肉はゆるみやすくなります。いびきが年々大きくなる大きな理由です。</p>
+          </li>
+          <li>
+            <h3>口呼吸</h3>
+            <p>鼻がつまって口で息をすると、舌が下がってのどが狭くなります。口が乾く、のどが痛む朝は要注意です。</p>
+          </li>
+          <li>
+            <h3>寝る前の習慣</h3>
+            <p>寝る前のお酒は、のどの筋肉をゆるめます。遅い時間の食事や体重の増加、強い疲れも影響します。</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ グッズとの違い ============ -->
+  <section class="section" id="compare" aria-labelledby="compare-title">
+    <div class="wrap">
+      <p class="eyebrow">グッズもサプリも効かなかった方へ</p>
+      <h2 class="h2" id="compare-title"><span class="ph">道具でおさえるか、</span><span class="ph">原因から見直すか</span></h2>
+      <p class="section__lead">口テープや枕などのグッズは、合えば役に立ちます。ただ、外せば元に戻りやすく、のどが狭くなる原因はそのまま残ります。静寂の夜メソッドは、その原因のほうに取り組みます。</p>
+
+      <div class="compare">
+        <article class="compare__col">
+          <h3 class="compare__name">市販のいびき対策グッズ</h3>
+          <dl class="compare__rows">
+            <div><dt>取り組み方</dt><dd>口テープ・鼻腔テープ・枕などで、空気の通り道を外から補う</dd></div>
+            <div><dt>向いている方</dt><dd>まず手軽に、一時的に音をおさえたい方</dd></div>
+            <div><dt>続け方</dt><dd>毎晩使い続け、消耗品は買い足す</dd></div>
+          </dl>
+        </article>
+        <article class="compare__col compare__col--us">
+          <h3 class="compare__name"><span class="compare__badge">このプログラム</span>静寂の夜メソッド</h3>
+          <dl class="compare__rows">
+            <div><dt>取り組み方</dt><dd>寝る姿勢・のどと舌の筋肉・鼻呼吸・夜の習慣を、自分で整える</dd></div>
+            <div><dt>向いている方</dt><dd>病気の診断はないが、いびきを原因から見直したい方</dd></div>
+            <div><dt>続け方</dt><dd>自宅で1日10分。身についた習慣は道具なしで続けられる</dd></div>
+          </dl>
+        </article>
+        <article class="compare__col">
+          <h3 class="compare__name">医療機関での治療</h3>
+          <dl class="compare__rows">
+            <div><dt>取り組み方</dt><dd>検査・診断のうえで、CPAP（シーパップ）やマウスピース、手術などで治療する</dd></div>
+            <div><dt>向いている方</dt><dd>睡眠時無呼吸症候群の疑いがある方、診断を受けた方</dd></div>
+            <div><dt>続け方</dt><dd>医師の指示に沿って通院する</dd></div>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ メソッドの3つの柱 ============ -->
+  <section class="section section--alt" id="method" aria-labelledby="method-title">
+    <div class="wrap">
+      <p class="eyebrow">静寂の夜メソッドとは</p>
+      <h2 class="h2" id="method-title"><span class="ph">のどの通り道を広く保つ、</span><span class="ph">3つの習慣</span></h2>
+      <div class="pillars">
+        <article class="pillar">
+          <svg class="pillar__icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="38" width="52" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="18" cy="28" r="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M26 32c6-4 16-5 26-2" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <h3>寝る姿勢を整える</h3>
+          <p>横向きで眠るクセづけと、首に合う枕の高さの見直し。家にあるクッションやタオルで始められます。</p>
+        </article>
+        <article class="pillar">
+          <svg class="pillar__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 26c6-8 34-8 40 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M12 26c4 16 36 16 40 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M24 30c4 6 12 6 16 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <h3>のどと舌をきたえる</h3>
+          <p>舌・のど・口のまわりの筋肉を動かす、座ったままできるトレーニング。1回3分ほどです。</p>
+        </article>
+        <article class="pillar">
+          <svg class="pillar__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 10v24c0 5-4 8-9 8M32 34c0 5 4 8 9 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M10 50c5-3 9-3 14 0s9 3 14 0 9-3 14 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <h3>鼻呼吸と夜の習慣</h3>
+          <p>鼻で息をする練習と、寝る前のお酒・食事・入浴の時間の見直し。寝室の環境も整えます。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7日間のスタートプログラム ============ -->
+  <!-- 【要確認】日ごとの内容・所要時間は講座の実際の構成に合わせる -->
+  <section class="section" id="program" aria-labelledby="program-title">
+    <div class="wrap">
+      <p class="eyebrow">最初の7日間</p>
+      <h2 class="h2" id="program-title"><span class="ph">録音で始まり、</span><span class="ph">録音で確かめる</span></h2>
+      <p class="section__lead">最初の1週間で、3つの習慣をひとつずつ身につけます。1日目と7日目には、スマホでいびきを録音して聞き比べます。</p>
+      <ol class="days">
+        <li class="day day--rec"><p class="day__num">1日目</p><div><h3>今のいびきを録音する</h3><p>スマホの録音アプリで一晩を記録。いびきの大きさと、出やすい時間帯を知ります。</p></div></li>
+        <li class="day"><p class="day__num">2日目</p><div><h3>横向きで眠る</h3><p>背中にクッションを置いて、寝返りであお向けに戻りにくくします。</p></div></li>
+        <li class="day"><p class="day__num">3日目</p><div><h3>舌の位置を整える</h3><p>舌先を上あごにつける練習。日中にも、気づいたときに続けます。</p></div></li>
+        <li class="day"><p class="day__num">4日目</p><div><h3>のどと口の体操</h3><p>声を出しながら、のどと口のまわりの筋肉を大きく動かします。</p></div></li>
+        <li class="day"><p class="day__num">5日目</p><div><h3>鼻で呼吸する</h3><p>日中と寝る前に、鼻でゆっくり呼吸する練習。鼻づまりの対策もここで。</p></div></li>
+        <li class="day"><p class="day__num">6日目</p><div><h3>夜の習慣を見直す</h3><p>お酒・食事・入浴の時間と、枕の高さ、寝室の明るさや湿度を整えます。</p></div></li>
+        <li class="day day--rec"><p class="day__num">7日目</p><div><h3>もう一度、録音する</h3><p>1日目と聞き比べ、自分に合った習慣を選んで、毎晩の10分にまとめます。</p></div></li>
+      </ol>
+      <p class="days__after">8日目からは、寝る前の10分で続けます。2週間ごとに録音して、変化を記録しましょう。</p>
+    </div>
+  </section>
+
+  <!-- ============ ご家族へ ============ -->
+  <section class="section section--alt" id="family" aria-labelledby="family-title">
+    <div class="wrap family">
+      <div class="family__text">
+        <p class="eyebrow">隣で眠るご家族へ</p>
+        <h2 class="h2" id="family-title"><span class="ph">いびきに悩んでいるのは、</span><span class="ph">本人だけではありません</span></h2>
+        <p>大きないびきは、電車の車内と同じくらいの大きさになることもあります。隣で眠る方は、毎晩その音のそばで眠っています。</p>
+        <p>静寂の夜メソッドは、ご家族がお申し込みをして、一緒に取り組むこともできます。</p>
+        <div class="tip">
+          <h3>すすめるときは「うるさい」より「心配だから」</h3>
+          <p>いびきを指摘されると、責められているように感じる方も少なくありません。「体が心配だから、一緒にやってみない？」と伝えると、話を聞いてもらいやすくなります。</p>
+        </div>
+      </div>
+
+      <figure class="meter" aria-labelledby="meter-caption">
+        <p class="meter__title">音の大きさの目安</p>
+        <div class="meter__body">
+          <ul class="meter__notes">
+            <li class="is-snore" data-at="70"><b>大きないびき</b>60〜80dB</li>
+            <li class="is-goal" data-at="30"><b>寝室の目安</b>30dB以下</li>
+          </ul>
+          <div class="meter__scale" aria-hidden="true">
+            <span class="meter__zone meter__zone--snore"></span>
+            <span class="meter__zone meter__zone--goal"></span>
+          </div>
+          <ul class="meter__ticks">
+            <li data-at="80"><b>80dB</b>電車の車内</li>
+            <li data-at="60"><b>60dB</b>ふつうの会話</li>
+            <li data-at="40"><b>40dB</b>図書館</li>
+            <li data-at="30"><b>30dB</b>ささやき声</li>
+          </ul>
+        </div>
+        <figcaption class="meter__caption" id="meter-caption">いびきの大きさには個人差があります。数値は一般的な目安です。寝室の目安は、WHO（世界保健機関）の『Guidelines for Community Noise』（1999年）で、よく眠るための寝室の騒音を30dB以下としていることによります。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 受講者の声 ============ -->
+  <!-- 【要差し替え】掲載例です。実際の受講者の声（本人の掲載許諾済み）に差し替え、「掲載例」の表示を外してから公開してください。
+       架空の体験談の掲載や、一部の人だけの結果を誰でも得られるかのように見せる表示は、景品表示法・特定商取引法に違反するおそれがあります（README 参照） -->
+  <section class="section" id="voices" aria-labelledby="voices-title">
+    <div class="wrap">
+      <p class="eyebrow">受講した方の声</p>
+      <h2 class="h2" id="voices-title"><span class="ph">「静かになったね」と</span><span class="ph">言われるまで</span></h2>
+      <p class="todo-note">掲載例です。実際の受講者の声に差し替えてください。</p>
+      <div class="voices">
+        <figure class="voice">
+          <span class="todo-tag">掲載例</span>
+          <blockquote><p>妻に別の部屋で寝てほしいと言われて3年。録音した自分のいびきを初めて聞いて、これは申し訳ないと思いました。今は横向きで眠るのがすっかり習慣です。</p></blockquote>
+          <figcaption>50代・男性・会社員</figcaption>
+        </figure>
+        <figure class="voice">
+          <span class="todo-tag">掲載例</span>
+          <blockquote><p>女性のいびきは恥ずかしくて、誰にも相談できませんでした。のどの体操は台所に立ちながらでもできるので、無理なく続いています。</p></blockquote>
+          <figcaption>60代・女性・主婦</figcaption>
+        </figure>
+        <figure class="voice">
+          <span class="todo-tag">掲載例</span>
+          <blockquote><p>夫のいびきで眠れず、私が申し込みました。一緒に7日間の表を埋めるうちに、夫も録音を楽しみにするようになりました。</p></blockquote>
+          <figcaption>40代・女性（ご家族のいびきでお悩み）</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 講師・監修 ============ -->
+  <!-- 【要確認】講師・監修者の氏名、資格、所属、経歴、写真。「睡眠専門家」と書く場合は根拠となる資格・所属を明記 -->
+  <section class="section section--alt" id="author" aria-labelledby="author-title">
+    <div class="wrap author">
+      <div class="author__photo" aria-hidden="true">
+        <svg viewBox="0 0 120 120"><circle cx="60" cy="46" r="22" fill="currentColor"/><path d="M18 112c4-24 22-36 42-36s38 12 42 36Z" fill="currentColor"/></svg>
+      </div>
+      <div class="author__text">
+        <p class="eyebrow">プログラムの講師</p>
+        <h2 class="h2" id="author-title">〇〇 〇〇<small>（資格・肩書き）</small></h2>
+        <p class="todo-note">講師・監修者の情報を入れてください。</p>
+        <p>経歴、これまでに指導した人数、いびきや睡眠に関わるようになったきっかけなどを、3〜4行で紹介します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 受講内容・料金 ============ -->
+  <section class="section offer" id="offer" aria-labelledby="offer-title">
+    <div class="wrap">
+      <p class="eyebrow">受講内容と料金</p>
+      <h2 class="h2" id="offer-title"><span class="ph">今夜から始める、</span><span class="ph">静寂の夜メソッド</span></h2>
+      <div class="offer__card">
+        <div class="offer__contents">
+          <h3>受講内容</h3>
+          <!-- 【要確認】講座の実際の内容（動画の本数、サポートの有無・期間など） -->
+          <ul class="ticks">
+            <li>解説動画 全〇本（1本5〜10分。スマホ・パソコンで視聴）</li>
+            <li>7日間スタートシート（印刷して使えます）</li>
+            <li>いびき録音チェックシート</li>
+            <li>毎晩10分の習慣カレンダー</li>
+            <li>メールでの質問サポート（〇日間）</li>
+          </ul>
+        </div>
+        <div class="offer__price">
+          <p class="offer__label">受講料</p>
+          <!-- 【要確認】価格（税込で表示）。分割払い・支払い方法があればここに -->
+          <p class="price"><span class="todo-inline">〇〇,〇〇〇</span>円<small>（税込）</small></p>
+          <p class="offer__sub">お申し込み後、すぐに視聴できます。</p>
+          <a class="btn btn--sun btn--lg btn--block" href="#offer" data-checkout data-cta="offer">お申し込みへ進む<small>決済ページに移動します</small></a>
+          <!-- 【要確認】返金保証を設けない場合は、この段落を削除 -->
+          <p class="guarantee"><b>〇〇日間 返金保証</b>内容が合わなかった場合は、受講開始から〇〇日以内のご連絡で全額を返金します。条件は<a href="tokushoho.html">特定商取引法に基づく表記</a>をご覧ください。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ よくあるご質問 ============ -->
+  <section class="section section--alt" id="faq" aria-labelledby="faq-title">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow">よくあるご質問</p>
+      <h2 class="h2" id="faq-title">よくあるご質問</h2>
+      <div class="faq">
+        <details>
+          <summary>何歳からでも取り組めますか？</summary>
+          <p>20代から80代の方まで、年齢を問わず取り組める内容です。トレーニングは座ったままできるものが中心です。持病のある方や、体に痛みのある方は、医師に相談してから始めてください。</p>
+        </details>
+        <details>
+          <summary>いびきが何十年も続いています。今からでも遅くないですか？</summary>
+          <p>いびきは、寝る姿勢・筋肉・呼吸・習慣が重なって起こります。何年続いていても、今日から見直せる部分はあります。ただし、効果の感じ方には個人差があります。</p>
+        </details>
+        <details>
+          <summary>1日にどれくらい時間がかかりますか？</summary>
+          <!-- 【要確認】 -->
+          <p>最初の7日間は1日15〜20分ほど、8日目からは寝る前の10分ほどが目安です。</p>
+        </details>
+        <details>
+          <summary>睡眠時無呼吸症候群と言われています。受講できますか？</summary>
+          <p>診断を受けている方、治療中の方は、まず主治医の指示に従ってください。このプログラムは、病気の診断や治療を目的としたものではありません。主治医の了承があれば、生活習慣の見直しとして並行して取り組めます。</p>
+        </details>
+        <details>
+          <summary>家族のいびきに悩んでいます。私が申し込んでもいいですか？</summary>
+          <p>はい。ご家族がお申し込みをして、一緒に取り組むこともできます。すすめ方のコツは、このページの「隣で眠るご家族へ」をご覧ください。</p>
+        </details>
+        <details>
+          <summary>スマホだけで受講できますか？</summary>
+          <!-- 【要確認】 -->
+          <p>はい。動画はスマホ・タブレット・パソコンで見られます。シートは印刷しても、画面で見ながらでも使えます。</p>
+        </details>
+        <details>
+          <summary>器具やグッズを買う必要はありますか？</summary>
+          <p>必要ありません。ご自宅にあるクッションやタオル、スマホの録音アプリを使います。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 受診の目安 ============ -->
+  <section class="section" id="medical" aria-labelledby="medical-title">
+    <div class="wrap wrap--narrow">
+      <div class="medical">
+        <h2 class="medical__title" id="medical-title">こんなときは、先に医療機関へご相談ください</h2>
+        <p>いびきの陰に、睡眠時無呼吸症候群などの病気が隠れていることがあります。次のような場合は、睡眠外来・耳鼻咽喉科・呼吸器内科などで相談してください。</p>
+        <ul>
+          <li>寝ている間に、呼吸が止まっていると言われた</li>
+          <li>運転中や会議中に、耐えられないほどの眠気がある</li>
+          <li>朝の頭痛や、日中の強いだるさが続いている</li>
+          <li>高血圧や心臓の病気などで治療を受けている</li>
+        </ul>
+        <p>このプログラムは医療行為ではなく、病気の診断・治療・予防を目的としたものではありません。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 最後の呼びかけ ============ -->
+  <section class="dawn" aria-labelledby="dawn-title">
+    <div class="wrap dawn__inner">
+      <h2 class="dawn__title" id="dawn-title"><span class="ph">隣で眠る人に</span><span class="ph">「静かになったね」と</span><span class="ph">言われる日は、</span><span class="ph">意外と近い。</span></h2>
+      <p>寝室の灯りを消す前の10分から、始めてみませんか。</p>
+      <a class="btn btn--sun btn--lg" href="#offer" data-cta="closing">今夜から始める<small>内容と料金を見る</small></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <ul class="site-footer__links">
+      <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
+    </ul>
+    <p class="site-footer__notes">※効果には個人差があります。※本プログラムは医療行為ではなく、病気の診断・治療・予防を目的としたものではありません。※いびきに加えて、呼吸が止まる・日中に強い眠気があるなどの場合は、医療機関にご相談ください。</p>
+    <!-- 【要確認】運営者名 -->
+    <p class="site-footer__copy">運営：〇〇〇〇</p>
+  </div>
+</footer>
+
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <a class="btn btn--sun btn--block" href="#offer" data-cta="sticky" tabindex="-1">今夜から始める<small>内容と料金を見る</small></a>
+</div>
+
+</body>
+</html>
