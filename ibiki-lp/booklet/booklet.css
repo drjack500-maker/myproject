@@ -1,0 +1,314 @@
+/* =========================================================
+   マンガ小冊子「私の眠りの記録」— booklet.css
+   紙面：A5（148×210mm）20ページ。マンガは右上から左下へ、セリフは縦書き。
+   画面では紙を並べて表示し、印刷（PDF）では1ページずつ出力する。
+   ========================================================= */
+
+@page { size: 148mm 210mm; margin: 0; }
+
+:root {
+  /* 紙面の色（テーマに関係なく紙の色のまま） */
+  --ink: #231d1b;
+  --paper: #fffdf8;
+  --indigo: #33408f;
+  --indigo-soft: #e8ebf7;
+  --night: #121833;
+  --night-2: #1f2850;
+  --moon: #f2d59b;
+  --sun: #b54a17;
+  --muted: #5d5a63;
+  --rule: #cfcac0;
+  --warn: #9b2d22;
+  --warn-soft: #fbefed;
+
+  /* 画面の背景（ビューアー部分だけライト／ダークで切り替え） */
+  --desk: #e7e4de;
+  --desk-ink: #2a2730;
+  --desk-muted: #6b6772;
+
+  --f-mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --f-maru: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-hand: "Klee One", "Zen Maru Gothic", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-sfx: "Dela Gothic One", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-body: "BIZ UDPGothic", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --desk: #17161c; --desk-ink: #ecebf0; --desk-muted: #a3a0ab; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --desk: #17161c; --desk-ink: #ecebf0; --desk-muted: #a3a0ab; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--desk); color: var(--desk-ink); font-family: var(--f-body); }
+
+/* ---------- 画面表示（ビューアー） ---------- */
+.viewer-head {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-block: 20px 4px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 4px;
+}
+.viewer-head h1 { margin: 0; font-family: var(--f-mincho); font-weight: 800; font-size: 1.35rem; letter-spacing: 0.06em; }
+.viewer-head p { margin: 0; color: var(--desk-muted); font-size: 0.85rem; line-height: 1.7; }
+.book {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  padding-block: 16px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media screen {
+  .page { zoom: var(--z, 1); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18); }
+}
+@media print {
+  body { background: #fff; }
+  .viewer-head { display: none; }
+  .book { display: block; padding: 0; }
+}
+
+/* ---------- 紙面 ---------- */
+.page {
+  position: relative;
+  width: 148mm;
+  height: 210mm;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  break-after: page;
+  break-inside: avoid;
+  font-family: var(--f-body);
+}
+.page:last-child { break-after: auto; }
+.nombre { position: absolute; left: 0; right: 0; bottom: 3.2mm; text-align: center; font-size: 8.5px; letter-spacing: 0.1em; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- コマ ---------- */
+.panel { position: absolute; overflow: hidden; background: #fff; outline: 2.2px solid var(--ink); outline-offset: -1.1px; }
+.panel > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- ふきだし（縦書き） ---------- */
+.bb {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font-family: var(--f-maru);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.42;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+.bb::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: calc(-21% - 9px) calc(-21% - 11px);
+  background: #fff;
+  border: 1.6px solid var(--ink);
+  border-radius: 50%;
+}
+.bb.is-h { writing-mode: horizontal-tb; line-height: 1.5; }
+.tcy { text-combine-upright: all; }
+
+/* しっぽ（話し手の方向）。要素の上辺中央をふきだしの縁に合わせて回転させる */
+.tail {
+  position: absolute;
+  width: 16px;
+  height: 22px;
+  margin-left: -8px;
+  transform-origin: 50% 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M0 0H16L8 22Z' fill='%23fff'/%3E%3Cpath d='M1 1.5L8 20.5L15 1.5' fill='none' stroke='%23231d1b' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+}
+.tail-b { left: var(--to, 50%); top: calc(121% + 6px); transform: rotate(var(--r, 0deg)); }
+.tail-t { left: var(--to, 50%); top: calc(-21% - 6px); transform: rotate(calc(180deg + var(--r, 0deg))); }
+.tail-l { top: var(--to, 50%); left: calc(-21% - 8px); transform: rotate(calc(90deg + var(--r, 0deg))); }
+.tail-r { top: var(--to, 50%); left: calc(121% + 8px); transform: rotate(calc(-90deg + var(--r, 0deg))); }
+
+/* 心の声：しっぽは小さな丸 */
+.bb--think .tail {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Ccircle cx='8' cy='6' r='4.6' fill='%23fff' stroke='%23231d1b' stroke-width='1.4'/%3E%3Ccircle cx='8' cy='16.5' r='2.8' fill='%23fff' stroke='%23231d1b' stroke-width='1.3'/%3E%3C/svg%3E");
+}
+.bb--think::before { border-width: 1.4px; }
+
+/* 小さな声・電話や録音から聞こえる音：点線 */
+.bb--whisper { font-weight: 500; font-size: 13px; }
+.bb--whisper::before { border-style: dashed; border-width: 1.4px; }
+
+/* さけび：ギザギザ */
+.bb--shout { font-weight: 900; font-size: 19px; }
+.bb--shout::before,
+.bb--shout::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  clip-path: polygon(50% 0%, 58% 14%, 74% 5%, 75% 21%, 93% 18%, 86% 34%, 100% 42%, 88% 52%, 99% 65%, 84% 69%, 90% 85%, 72% 81%, 66% 98%, 54% 86%, 44% 100%, 37% 85%, 21% 94%, 21% 78%, 4% 80%, 13% 64%, 0% 55%, 13% 45%, 3% 30%, 19% 28%, 16% 11%, 33% 16%, 39% 1%);
+  border: 0;
+  border-radius: 0;
+}
+.bb--shout::before { inset: calc(-55% - 18px) calc(-62% - 18px); background: var(--ink); }
+.bb--shout::after { inset: calc(-55% - 15px) calc(-62% - 15px); background: #fff; }
+
+/* ナレーション：四角い枠、手書き風 */
+.bb--narr { font-family: var(--f-hand); font-weight: 600; font-size: 13px; line-height: 1.5; letter-spacing: 0.06em; }
+.bb--narr::before { inset: -8px -7px; border-radius: 1px; border-width: 1.3px; }
+
+/* 話のタイトル：黒地に白 */
+.bb--ep { font-family: var(--f-mincho); font-weight: 800; font-size: 15px; line-height: 1.5; letter-spacing: 0.1em; color: #fff; }
+.bb--ep::before { inset: -10px -8px; border-radius: 1px; background: var(--ink); border-color: var(--ink); }
+.bb--ep small { font-size: 10.5px; letter-spacing: 0.2em; }
+
+/* ラベル（何日目か・説明の見出し）：横書き */
+.bb--tag { writing-mode: horizontal-tb; font-family: var(--f-body); font-weight: 700; font-size: 11px; line-height: 1.4; letter-spacing: 0.04em; color: #fff; }
+.bb--tag::before { inset: -3px -8px; border-radius: 3px; background: var(--indigo); border-color: var(--indigo); }
+.bb--tag b { margin-right: 6px; font-size: 1.15em; }
+
+/* 説明書き（図の見出し・板書）：横書き */
+.bb--note { writing-mode: horizontal-tb; font-family: var(--f-body); font-weight: 700; font-size: 10.5px; line-height: 1.55; letter-spacing: 0.02em; }
+.bb--note::before { inset: -4px -7px; border-radius: 2px; border-width: 1.2px; }
+.bb--board { writing-mode: horizontal-tb; font-family: var(--f-hand); font-weight: 600; font-size: 10px; line-height: 1.45; text-align: left; }
+.bb--board::before { display: none; }
+.bb--board b { font-size: 1.2em; color: var(--warn); }
+
+/* 効果音：白抜きの太い文字 */
+.sfx {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  font-family: var(--f-sfx);
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow:
+    2.4px 0 0 var(--ink), -2.4px 0 0 var(--ink), 0 2.4px 0 var(--ink), 0 -2.4px 0 var(--ink),
+    1.7px 1.7px 0 var(--ink), -1.7px 1.7px 0 var(--ink), 1.7px -1.7px 0 var(--ink), -1.7px -1.7px 0 var(--ink),
+    2.2px 0.9px 0 var(--ink), -2.2px 0.9px 0 var(--ink), 2.2px -0.9px 0 var(--ink), -2.2px -0.9px 0 var(--ink),
+    0.9px 2.2px 0 var(--ink), -0.9px 2.2px 0 var(--ink), 0.9px -2.2px 0 var(--ink), -0.9px -2.2px 0 var(--ink);
+}
+.sfx.is-v { writing-mode: vertical-rl; }
+.sfx.is-dark { color: var(--ink); text-shadow: none; }
+
+/* マンガの終わり */
+.fin { position: absolute; right: 8mm; bottom: 2.4mm; font-family: var(--f-mincho); font-weight: 800; font-size: 13px; letter-spacing: 0.3em; }
+.fiction { position: absolute; left: 8mm; bottom: 3.4mm; font-size: 7.5px; color: var(--muted); }
+
+/* ---------- 文字のページ（共通） ---------- */
+.tp { position: absolute; inset: 11mm 10mm 12mm; display: flex; flex-direction: column; gap: 3.6mm; font-size: 12.5px; line-height: 1.75; }
+.tp h2 { margin: 0; font-family: var(--f-mincho); font-weight: 800; font-size: 21px; line-height: 1.4; letter-spacing: 0.06em; text-wrap: balance; }
+.tp h3 { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tp p { margin: 0; }
+.kicker { font-size: 9.5px; font-weight: 700; letter-spacing: 0.18em; color: var(--indigo); }
+.lead { font-size: 12.5px; }
+.small { font-size: 9.5px; line-height: 1.65; color: var(--muted); }
+.box { border: 1.2px solid var(--ink); border-radius: 2mm; padding: 3mm 3.5mm; }
+.box--indigo { border-color: var(--indigo); background: var(--indigo-soft); }
+.box--warn { border-color: var(--warn); background: var(--warn-soft); }
+.box--warn h3 { color: var(--warn); }
+.spot { position: absolute; pointer-events: none; }
+
+/* 表紙 */
+.page--cover { background: var(--night); color: #fff; }
+.cover-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%; }
+.cover-title {
+  position: absolute;
+  top: 12mm;
+  right: 10mm;
+  writing-mode: vertical-rl;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+}
+.cover-title h1 { margin: 0; font-family: var(--f-mincho); font-weight: 800; font-size: 42px; line-height: 1.1; letter-spacing: 0.14em; color: var(--moon); text-shadow: 0 2px 14px rgba(10, 14, 40, 0.75); }
+.cover-title p { margin: 0; font-family: var(--f-hand); font-weight: 600; font-size: 14px; letter-spacing: 0.16em; color: #fff; text-shadow: 0 1px 8px rgba(10, 14, 40, 0.9); padding-top: 18mm; }
+.cover-foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5mm 8mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to top, rgba(18, 24, 51, 0.92), rgba(18, 24, 51, 0));
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+.cover-foot b { font-family: var(--f-mincho); font-size: 13px; letter-spacing: 0.12em; }
+.cover-badge { border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 2px; padding: 1px 6px; font-size: 9px; }
+
+/* はじめに */
+.lineup { position: relative; margin: 1mm -1mm 0; }
+.lineup img { display: block; width: 100%; border-radius: 1.5mm; }
+.cast { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5mm; direction: rtl; }
+.cast div { direction: ltr; border-top: 2px solid var(--ink); padding-top: 1.5mm; font-size: 9.5px; line-height: 1.6; }
+.cast b { display: block; font-size: 11.5px; }
+.toc { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6mm; font-size: 10.5px; }
+.toc li { display: flex; gap: 2mm; align-items: baseline; }
+.toc li::after { content: ""; order: 1; flex: 1; border-bottom: 1px dotted var(--rule); }
+.toc span { order: 2; font-variant-numeric: tabular-nums; }
+.toc .sub { padding-left: 4mm; color: var(--muted); }
+
+/* チェックリスト */
+.checks { margin: 0; padding: 0; list-style: none; display: grid; gap: 2mm; }
+.checks li { display: flex; gap: 2.5mm; align-items: flex-start; font-size: 12.5px; line-height: 1.55; }
+.checks li::before { content: ""; flex: none; width: 4mm; height: 4mm; margin-top: 0.4mm; border: 1.2px solid var(--ink); border-radius: 0.6mm; background: #fff; }
+.result { display: grid; grid-template-columns: auto 1fr; gap: 1.2mm 3mm; font-size: 11.5px; line-height: 1.6; }
+.result dt { font-weight: 700; color: var(--indigo); }
+.result dd { margin: 0; }
+
+/* 手順 */
+.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 3.4mm; counter-reset: s; }
+.steps li { position: relative; padding-left: 9mm; counter-increment: s; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 0.2mm; width: 6mm; height: 6mm; border-radius: 50%; background: var(--indigo); color: #fff; font-weight: 700; font-size: 11px; line-height: 6mm; text-align: center; }
+.steps h3 { font-size: 13.5px; }
+.steps p { font-size: 12px; line-height: 1.7; }
+.legend { display: flex; flex-wrap: wrap; gap: 1mm 5mm; font-size: 12px; }
+
+/* 記録シート */
+.sheet { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 10px; line-height: 1.45; }
+.sheet th, .sheet td { border: 1px solid var(--ink); padding: 1.4mm 1.4mm; height: 9mm; vertical-align: top; }
+.sheet thead th { background: var(--indigo); color: #fff; font-size: 10.5px; text-align: center; vertical-align: middle; }
+.sheet tbody th { width: 25mm; background: var(--indigo-soft); text-align: left; font-size: 10px; }
+.sheet tbody th small { display: block; font-weight: 400; font-size: 8px; color: var(--muted); }
+.sheet td { color: var(--muted); font-size: 9px; }
+.sheet .opts { display: flex; flex-wrap: wrap; gap: 0.4mm 2mm; }
+.sheet .tall td { height: 17mm; }
+.sheet .mid td { height: 10mm; }
+.page--short .sheet th, .page--short .sheet td { height: 7.2mm; }
+.page--short .sheet .tall th, .page--short .sheet .tall td { height: 10mm; }
+.page--short .review th, .page--short .review td { height: 8mm; }
+.sheet .habit { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3mm 0.8mm; font-size: 7.8px; white-space: nowrap; }
+.sheet .habit span::before { content: "□"; margin-right: 0.5mm; color: var(--ink); }
+.review { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+.review th, .review td { border: 1px solid var(--ink); padding: 1.5mm 2mm; height: 9.5mm; vertical-align: top; font-size: 10px; }
+.review thead th { background: var(--ink); color: #fff; height: auto; text-align: center; }
+.review tbody th { width: 30mm; text-align: left; background: var(--indigo-soft); }
+.lines { display: grid; gap: 0; }
+.lines span { display: block; height: 8mm; border-bottom: 1px solid var(--rule); }
+
+/* 5つの習慣 */
+.habits { margin: 0; padding: 0; list-style: none; display: grid; gap: 3mm; }
+.habits li { display: grid; grid-template-columns: 1fr auto; gap: 0 3mm; padding-bottom: 2mm; border-bottom: 1px solid var(--rule); }
+.habits h3 { font-size: 13.5px; }
+.habits p { font-size: 11.5px; line-height: 1.7; color: var(--ink); }
+.habits .did { grid-row: 1 / span 2; grid-column: 2; align-self: center; display: flex; gap: 1mm; font-size: 8px; color: var(--muted); }
+.habits .did i { width: 4.6mm; height: 4.6mm; border: 1px solid var(--ink); border-radius: 0.6mm; display: grid; place-items: end start; padding: 0 0 0 0.5mm; font-style: normal; font-size: 6px; line-height: 1.2; color: var(--muted); }
+
+/* 裏表紙 */
+.page--back { background: linear-gradient(to bottom, var(--night) 0%, var(--night-2) 70%, #3a3355 100%); color: #fff; }
+.page--back .tp { gap: 3.5mm; }
+.page--back h2 { color: var(--moon); }
+.page--back .kicker { color: var(--moon); }
+.offer { border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 2mm; padding: 3.5mm 4mm; display: grid; gap: 1.8mm; background: rgba(255, 255, 255, 0.06); }
+.offer ul { margin: 0; padding-left: 1.2em; display: grid; gap: 0.8mm; font-size: 12px; }
+.qr { display: grid; grid-template-columns: 26mm 1fr; gap: 4mm; align-items: center; }
+.qr-box { width: 26mm; height: 26mm; border: 1.5px dashed var(--moon); border-radius: 1.5mm; display: grid; place-items: center; text-align: center; font-size: 8.5px; line-height: 1.5; color: var(--moon); }
+.qr p { font-size: 11.5px; line-height: 1.7; }
+.qr .url { font-family: var(--f-body); font-weight: 700; color: var(--moon); }
+.page--back .small { color: rgba(255, 255, 255, 0.72); }
+.page--back .cover-foot { background: none; }

@@ -1,0 +1,217 @@
+{
+ "_note": "マンガ小冊子『私の眠りの記録』の絵の生成プロンプト。Higgsfield / gpt_image_2_5（quality: high, resolution: 1k）。reference にキャラクター表（img/charsheet.jpg と同じ生成画像）を指定。セリフ・効果音は画像に入れず、index.html 側で文字として重ねる。表紙はカラー、owl-* は背景透過",
+ "panels": {
+  "p03-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. No people in this panel. There is NO owl and no animal anywhere in this panel. Scene: establishing shot at 2 a.m., a quiet two-story Japanese suburban house seen from the street under a large full moon and a starry sky, dark screentone night sky, all windows dark, nobody visible. Wide panoramic composition; keep the upper right area of the sky empty and dark for a caption."
+  },
+  "p03-2": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: high-angle view looking down at a double bed at night in a dark bedroom. Makoto in plaid pajamas sleeps on his back with his mouth wide open, snoring loudly, comic motion lines near his mouth. Yumiko in polka-dot pajamas lies next to him wide awake, staring at the ceiling with tired, irritated eyes and dark circles. Dark night screentone. Leave the top quarter of the panel fairly empty for sound effects."
+  },
+  "p03-3": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: close-up of Yumiko in polka-dot pajamas lying in bed at night, pressing a pillow over her ears with both hands, eyes squeezed shut in frustration, a small anger vein mark. Dark night screentone background. Keep the left third of the panel empty for a thought bubble."
+  },
+  "p03-4": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: dark bedroom at night. Yumiko in polka-dot pajamas sits up in bed hugging her pillow and sighing, looking wearily toward the bedroom door on the left. Behind her on the right, Makoto in plaid pajamas is asleep with his mouth open, snoring. Moonlight from a window. Leave the upper left and upper right corners empty for captions."
+  },
+  "p04-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: bright morning in a Japanese home kitchen, dining table seen from the side. On the RIGHT, Makoto in a white shirt and tie stretches his arms happily with a big refreshed smile, coffee and toast in front of him. On the LEFT, Yumiko in a cardigan sits slumped with dark circles under her eyes, holding a mug, exhausted. Sunlight from a window. Leave space above both heads for speech bubbles."
+  },
+  "p04-2": {
+   "aspect_ratio": "8:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: dramatic close-up of Yumiko in a cardigan at the breakfast table, looking straight at the viewer with a calm but very serious, determined expression, slight shadow over her eyes, morning light. Keep the upper right area and the left side empty for speech bubbles."
+  },
+  "p04-3": {
+   "aspect_ratio": "8:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: comedic manga shock reaction close-up of Makoto in a white shirt and tie: eyes wide, mouth open in shock, glasses knocked askew, sweat drops, a coffee cup tipping in his hand. Strong radial focus lines (concentrated speed lines) in the background. Keep the upper area empty for a shout bubble."
+  },
+  "p04-4": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: breakfast table, two-shot. On the RIGHT, Yumiko in a cardigan explains wearily with one hand on her forehead. On the LEFT, Makoto in a white shirt and tie sweats nervously and points at himself with a guilty, surprised expression. Morning kitchen. Leave space above each of them for speech bubbles."
+  },
+  "p05-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: evening living room with a sofa. On the RIGHT, Makoto in a casual gray sweater scratches the back of his head, embarrassed. On the LEFT, Yumiko in a cardigan holds up a smartphone toward him with a helpful smile. Leave space above their heads for speech bubbles."
+  },
+  "p05-2": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: night, close-up of a smartphone standing on a bedside table next to a small lamp, its screen showing a simple sound-recording app with a round record button and a waveform (no readable text). In the soft-focus background Makoto and Yumiko sleep in bed. Dark night screentone. Leave the right side empty for a caption."
+  },
+  "p05-3": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: next morning, Makoto in plaid pajamas sits on the edge of the bed, holding a smartphone to his ear and listening, with a nervous, worried face. Morning light through curtains. Leave the left half of the upper area empty for sound effects."
+  },
+  "p05-4": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: comedic manga 'devastated' reaction of Makoto in plaid pajamas: face pale with vertical gloom lines over his forehead, glasses turned blank white, sweat drop, wavy mouth, holding the smartphone limply. Dark gloomy screentone background with vertical lines. Keep the top-left area empty for a thought bubble."
+  },
+  "p05-5": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: Yumiko in polka-dot pajamas sitting on the bed, holding the smartphone near her ear, freezing in surprise with a big sweat drop, pointing at herself with her other hand, embarrassed. Morning bedroom. Keep the upper right area empty for small bubbles."
+  },
+  "p06-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: office meeting room in daytime. Makoto in a white shirt and tie sits at a meeting table, dozing off: eyes closed, head drooping forward, glasses slipping. Male coworkers in suits around the table are blurred and partially out of frame; one coworker's hand reaches toward his shoulder from the left edge. Leave the upper right corner empty for a title caption."
+  },
+  "p06-2": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: evening, Makoto, still in his white shirt and loosened tie after work, sits on a living-room sofa looking at a smartphone screen showing a search results page (no readable text), with a worried, uneasy face and a small sweat drop. Cozy lamp light. Keep the top-left area empty for a thought bubble."
+  },
+  "p06-3": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: on a living-room coffee table, a sudden puff of magical white smoke with sparkles, and Owl Sensei pops out of it, one wing raised in a cheerful greeting, eyes bright. Dynamic burst lines behind. Keep the upper area empty for a sound effect and a speech bubble."
+  },
+  "p06-4": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: living room. On the RIGHT, Makoto in a white shirt and loosened tie and Yumiko in a cardigan leap back on the sofa in comic surprise, clinging to each other. On the LEFT, Owl Sensei stands on the coffee table and bows politely with one wing on its chest. Leave space above the couple and above the owl for speech bubbles."
+  },
+  "p07-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: living room. On the RIGHT, Owl Sensei stands on the coffee table raising one wing like a teacher making a point, wise expression. On the LEFT, Makoto sits on the sofa rubbing the back of his neck, sheepish. Leave space above each for speech bubbles."
+  },
+  "p07-2": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: educational manga illustration panel. Two simple side-view cross-section diagrams of a human head and throat drawn side by side in clean line art. Left diagram: awake, the airway behind the tongue is wide open with smooth arrows of air flowing. Right diagram: asleep, the base of the tongue and soft palate have fallen back and narrowed the airway, with small vibration marks. Owl Sensei stands in the lower right corner pointing at the diagrams with a pointer stick. White background, no labels, no text. Keep the top strip of the panel empty for captions."
+  },
+  "p07-3": {
+   "aspect_ratio": "4:3",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: Yumiko in a cardigan, curious, tapping her chin with one finger and tilting her head. Simple living-room background with soft screentone. Keep the left side empty for a speech bubble."
+  },
+  "p07-4": {
+   "aspect_ratio": "4:3",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: Owl Sensei proudly holding up one wing with four feather tips spread like four fingers, confident and cheerful, sparkles around. Simple background. Keep the right side empty for a speech bubble."
+  },
+  "p08-1": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes. There is NO owl and no animal anywhere in this panel. Scene: side view of Makoto in plaid pajamas sleeping on his back in bed with his mouth open and chin tilted up, snoring, motion lines near his mouth. Night screentone. Keep the top strip empty for a label."
+  },
+  "p08-2": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: Makoto in a sweater looks at himself in a bathroom mirror, pinching the loose skin under his chin, sighing with a slightly sad, aging-related worry. Keep the top strip empty for a label."
+  },
+  "p08-3": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes. There is NO owl and no animal anywhere in this panel. Scene: Makoto in plaid pajamas asleep in bed breathing through his open mouth, with a small comic symbol suggesting a blocked nose. Night screentone. Keep the top strip empty for a label."
+  },
+  "p08-4": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: late evening at the dining table, Makoto in a gray sweater happily gulps a glass of beer, cheeks flushed, a beer bottle beside him, a wall clock in the background showing late night. Keep the top strip empty for a label."
+  },
+  "p08-5": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: living room, comedic three-shot. On the RIGHT, Makoto in a white shirt and loosened tie slumps on the sofa in despair with gloomy vertical lines over his head. In the CENTER, Yumiko in a cardigan stands with arms crossed and a deadpan, knowing look. On the LEFT, Owl Sensei on the coffee table laughs gently with a raised wing. Leave space above each character for speech bubbles."
+  },
+  "p09-1": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: living room. Owl Sensei with a stern, serious expression, glasses glinting, stands on the coffee table on the RIGHT next to a small completely blank white board on a tabletop easel on the LEFT. Behind the owl, Makoto in a white shirt and loosened tie and Yumiko in a cardigan gulp nervously. Keep the upper right area empty for a speech bubble; the board must be completely blank."
+  },
+  "p09-2": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: Yumiko in a cardigan with a reassuring expression, one hand on her chest, speaking calmly. Soft living-room background. Keep the left side empty for a speech bubble."
+  },
+  "p09-3": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: Makoto in a white shirt and loosened tie, hand on his chin, thinking with a slightly worried face, looking down. Soft living-room background. Keep the left side empty for a speech bubble."
+  },
+  "p09-4": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: a calm ENT clinic consultation room. Makoto in a shirt sits facing a doctor in a white coat; the doctor is seen from behind (face not visible) holding a clipboard. Makoto nods with relief. Keep the upper right and upper left corners empty for a caption and a speech bubble."
+  },
+  "p10-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: living room at night. Owl Sensei stands on the coffee table with one wing thrust up energetically. Makoto in a gray sweater and Yumiko in a cardigan sit on the sofa, both making determined fists and nodding. Leave the upper right corner empty for a title caption and space above the characters for speech bubbles."
+  },
+  "p10-2": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: Yumiko in a cardigan smiling brightly, holding up a plain notebook with a blank cover in one hand and a pen in the other, eager. Simple background with soft sparkles. Keep the right side empty for a speech bubble."
+  },
+  "p10-3": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: night bedroom, Makoto in plaid pajamas (glasses still on) carefully places a smartphone with a recording app on the bedside table, focused. Dark screentone. Keep the top strip empty for a label."
+  },
+  "p10-4": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: night bedroom, high angle. Makoto in plaid pajamas sleeps on his SIDE with a long cushion placed behind his back to stop him rolling onto his back. Owl Sensei perches on the headboard, giving advice with a raised wing. Yumiko in polka-dot pajamas sleeps peacefully beside him. Leave the top-left area empty for a speech bubble and the top-right for a label."
+  },
+  "p11-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: daytime office. On the RIGHT, Makoto in a white shirt and tie sits at his desk with his lips firmly closed and an oddly concentrated face (pressing his tongue to the roof of his mouth). On the LEFT, a younger male coworker peeks at him with a puzzled sweat-drop expression. Leave space above both for bubbles and the top-right corner for a label."
+  },
+  "p11-2": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: bathroom mirror, morning. Makoto in plaid pajamas and Yumiko in polka-dot pajamas stand side by side in front of the mirror doing exaggerated mouth and throat exercises: Makoto opens his mouth very wide, Yumiko stretches her lips wide and bursts out laughing. Fun, warm mood. Leave the upper area empty for sound effects and a label."
+  },
+  "p11-3": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: Makoto in a gray sweater sits upright on the sofa with eyes closed, calmly breathing in slowly through his nose, small gentle air-flow lines near his nose, peaceful expression. Keep the left side empty for a thought bubble and the top for a label."
+  },
+  "p11-4": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: early-evening dinner at the dining table: Makoto in a gray sweater on the RIGHT with just one small glass of beer beside his dinner, smiling proudly; Yumiko in a cardigan on the LEFT gives a thumbs-up. A wall clock shows early evening. Keep space above both for speech bubbles and the top for a label."
+  },
+  "p12-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: night bedroom: a smartphone recording on the bedside table glows softly in the foreground; behind it, Makoto in plaid pajamas sleeps on his side with his mouth closed, Yumiko in polka-dot pajamas asleep beside him. Moonlight, dark screentone. Leave the top-right corner empty for a caption and the top-left for a label."
+  },
+  "p12-2": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: next morning, Makoto in plaid pajamas and Yumiko in polka-dot pajamas sit on the edge of the bed leaning their heads together over a smartphone, listening intently; Makoto's face lights up with a hopeful, surprised smile. Soft morning light. Leave space above them for speech bubbles."
+  },
+  "p12-3": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: Owl Sensei on the RIGHT sits on a sunny windowsill in morning light with a gentle smile, wing raised as if giving encouraging advice. Makoto in plaid pajamas on the LEFT clenches a fist with a determined, motivated face. Leave space above the owl and above Makoto for bubbles."
+  },
+  "p13-1": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. No people in this panel. There is NO owl and no animal anywhere in this panel. Scene: establishing shot at night, the same two-story Japanese suburban house seen from the street under a full moon and stars, very peaceful and quiet, all windows dark, nobody visible. Wide composition; keep the upper right sky empty for a title caption."
+  },
+  "p13-2": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples) lying in bed with his glasses taken off: bare face, nothing on his eyes; Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: high-angle view of the double bed at night: Makoto in plaid pajamas sleeps peacefully on his side with his mouth closed; Yumiko in polka-dot pajamas sleeps soundly next to him with a gentle smile. Soft moonlight, calm and quiet mood, light screentone. Leave the top area empty for a small sound effect."
+  },
+  "p13-3": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: morning, Yumiko in polka-dot pajamas sits up in bed stretching her arms with a refreshed, radiant smile, sparkles and soft morning light around her. Keep the left side empty for a speech bubble."
+  },
+  "p13-4": {
+   "aspect_ratio": "9:8",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses). There is NO owl and no animal anywhere in this panel. Scene: Makoto in plaid pajamas, surprised and deeply moved, tears welling up behind his glasses with a trembling happy smile. Soft sparkly background. Keep the upper area empty for a small bubble."
+  },
+  "p14-1": {
+   "aspect_ratio": "16:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs). There is NO owl and no animal anywhere in this panel. Scene: bright, warm breakfast at the dining table: Yumiko in a cardigan on the RIGHT pours tea into Makoto's cup with a happy smile; Makoto in a white shirt and tie on the LEFT smiles shyly with slightly blushing cheeks. Sunny morning. Leave space above each for speech bubbles."
+  },
+  "p14-2": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: morning sky seen from outside a house window: Owl Sensei flies away into the bright sky with its nightcap fluttering, waving a wing; Makoto in a white shirt and tie and Yumiko in a cardigan lean out of the window and wave goodbye happily. Leave the upper area empty for speech bubbles."
+  },
+  "p14-3": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: close-up of Owl Sensei facing the viewer directly, winking, pointing one wing at the reader, friendly and encouraging, with a soft starry night-into-dawn background. Keep the right third and the left third empty for speech bubbles."
+  },
+  "cover": {
+   "aspect_ratio": "2:3",
+   "prompt": "Warm, soft FULL-COLOR Japanese manga cover illustration (not black-and-white) in the same character designs as the reference sheet. A calm moonlit night in deep indigo-blue tones: Makoto (58-year-old husband, short black hair graying at the temples, glasses taken off) and Yumiko (55-year-old wife, shoulder-length bob) sleep peacefully side by side in bed under cozy white bedding, seen from a gentle high angle in the lower half. Owl Sensei (small round owl with tiny round glasses and a striped nightcap) sits on a glowing crescent moon in the upper left, holding a small notebook. Twinkling stars. Keep the right third of the upper two-thirds as calm, empty night sky for a vertical title. No text, no letters."
+  },
+  "lineup": {
+   "aspect_ratio": "21:9",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Makoto (58-year-old husband, short black hair graying at the temples, thin rectangular glasses); Yumiko (55-year-old wife, shoulder-length bob with side-swept bangs); Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: character introduction lineup on a plain white background, standing in a row facing the viewer with generous space between them. From RIGHT to LEFT: Makoto in a white shirt and tie (waist-up, friendly smile), Yumiko in a cardigan (waist-up, warm smile), Owl Sensei (full body, waving a wing)."
+  },
+  "owl-point": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: Owl Sensei full body, standing, pointing to the left with one wing as if explaining something, friendly smile. Isolated on a transparent background, no ground, no shadow."
+  },
+  "owl-note": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: Owl Sensei full body writing in a small open notebook with a pencil, focused and happy. Isolated on a transparent background, no ground, no shadow."
+  },
+  "owl-wave": {
+   "aspect_ratio": "1:1",
+   "prompt": "Black-and-white Japanese manga panel in the exact art style of the reference sheet: clean ink line art, gray screentone shading. NO text, NO letters, NO speech bubbles, NO sound-effect lettering, NO panel border. Characters in this panel: Owl Sensei (small round owl with tiny round glasses and a striped nightcap). Scene: Owl Sensei full body waving goodbye with one wing and winking. Isolated on a transparent background, no ground, no shadow."
+  }
+ }
+}
