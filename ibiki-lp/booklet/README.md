@@ -59,5 +59,6 @@ booklet/
 ```bash
 npm run build:booklet            # PDFを作る（Google Fonts を読み込むためネット接続が必要）
 npm run build:booklet -- --png   # あわせて dist/booklet/ にページごとの確認用PNG
+npm run build:bundle             # LPとあわせて、1ファイル版HTMLとPDFを dist/ibiki-bundle/ に作る
 npm run test:e2e                 # ページ数・A5サイズ・絵の読み込み・ふきだしのはみ出し・文字のはみ出しを確認
 ```

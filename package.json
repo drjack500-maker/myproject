@@ -12,11 +12,13 @@
     "build:images": "node tools/build-images.js",
     "build:preview": "node tools/build-preview.js",
     "build:hotfix": "node tools/build-hotfix.js",
-    "build:booklet": "node tools/build-booklet.js"
+    "build:booklet": "node tools/build-booklet.js",
+    "build:bundle": "node tools/build-bundle.js"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
     "html-validate": "^11.16.1",
+    "pdf-lib": "^1.17.1",
     "playwright": "^1.56.1"
   }
 }

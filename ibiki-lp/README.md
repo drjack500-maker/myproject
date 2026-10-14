@@ -103,6 +103,7 @@ LPの本文では、医療との線引きをはっきりさせています（比
 ```bash
 npm install            # 初回のみ
 npm run serve:ibiki    # http://localhost:8000/ で確認
+npm run build:bundle   # 共有用に dist/ibiki-bundle/ へ、LPと小冊子の1ファイル版HTMLとPDFを作る
 npm test               # HTML検証 + 自動テスト（このLPのテストは tests/ibiki.e2e.test.js）
 ```
 
