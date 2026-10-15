@@ -14,7 +14,8 @@
     "build:hotfix": "node tools/build-hotfix.js",
     "build:booklet": "node tools/build-booklet.js",
     "build:bundle": "node tools/build-bundle.js",
-    "build:video": "node tools/build-video.js"
+    "build:video": "node tools/build-video.js",
+    "build:obsidian": "node tools/build-obsidian.js"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
