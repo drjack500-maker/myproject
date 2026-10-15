@@ -1,0 +1,211 @@
+{
+ "_note": "ナレーション音声（Higgsfield seed_audio・登録音声「尾崎裕院長」＝尾崎隆理事長の声・wav 48kHz）。build-video.js が dist/video-cache/ にダウンロードして使う。台本を直したら、その場面だけ作り直してここを差し替える",
+ "voice_element": "8019928e-2bed-46fc-b2e5-a97b713295a8",
+ "clips": [
+  {
+   "id": "s01",
+   "job": "6a293650-bb16-4328-90b4-8f17c04b4682",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_6a293650-bb16-4328-90b4-8f17c04b4682.wav"
+  },
+  {
+   "id": "s02",
+   "job": "bfdee14a-e376-4bb7-b818-858109772b49",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_bfdee14a-e376-4bb7-b818-858109772b49.wav"
+  },
+  {
+   "id": "s03",
+   "job": "8ad7bc9d-07e6-4959-b828-769369a133a6",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_8ad7bc9d-07e6-4959-b828-769369a133a6.wav"
+  },
+  {
+   "id": "s04",
+   "job": "6fb9fd96-180c-41ef-9d70-3ef43963021e",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062608_6fb9fd96-180c-41ef-9d70-3ef43963021e.wav"
+  },
+  {
+   "id": "s05",
+   "job": "b02b8cf6-324e-4d88-9d69-784dfb8493cc",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_065130_b02b8cf6-324e-4d88-9d69-784dfb8493cc.wav"
+  },
+  {
+   "id": "s06",
+   "job": "ef8216cf-3867-473e-a4d9-a98245b13401",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_ef8216cf-3867-473e-a4d9-a98245b13401.wav"
+  },
+  {
+   "id": "s07",
+   "job": "f3dafa59-e4fc-4222-a5e4-6ee47f83fccd",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_f3dafa59-e4fc-4222-a5e4-6ee47f83fccd.wav"
+  },
+  {
+   "id": "s08",
+   "job": "e5a2da31-e000-4431-a35b-8f107d5c65e6",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062608_e5a2da31-e000-4431-a35b-8f107d5c65e6.wav"
+  },
+  {
+   "id": "s09",
+   "job": "26530850-7c7a-49f8-8d6b-60fcaa20dd41",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_065130_26530850-7c7a-49f8-8d6b-60fcaa20dd41.wav"
+  },
+  {
+   "id": "s10",
+   "job": "fd4b9856-87cb-46a6-a358-38524db46c4f",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_fd4b9856-87cb-46a6-a358-38524db46c4f.wav"
+  },
+  {
+   "id": "s11",
+   "job": "0036d6b2-0296-47d7-af56-48f6db9744bb",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062416_0036d6b2-0296-47d7-af56-48f6db9744bb.wav"
+  },
+  {
+   "id": "s12",
+   "job": "bb804e24-d9db-4fe7-acff-8a175630942b",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062415_bb804e24-d9db-4fe7-acff-8a175630942b.wav"
+  },
+  {
+   "id": "s13",
+   "job": "378d9768-69cc-4733-b95f-8e647e4f0c02",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062607_378d9768-69cc-4733-b95f-8e647e4f0c02.wav"
+  },
+  {
+   "id": "s14",
+   "job": "a23c4327-c1f3-4992-b616-4ac0bf225041",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062608_a23c4327-c1f3-4992-b616-4ac0bf225041.wav"
+  },
+  {
+   "id": "s15",
+   "job": "16608147-ed5b-428f-ab81-b5b83b764494",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062607_16608147-ed5b-428f-ab81-b5b83b764494.wav"
+  },
+  {
+   "id": "s16",
+   "job": "58be0d05-54be-4d72-afc1-c786c6c97e76",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062608_58be0d05-54be-4d72-afc1-c786c6c97e76.wav"
+  },
+  {
+   "id": "s17",
+   "job": "12dac565-719f-4d50-8f25-35e825e00790",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062607_12dac565-719f-4d50-8f25-35e825e00790.wav"
+  },
+  {
+   "id": "s18",
+   "job": "b0aec82c-c376-4391-bb4f-b05c7f233e20",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062608_b0aec82c-c376-4391-bb4f-b05c7f233e20.wav"
+  },
+  {
+   "id": "s19",
+   "job": "ab7f6f56-9240-4083-bc22-8ebb3902e3eb",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_ab7f6f56-9240-4083-bc22-8ebb3902e3eb.wav"
+  },
+  {
+   "id": "s20",
+   "job": "ed7598af-d130-4b7e-b5aa-82c1faa39d5d",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_ed7598af-d130-4b7e-b5aa-82c1faa39d5d.wav"
+  },
+  {
+   "id": "s21",
+   "job": "81b5a207-8393-405a-a38b-a2d5f8c400f8",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_81b5a207-8393-405a-a38b-a2d5f8c400f8.wav"
+  },
+  {
+   "id": "s22",
+   "job": "03bf4e29-42fc-4033-bc6c-a33b7793cffd",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_03bf4e29-42fc-4033-bc6c-a33b7793cffd.wav"
+  },
+  {
+   "id": "s23",
+   "job": "fce50d70-1666-47f7-b351-5c25846cf8e9",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_fce50d70-1666-47f7-b351-5c25846cf8e9.wav"
+  },
+  {
+   "id": "s24",
+   "job": "9fad3088-1c4c-444a-9f43-fade9941ae7d",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_9fad3088-1c4c-444a-9f43-fade9941ae7d.wav"
+  },
+  {
+   "id": "s25",
+   "job": "77aeff73-3f69-420e-8129-b076ac081294",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_77aeff73-3f69-420e-8129-b076ac081294.wav"
+  },
+  {
+   "id": "s26",
+   "job": "04667cb9-2d8f-412f-bdb8-e1ad9e2c1b23",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_062929_04667cb9-2d8f-412f-bdb8-e1ad9e2c1b23.wav"
+  },
+  {
+   "id": "s27",
+   "job": "179b278b-b5e3-4393-b790-cb47d19e3b12",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_179b278b-b5e3-4393-b790-cb47d19e3b12.wav"
+  },
+  {
+   "id": "s28",
+   "job": "854b8886-d267-4f31-80b3-7135e5c9ebd3",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063116_854b8886-d267-4f31-80b3-7135e5c9ebd3.wav"
+  },
+  {
+   "id": "s29",
+   "job": "5888f96d-765a-4057-8ea4-fb417874a7d5",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_5888f96d-765a-4057-8ea4-fb417874a7d5.wav"
+  },
+  {
+   "id": "s30",
+   "job": "ce300702-55d3-469e-837c-fd820a4a38ef",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_ce300702-55d3-469e-837c-fd820a4a38ef.wav"
+  },
+  {
+   "id": "s31",
+   "job": "c7f0f805-c7fd-49d1-b0e7-8703b04df561",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_c7f0f805-c7fd-49d1-b0e7-8703b04df561.wav"
+  },
+  {
+   "id": "s32",
+   "job": "4cee3901-3f92-486a-b81b-399c36faa164",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_4cee3901-3f92-486a-b81b-399c36faa164.wav"
+  },
+  {
+   "id": "s33",
+   "job": "8c31a975-b242-4092-b94a-00696f1235e7",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_8c31a975-b242-4092-b94a-00696f1235e7.wav"
+  },
+  {
+   "id": "s34",
+   "job": "93535e56-5537-429d-86d7-809fbf1bd4a5",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063114_93535e56-5537-429d-86d7-809fbf1bd4a5.wav"
+  },
+  {
+   "id": "s35",
+   "job": "78594108-dc20-4bbe-94c3-7309843bb414",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_065130_78594108-dc20-4bbe-94c3-7309843bb414.wav"
+  },
+  {
+   "id": "s36",
+   "job": "f09a52b8-c8c0-4c82-a79b-d2345b88d57d",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063237_f09a52b8-c8c0-4c82-a79b-d2345b88d57d.wav"
+  },
+  {
+   "id": "s37",
+   "job": "529e5060-7659-4ed8-996a-ddd9c704ea29",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063236_529e5060-7659-4ed8-996a-ddd9c704ea29.wav"
+  },
+  {
+   "id": "s38",
+   "job": "b13fa60d-e043-47b9-82d3-01b800db6239",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063238_b13fa60d-e043-47b9-82d3-01b800db6239.wav"
+  },
+  {
+   "id": "s39",
+   "job": "7716052d-cb0f-40b7-ab58-f565fbc519ba",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063236_7716052d-cb0f-40b7-ab58-f565fbc519ba.wav"
+  },
+  {
+   "id": "s40",
+   "job": "e23ae2f8-eb7f-40df-ab5f-3eff28f3e6cd",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063236_e23ae2f8-eb7f-40df-ab5f-3eff28f3e6cd.wav"
+  },
+  {
+   "id": "s41",
+   "job": "4d721440-8203-4081-856f-7c1be5a5649e",
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3Fn5feZNcEb4JUCRqdy9lQzNLPn/hf_20261015_063236_4d721440-8203-4081-856f-7c1be5a5649e.wav"
+  }
+ ]
+}
