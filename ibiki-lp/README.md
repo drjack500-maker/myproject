@@ -5,19 +5,33 @@
 
 無料小冊子（マンガ「私の眠りの記録」A5・20ページ）は [`booklet/`](booklet/) にあります（[PDF](booklet/nemuri-kiroku.pdf)・[説明](booklet/README.md)）。
 
+小冊子を入口に、面談・通話なしのオンラインだけで30万円の「12週間 個別フィードバックコース」（仮の商品案）を販売する流れも入っています。全体の設計（流れ・LINE配信の全文・動画セミナーの台本・運用・収支シミュレーター・法令のチェック・公開までにやること）は [`funnel/index.html`](funnel/index.html) にまとめています。
+
+```
+広告 → 小冊子プレゼント（free/）→ LINE 7日間の記録チャレンジ → 無料動画セミナー（40分）
+     → 12週間コース（program/）の申込フォーム → 受講可否をLINEで連絡 → 決済 → 受講開始
+     申し込まなかった方 → 自習版（このLP） ／ 受診の目安に当てはまった方 → 医療機関を案内（販売の案内は送らない）
+```
+
 ビルド不要の静的ファイルです（外部ライブラリなし。フォントのみ Google Fonts）。**このフォルダをそのままサーバーにアップロードすれば動きます。**
 
 ## ファイル構成
 
 ```
 ibiki-lp/
-├── index.html          LP本体
-├── tokushoho.html      特定商取引法に基づく表記（ひな形）
+├── index.html          LP本体（自習版）
+├── tokushoho.html      特定商取引法に基づく表記（ひな形。自習版 #self と12週間コース #course）
+├── privacy.html        個人情報の取り扱い（ひな形。健康に関する情報の扱いを含む）
+├── free/               小冊子プレゼントのページ（広告の受け皿。LINE友だち追加へ）
+├── program/            12週間コースの販売ページと申込フォーム（受講前チェックつき）
+├── funnel/             販売導線の設計書（社内用。公開しない。doc.css・doc.js）
+├── booklet/            無料小冊子（マンガ「私の眠りの記録」）。booklet/README.md 参照
 └── assets/
-    ├── css/style.css
+    ├── css/style.css   共通
+    ├── css/funnel.css  free/・program/ 用
     ├── js/main.js      見出しの出し分け・一晩の記録グラフ・セルフチェック・決済リンク（設定は冒頭の CONFIG）
+    ├── js/funnel.js    free/・program/ 用：LINEボタン・申込フォーム（設定は冒頭の CONFIG）
     └── img/              favicon.svg・ファーストビューの写真
-booklet/                無料小冊子（マンガ「私の眠りの記録」）。booklet/README.md 参照
 ```
 
 ## ページの構成
@@ -57,6 +71,17 @@ HTML・JS 内の `【要確認】` `【要設定】` `【要差し替え】` `�
 9. **ファーストビューの写真**：`assets/img/hero-night.jpg`（PC用 1600×1075）と `hero-night-sm.jpg`（スマホ用 960×645）は、生成AI（Higgsfield）で作ったイメージ写真です。実在の受講者ではないため「※写真はイメージです」と表示しています。撮影した写真や素材写真に替える場合は、同じファイル名・同じ縦横比（3:2）で差し替えてください（人物は右寄り、左側を暗めに空けると見出しが読みやすくなります）
 10. **OGP**：`index.html` の `og:url` を公開URLに。SNS・LINEで共有する場合は `og:image`（1200×630）も追加
 11. **計測**：Google タグマネージャーを入れる場合は `<head>` に追加。ボタンのクリックは `dataLayer` に `cta_click`（`cta`＝header/hero/sticky/offer/closing、`lp_variant`）として送っています
+
+### 12週間コースの販売導線（free/・program/）
+
+設計書 `funnel/index.html` の「8. 公開までにやること」が一覧です。コードで設定する箇所は次のとおりです。
+
+- **LINEの友だち追加URL**：`assets/js/funnel.js` の `CONFIG.lineUrl`（未設定のときは手元の確認で「未設定です」と表示）
+- **申込フォームの送信先**：`CONFIG.applyEndpoint`（Googleフォーム・スプレッドシートのWebアプリなど、`application/x-www-form-urlencoded` のPOSTを受けられるURL）。流入元（`utm_*` など）と入力にかかった秒数（`elapsed`）も一緒に送ります。未設定の公開サーバーでは送信ボタンを止め、「準備しています」と表示します
+- **受講前チェック**：無呼吸・日中の強い眠気・朝の頭痛のどれかに「はい」の方は送信できず、医療機関を案内します（`RED_FLAGS`）。治療中（CPAPなど）の方は「主治医に確認した」が必須
+- **ページの設定を上書きする**：各ページで `funnel.js` より前に `window.LP_CONFIG = { lineUrl: '…', applyEndpoint: '…' }` を置いても設定できます
+- **商品の中身・価格・定員・担当スタッフ・フィードバック例**は仮です（`【要確認】` と点線枠）。決まったら `program/index.html` と `tokushoho.html#course` を合わせて直してください
+- `funnel/` は社内資料なので、公開サーバーには置かないでください（`noindex` 付き）
 
 ## 見出しの出し分け（タイトルコンセプト10パターン）
 
@@ -103,8 +128,10 @@ LPの本文では、医療との線引きをはっきりさせています（比
 ```bash
 npm install            # 初回のみ
 npm run serve:ibiki    # http://localhost:8000/ で確認
-npm run build:bundle   # 共有用に dist/ibiki-bundle/ へ、LPと小冊子の1ファイル版HTMLとPDFを作る
-npm test               # HTML検証 + 自動テスト（このLPのテストは tests/ibiki.e2e.test.js）
+npm run build:bundle   # 共有用に dist/ibiki-bundle/ へ、LP・小冊子・小冊子プレゼント・12週間コース・設計書の1ファイル版HTMLとPDFを作る
+npm test               # HTML検証 + 自動テスト（このLPは tests/ibiki.e2e.test.js、販売導線は tests/funnel.test.js）
 ```
 
 自動テストの内容：375×667 の画面で申し込みボタンが最初に見える／確認用の見出し切り替え／幅320・360・768・1280pxで全10パターンとも横スクロールなし／見出しの出し分け／一晩の記録の切り替え／セルフチェックと医療機関の案内／決済URLへの流入元の引き継ぎ／追従ボタン／文字サイズの保存／アクセシビリティ（axe、ライト・ダーク）
+
+販売導線のテスト：小冊子プレゼントの最初の画面にLINEボタン／LINEのURL設定／幅320・390・1280pxで横スクロールなし／受診の目安に当てはまると送信できない／治療中の方の確認と送信内容（流入元つき）／送信先が未設定のときの動作／収支シミュレーターの計算／アクセシビリティ（axe）

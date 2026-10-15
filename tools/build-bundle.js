@@ -5,6 +5,9 @@
  *     LP_静寂の夜メソッド.pdf         LPの全体（1ページ目：スマホ幅、2ページ目：PC幅）
  *     小冊子_私の眠りの記録.html      1ファイル版の小冊子（絵を埋め込み）
  *     小冊子_私の眠りの記録.pdf       配布用PDF（A5・20ページ）
+ *     小冊子プレゼントページ.html/.pdf  広告の受け皿（free/）。PDFはスマホ幅・PC幅の2ページ
+ *     12週間コース販売ページ.html/.pdf  30万円コースの販売ページと申込フォーム（program/）
+ *     販売導線の設計書.html/.pdf      流れ・LINE配信文・セミナー台本・収支シミュレーター（funnel/。PDFはA4）
  * フォントは Google Fonts を使うため、ネットにつながる環境で実行してください。
  */
 const path = require('node:path');
@@ -26,15 +29,41 @@ function replaceOnce(html, from, to) {
   return html.replace(from, () => to);
 }
 
-// ---------- 1ファイル版のLP ----------
-function lpHtml() {
-  let html = read('index.html');
-  html = replaceOnce(html, '<link rel="stylesheet" href="assets/css/style.css">', `<style>\n${read('assets/css/style.css')}\n</style>`);
-  html = replaceOnce(html, '<script src="assets/js/main.js" defer></script>', '');
-  html = replaceOnce(html, '</body>', `<script>\n${read('assets/js/main.js')}\n</script>\n</body>`);
-  html = html.replace(/(src|srcset|href)="(assets\/img\/[^"]+)"/g, (m, attr, p) => `${attr}="${dataUri(p)}"`);
-  // 特定商取引法の表記は別ページのため、1ファイル版ではページ内の注記に置きかえる
-  html = html.replace(/<a href="tokushoho\.html">/g, '<a href="#offer" title="公開時は tokushoho.html（特定商取引法に基づく表記）へのリンクになります">');
+// ---------- 1ファイル版のページ（LP・小冊子プレゼント・12週間コース・設計書） ----------
+// まとめた中にあるページへのリンクは同じフォルダのファイルへ、ないページ（特商法の表記など）は
+// リンクを外して「公開時の移動先」を title に残す
+const PAGES = {
+  'index.html': { name: NAME_LP, title: '静寂の夜メソッド LP（スマホ・PC）' },
+  'free/index.html': { name: '小冊子プレゼントページ', title: '小冊子プレゼントページ（スマホ・PC）' },
+  'program/index.html': { name: '12週間コース販売ページ', title: '12週間コース販売ページ（スマホ・PC）' },
+  'funnel/index.html': { name: '販売導線の設計書', print: true },
+};
+const LINK_NAMES = { 'tokushoho.html': '特定商取引法に基づく表記', 'privacy.html': '個人情報の取り扱い' };
+
+function pageHtml(rel) {
+  const dir = path.posix.dirname(rel);
+  const local = (p) => !/^(https?:|data:|mailto:|tel:|#)/.test(p);
+  const res = (p) => path.posix.normalize(path.posix.join(dir, p));
+  let html = read(rel);
+  html = html.replace(/<link rel="stylesheet" href="([^"]+)">/g, (m, p) => (local(p) ? `<style>\n${read(res(p))}\n</style>` : m));
+  const scripts = [];
+  html = html.replace(/<script src="([^"]+)" defer><\/script>\n?/g, (m, p) => {
+    if (!local(p)) return m;
+    scripts.push(read(res(p)));
+    return '';
+  });
+  html = replaceOnce(html, '</body>', `${scripts.map((js) => `<script>\n${js}\n</script>\n`).join('')}</body>`);
+  html = html.replace(/(src|srcset|href)="([^"]+\.(?:jpg|png|svg))"/g, (m, attr, p) => (local(p) ? `${attr}="${dataUri(res(p))}"` : m));
+  html = html.replace(/<a href="([^"]+)"/g, (m, href) => {
+    if (!local(href)) return m;
+    const [p, hash] = href.split('#');
+    let target = res(p || '.');
+    if (target === '.' || target.endsWith('/')) target = path.posix.join(target, 'index.html');
+    if (PAGES[target]) return `<a href="${PAGES[target].name}.html"`;
+    const label = LINK_NAMES[target] || target;
+    return `<a title="公開時は「${label}」のページ（${target}${hash ? `#${hash}` : ''}）へ移動します"`;
+  });
+  if (/(?:src|href)="(?:\.\.\/|assets\/|img\/|booklet\/)/.test(html)) throw new Error(`${rel}: 埋め込めていない参照があります`);
   return html;
 }
 
@@ -60,7 +89,8 @@ function bookletHtml() {
   return html;
 }
 
-async function lpPdf(browser, url) {
+// 長いページのPDF（1ページ目：スマホ幅、2ページ目：PC幅）
+async function longPdf(browser, url, title) {
   const parts = [];
   for (const [label, width, mobile] of [['スマホ', 390, true], ['PC', 1280, false]]) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 }, isMobile: mobile, hasTouch: mobile, deviceScaleFactor: 2, locale: 'ja-JP', reducedMotion: 'reduce' });
@@ -71,11 +101,11 @@ async function lpPdf(browser, url) {
     await page.emulateMedia({ media: 'screen' });
     const height = await page.evaluate(() => Math.ceil(document.documentElement.scrollHeight));
     parts.push(await page.pdf({ width: `${width}px`, height: `${height + 2}px`, printBackground: true, pageRanges: '1' }));
-    console.log(`  LP ${label}: ${width}×${height}px`);
+    console.log(`  ${title} ${label}: ${width}×${height}px`);
     await ctx.close();
   }
   const merged = await PDFDocument.create();
-  merged.setTitle('静寂の夜メソッド LP（スマホ・PC）');
+  merged.setTitle(title);
   for (const bytes of parts) {
     const src = await PDFDocument.load(bytes);
     const [p] = await merged.copyPages(src, [0]);
@@ -84,9 +114,21 @@ async function lpPdf(browser, url) {
   return merged.save();
 }
 
+// 1ファイル版のHTMLを開いて、エラーと読みこめない画像がないことを確かめる
+async function check(browser, file) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('requestfailed', (r) => { if (r.url().startsWith('file:')) errors.push(`読みこめない: ${r.url()}`); });
+  await page.goto(`file://${file}`, { waitUntil: 'networkidle' });
+  const broken = await page.$$eval('img', (els) => els.filter((e) => e.complete && !e.naturalWidth).length);
+  if (errors.length || broken) throw new Error(`${path.basename(file)} に問題があります: ${errors.join(' / ')} 読みこめない画像 ${broken}`);
+  return page;
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  fs.writeFileSync(path.join(OUT, `${NAME_LP}.html`), lpHtml());
+  for (const [rel, { name }] of Object.entries(PAGES)) fs.writeFileSync(path.join(OUT, `${name}.html`), pageHtml(rel));
   fs.writeFileSync(path.join(OUT, `${NAME_BOOK}.html`), bookletHtml());
 
   const server = createServer(ROOT);
@@ -94,16 +136,23 @@ async function lpPdf(browser, url) {
   const base = `http://localhost:${server.address().port}/`;
   const browser = await chromium.launch();
   try {
-    fs.writeFileSync(path.join(OUT, `${NAME_LP}.pdf`), await lpPdf(browser, `${base}index.html`));
+    for (const [rel, { name, title, print }] of Object.entries(PAGES)) {
+      const file = path.join(OUT, `${name}.html`);
+      const page = await check(browser, file);
+      if (print) {
+        // 設計書はA4で印刷する前提のレイアウト（doc.css の @media print）
+        await page.emulateMedia({ media: 'print' });
+        await page.evaluate(() => document.fonts.ready);
+        await page.pdf({ path: path.join(OUT, `${name}.pdf`), preferCSSPageSize: true, printBackground: true });
+      } else {
+        fs.writeFileSync(path.join(OUT, `${name}.pdf`), await longPdf(browser, base + rel, title));
+      }
+      await page.close();
+    }
 
     // 小冊子のPDF（1ファイル版のHTMLから作り、HTMLが正しく組めていることも確かめる）
-    const page = await browser.newPage();
-    const errors = [];
-    page.on('pageerror', (e) => errors.push(e.message));
-    await page.goto(`file://${path.join(OUT, `${NAME_BOOK}.html`)}`, { waitUntil: 'networkidle' });
+    const page = await check(browser, path.join(OUT, `${NAME_BOOK}.html`));
     await page.evaluate(() => window.BOOKLET_READY);
-    const broken = await page.$$eval('img', (els) => els.filter((e) => !e.naturalWidth).length);
-    if (errors.length || broken) throw new Error(`小冊子のHTMLに問題があります: ${errors.join(' / ')} 読みこめない画像 ${broken}`);
     await page.emulateMedia({ media: 'print' });
     await page.pdf({ path: path.join(OUT, `${NAME_BOOK}.pdf`), preferCSSPageSize: true, printBackground: true });
   } finally {

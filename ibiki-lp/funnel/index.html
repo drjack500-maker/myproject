@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>12週間コースの販売導線</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Shippori+Mincho+B1:wght@800&display=swap">
+<link rel="stylesheet" href="doc.css">
+<script src="doc.js" defer></script>
+</head>
+<body>
+
+<header class="cover">
+  <div class="w">
+    <p class="kicker">静寂の夜メソッド｜販売導線の設計書（仮の商品案）</p>
+    <h1>無料の小冊子から、<br>30万円の12週間コースへ</h1>
+    <p class="lead">マンガ小冊子「私の眠りの記録」を入口に、面談・通話なしのオンラインだけで、30万円の「12週間 個別フィードバックコース」を販売する流れです。商品の中身・価格・定員はすべて仮です。決まったら、この設計書と各ページの【要確認】を差し替えてください。</p>
+    <nav class="toc" aria-label="目次">
+      <a href="#flow">1. 全体の流れ</a>
+      <a href="#product">2. 商品（仮）</a>
+      <a href="#line">3. LINE配信の全文</a>
+      <a href="#seminar">4. 動画セミナーの台本</a>
+      <a href="#ops">5. 申込から受講開始まで</a>
+      <a href="#sim">6. 収支シミュレーター</a>
+      <a href="#law">7. 法令・表現のチェック</a>
+      <a href="#todo">8. 公開までにやること</a>
+    </nav>
+  </div>
+</header>
+
+<main class="w">
+
+  <!-- ===================== 1 ===================== -->
+  <section id="flow" aria-labelledby="flow-h">
+    <h2 id="flow-h"><span class="num">1</span>全体の流れ</h2>
+    <p>広告から受講開始まで、約２週間です。人が話すのは、LINEのトークでの文字のやりとりだけ。通話や面談はありません（電話での勧誘にあたらないため、販売は「通信販売」のルールで運用できます）。</p>
+
+    <ol class="flow">
+      <li class="flow__step">
+        <p class="flow__when">0日目</p>
+        <h3>広告 → 小冊子プレゼントのページ</h3>
+        <p>「別の部屋で寝て」と言われた夫婦のマンガを入口に、LINEの友だち追加で小冊子を受け取ってもらいます。</p>
+        <p class="flow__asset">ページ：<code>free/index.html</code>（新規）</p>
+        <p class="flow__kpi">見る数字：登録1人あたりの広告費</p>
+      </li>
+      <li class="flow__step">
+        <p class="flow__when">0〜7日目</p>
+        <h3>LINE：７日間の記録チャレンジ</h3>
+        <p>毎晩１通、その日の記録と習慣をお知らせ。３日目のセルフチェックで受診の目安に当てはまる方は、医療機関を案内し、以降の販売の案内は送りません。</p>
+        <p class="flow__asset">配信文：<a href="#line">3. LINE配信の全文</a></p>
+        <p class="flow__kpi">見る数字：７日目まで残った割合、受診案内の割合</p>
+      </li>
+      <li class="flow__step">
+        <p class="flow__when">8〜12日目</p>
+        <h3>無料の動画セミナー（40分）</h3>
+        <p>「いびきが“戻る人”と、静かな夜が“続く人”の違い」。７日間の録音を聞き比べたあとに、続けるための考え方を伝え、最後に12週間コースを紹介します。</p>
+        <p class="flow__asset">台本：<a href="#seminar">4. 動画セミナーの台本</a></p>
+        <p class="flow__kpi">見る数字：視聴率、最後まで見た割合</p>
+      </li>
+      <li class="flow__step flow__step--key">
+        <p class="flow__when">10〜12日目</p>
+        <h3>12週間コースの販売ページ → 申込フォーム</h3>
+        <p>受講料300,000円（仮）。申込フォームに受講前チェックを入れ、医療機関への相談が先の方は送信できないようにしています。お支払いは、受講いただけることを確認したあと。</p>
+        <p class="flow__asset">ページ：<code>program/index.html</code>（新規・申込フォームつき）</p>
+        <p class="flow__kpi">見る数字：視聴者の申込率</p>
+      </li>
+      <li class="flow__step">
+        <p class="flow__when">申込から２営業日以内</p>
+        <h3>受講可否の連絡 → 決済ページ → 受講開始</h3>
+        <p>LINEで受講可否を連絡し、決済ページ（最終確認画面つき）をご案内。お支払いの翌週月曜から12週間。</p>
+        <p class="flow__asset">運用：<a href="#ops">5. 申込から受講開始まで</a></p>
+        <p class="flow__kpi">見る数字：決済完了率、14日以内の返金率</p>
+      </li>
+    </ol>
+
+    <div class="branches">
+      <div class="branch">
+        <h3>申し込まなかった方</h3>
+        <p>14日目に、動画と教材だけの自習版（既存のLP <code>index.html</code>・価格は未定）を一度だけご案内。その後は月２回の習慣のコラムと、毎月の受付開始のお知らせ。</p>
+      </div>
+      <div class="branch branch--warn">
+        <h3>受診の目安に当てはまった方</h3>
+        <p>医療機関への相談をおすすめし、セミナーや販売の案内は送りません。記録のコツだけを届けます。</p>
+      </div>
+      <div class="branch">
+        <h3>既存のLP（自習版）</h3>
+        <p>検索広告など「今すぐ自分で取り組みたい」方の入口として残します。ページ下部に無料小冊子への導線を追加しました。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 ===================== -->
+  <section id="product" aria-labelledby="product-h">
+    <h2 id="product-h"><span class="num">2</span>30万円の商品（仮の案）</h2>
+    <p>「12週間の学習＋睡眠記録への個別フィードバック＋定期面談」から面談を外し、オンラインで完結する形にしました。面談のかわりに、<b>体操の動画添削</b>と<b>チャットでの質問</b>で個別対応の手ごたえを出します。</p>
+    <table class="spec">
+      <tbody>
+        <tr><th>名前（仮）</th><td>静寂の夜メソッド 12週間コース</td></tr>
+        <tr><th>期間</th><td>12週間（1〜4週 知る・整える／5〜8週 鍛える・変える／9〜12週 定着させる）</td></tr>
+        <tr><th>毎週の流れ</th><td>月曜に動画レッスン２本 → 毎日の記録（各１分）と体操（５〜10分） → 金曜に録音の結果と体操の動画（30秒）を提出 → 48時間以内に個別フィードバック（文字＋短い動画）</td></tr>
+        <tr><th>含まれるもの</th><td>動画レッスン24本／個別フィードバック12回／体操の動画添削12回／チャットで質問（平日24時間以内に返信）／家族アカウント／卒業レポート／終了後３か月の動画視聴</td></tr>
+        <tr><th>面談・通話</th><td>なし（すべてスマホで完結）</td></tr>
+        <tr><th>受講料</th><td>300,000円（税込）。カード一括・カード会社の分割・銀行振込</td></tr>
+        <tr><th>返金</th><td>受講開始から14日以内は理由を問わず全額</td></tr>
+        <tr><th>定員</th><td>毎月20名まで（担当スタッフ１人が同時に30名を担当する前提で、２名体制）</td></tr>
+        <tr><th>担当</th><td>【要確認】資格のある担当スタッフ（例：口や舌の機能訓練に詳しい専門職）。医療機関への受診をすすめる基準は、可能なら医師の監修で決める</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note-box">
+      <h3>価格について</h3>
+      <p>30万円は、保険が使える医療機関での検査や治療と比べて高額です。この価格を支えるのは「12週間、毎週あなたの記録に合わせて調整してもらえる」ことなので、フィードバックの質と返信の速さを必ず守れる人数で始めてください。あわせて次の３つを前提にしています。</p>
+      <ul>
+        <li>効果を約束しない（変化には個人差がある）。かわりに14日間の全額返金を用意する</li>
+        <li>受講前チェックで、医療機関への相談が先の方は受け付けない</li>
+        <li>「残りわずか」「本日限り」は、実際の定員と締切に合っているときだけ使う</li>
+      </ul>
+      <p>最初の数か月は、価格（例：198,000円と298,000円）や定員を変えながら、申込率と返金率を見て決めることをおすすめします。</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3 ===================== -->
+  <section id="line" aria-labelledby="line-h">
+    <h2 id="line-h"><span class="num">3</span>LINE配信の全文</h2>
+    <p>ステップ配信（友だち追加からの日数で送る機能）と、選択肢のボタンによるタグ分けができる配信ツール（Lステップ、エルメ、UTAGE など）を使う前提です。「〇〇さん」は名前の差し込み。時刻は目安です。</p>
+
+    <div class="tags">
+      <p><b>タグ</b></p>
+      <ul>
+        <li><code>対象_本人</code><code>対象_家族</code><code>対象_両方</code>：0日目の回答</li>
+        <li><code>受診案内</code>：3日目のチェックで当てはまった方。セミナー・販売の配信から外す</li>
+        <li><code>セミナー視聴</code><code>セミナー完走</code>：動画の視聴状況（視聴ページのツールで付ける）</li>
+        <li><code>申込</code><code>受講中</code><code>卒業</code>：申込フォームと決済で付ける</li>
+      </ul>
+    </div>
+
+    <ol class="msgs">
+      <li class="msg">
+        <p class="msg__when">0日目　友だち追加の直後</p>
+        <div class="msg__body">
+          <p>〇〇さん、友だち追加ありがとうございます。静寂の夜メソッドです。</p>
+          <p>お約束の小冊子「私の眠りの記録」をお届けします。</p>
+          <p class="btnline">［小冊子を開く（PDF）］</p>
+          <p>明日から７日間、夜９時に１通だけ、その日の記録と習慣をお知らせします。</p>
+          <p>最初にひとつだけ教えてください。いびきが気になっているのは？</p>
+          <p class="btnline">［自分］［家族］［両方］</p>
+        </div>
+        <p class="msg__note">回答でタグを付ける。「家族」には「ご家族にすすめるときは『うるさい』より『心配だから』と伝えると、話を聞いてもらいやすくなります」と返す。</p>
+      </li>
+      <li class="msg">
+        <p class="msg__when">1日目　21:00</p>
+        <div class="msg__body">
+          <p>１日目の夜です。今夜やることは、ひとつだけ。</p>
+          <p>枕元から少し離してスマホを置き、録音アプリをスタートしてください。明日の朝、記録シート（17ページ）に「寝た時刻」と「起きた時刻」を書けたら満点です。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">2日目　21:00</p>
+        <div class="msg__body">
+          <p>ゆうべの録音、聞いてみましたか？</p>
+          <p class="btnline">［聞いた］［まだ］</p>
+          <p>今夜は、背中にクッションか丸めた毛布を置いて、横向きで眠ってみましょう。寝返りで、あお向けに戻りにくくなります。</p>
+        </div>
+        <p class="msg__note">「まだ」には「最初の10分だけでも大丈夫です。いびきの大きさの見当がつきます」と返す。</p>
+      </li>
+      <li class="msg msg--key">
+        <p class="msg__when">3日目　21:00（受診の目安の確認）</p>
+        <div class="msg__body">
+          <p>今日は、小冊子15ページのセルフチェックをやってみてください。</p>
+          <p>とくに大切な３つです。当てはまるものはありますか？</p>
+          <p>・寝ている間に、呼吸が止まっていると言われた<br>・運転中や会議中など、眠ってはいけない場面で眠ってしまう<br>・朝の頭痛が何日も続いている</p>
+          <p class="btnline">［ひとつでもある］［ない］</p>
+          <p>今夜は、舌先を上の前歯の少し後ろにつける練習を。寝る前に１分でOKです。</p>
+        </div>
+        <p class="msg__note">「ひとつでもある」→ タグ<code>受診案内</code>。返信：「教えてくださってありがとうございます。この場合は、まず睡眠外来・耳鼻咽喉科・呼吸器内科などで相談してください。いびきの陰に、睡眠時無呼吸症候群などが隠れていることがあります。このあとは、記録のコツだけをお送りします。」以降、セミナーと販売の配信を止める。</p>
+      </li>
+      <li class="msg">
+        <p class="msg__when">4日目　21:00</p>
+        <div class="msg__body">
+          <p>４日目は、のどと口の体操です。「あー」「いー」と声を出しながら、口を大きく動かします。</p>
+          <p class="btnline">［１分の手本動画を見る］</p>
+          <p>鏡を見ながらやると、口の開き方が左右でちがうことに気づけます。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">5日目　21:00</p>
+        <div class="msg__body">
+          <p>５日目は、鼻で呼吸する練習です。口を閉じて、鼻からゆっくり吸って、ゆっくり吐く。寝る前に10回。</p>
+          <p>鼻がつまりやすい日は、寝室の湿度も見てみてください。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">6日目　21:00</p>
+        <div class="msg__body">
+          <p>６日目は、夜の習慣の見直しです。お酒は、のどの筋肉をゆるめます。飲むなら夕食のときまでにしてみましょう。</p>
+          <p>記録シートの「寝る前のお酒」の欄に、今夜の様子を書いておくと、あとで録音と見比べられます。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">7日目　21:00</p>
+        <div class="msg__body">
+          <p>７日目です。今夜も、１日目と同じ場所にスマホを置いて録音してください。</p>
+          <p>明日の朝、１日目と聞き比べる方法をお送りします。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">8日目　7:30</p>
+        <div class="msg__body">
+          <p>おはようございます。１日目と７日目の録音を、３つの点で比べてみましょう。</p>
+          <p>① いびきの時間　② いちばん大きな音　③ ご家族のひとこと</p>
+          <p>比べてみて、どうでしたか？</p>
+          <p class="btnline">［静かな時間が増えた］［あまり変わらない］［まだ比べていない］</p>
+        </div>
+        <p class="msg__note">「増えた」→「その変化を、続く習慣にしていきましょう」。「変わらない」→「７日間では変化が見えにくいこともあります。原因の組み合わせは人によってちがいます」。どちらも今夜のセミナー案内につなげる。</p>
+      </li>
+      <li class="msg msg--key">
+        <p class="msg__when">8日目　20:00（動画セミナーの案内）</p>
+        <div class="msg__body">
+          <p>７日間、おつかれさまでした。</p>
+          <p>７日間で感じた変化を、続く習慣にできる人と、いつのまにか元に戻ってしまう人がいます。その違いを、40分の無料動画にまとめました。</p>
+          <p>「いびきが“戻る人”と、静かな夜が“続く人”の違い」</p>
+          <p class="btnline">［動画を見る（〇月〇日〇時まで）］</p>
+          <p>記録シートを手元に置いて見ると、自分に当てはめやすくなります。</p>
+        </div>
+        <p class="msg__note">視聴期限は、視聴ページが実際に閉じる日時にする（1人ずつ期限を設定できる配信ツールを使う）。</p>
+      </li>
+      <li class="msg">
+        <p class="msg__when">9日目　20:00（まだ見ていない方）</p>
+        <div class="msg__body">
+          <p>動画の15分ごろから、自己流の体操で起きやすい「３つのずれ」を実演でお見せしています。体操をしている方は、ここだけでも見てみてください。</p>
+          <p class="btnline">［15分の場面から見る］</p>
+        </div>
+      </li>
+      <li class="msg msg--key">
+        <p class="msg__when">10日目　20:00（12週間コースの案内）</p>
+        <div class="msg__body">
+          <p>動画を見てくださった方へ。動画の最後でご紹介した「12週間コース」の、今月の受付を始めました。</p>
+          <p>・毎週、あなたの録音と記録に個別のフィードバック<br>・体操の動画添削<br>・面談なし、スマホで完結</p>
+          <p>フィードバックの質を保つため、今月の受付は20名までです。</p>
+          <p class="btnline">［12週間コースをくわしく見る］</p>
+          <p>お申し込みのあと、受講いただけるかを確認してからのお支払いです。</p>
+        </div>
+        <p class="msg__note">未視聴の方には「動画の視聴期限は〇日です」とだけ送り、コースの案内は視聴後に。</p>
+      </li>
+      <li class="msg">
+        <p class="msg__when">11日目　20:00（よくある質問）</p>
+        <div class="msg__body">
+          <p>12週間コースについて、よくいただく質問にお答えします。</p>
+          <p>Q 面談がなくて大丈夫？<br>A 毎週、記録と体操の動画に、文字と短い動画でお返しします。質問はチャットで、平日24時間以内に返信します。</p>
+          <p>Q 年齢やスマホが心配<br>A 動画を見る、録音する、フォームで選ぶ、の３つができれば大丈夫です。最初の週に使い方のサポートがあります。</p>
+          <p>Q 合わなかったら？<br>A はじめの14日間は、理由を問わず全額をお返しします。</p>
+          <p>ほかにも気になることがあれば、このトークに送ってください。担当が文字でお返事します。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">12日目　20:00（今月の受付の最終日）</p>
+        <div class="msg__body">
+          <p>今月の12週間コースの受付は、今夜23:59までです。</p>
+          <p>迷っている方は、無理に決めなくて大丈夫です。来月の受付もLINEでお知らせします。</p>
+          <p class="btnline">［12週間コースを見る］</p>
+        </div>
+        <p class="msg__note">締切は実際の受付期間と一致させる（毎月の受付をまとめて行う運用）。定員に達したら、その時点で受付終了を送る。</p>
+      </li>
+      <li class="msg">
+        <p class="msg__when">14日目　20:00（申し込まなかった方）</p>
+        <div class="msg__body">
+          <p>自分のペースで取り組みたい方のために、動画と教材だけの自習版「静寂の夜メソッド」もあります。</p>
+          <p class="btnline">［自習版を見る］</p>
+          <p>このあとは月に２回、記録の読み方や季節の注意など、習慣のコラムをお届けします。</p>
+        </div>
+      </li>
+      <li class="msg">
+        <p class="msg__when">15日目以降</p>
+        <div class="msg__body">
+          <p>月２回：習慣のコラム（記録の読み方、花粉や乾燥の季節、飲み会の多い時期など）<br>毎月１回：12週間コースの受付開始のお知らせ（受付期間と定員）</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== 4 ===================== -->
+  <section id="seminar" aria-labelledby="seminar-h">
+    <h2 id="seminar-h"><span class="num">4</span>動画セミナーの台本（40分）</h2>
+    <p>タイトル：<b>いびきが“戻る人”と、静かな夜が“続く人”の違い</b>。話し手は担当スタッフ（顔出しなしでも可）。スライド約25枚。ふくろう先生のイラストを進行役に使えます。</p>
+    <table class="script">
+      <thead><tr><th>時間</th><th>内容</th><th>話すこと（要点）</th></tr></thead>
+      <tbody>
+        <tr><td>0:00</td><td>はじめに</td><td>この動画でわかること。最初にお願い：呼吸が止まる、日中に耐えられない眠気がある方は、先に医療機関へ。この動画は医療の代わりではありません。</td></tr>
+        <tr><td>3:00</td><td>７日間のふりかえり</td><td>録音の聞き比べ方（時間・いちばん大きな音・家族のひとこと）。変わった人も、変わらなかった人も、ここからが大事。</td></tr>
+        <tr><td>8:00</td><td>違い① 原因の組み合わせを知っている</td><td>あお向け・筋肉のゆるみ・口呼吸・お酒は、人によって効き方がちがう。記録シートから、自分のいびきが強くなる条件を見つける方法。</td></tr>
+        <tr><td>15:00</td><td>違い② 正しいやり方で続けている</td><td>自己流の体操で起きやすい３つのずれ（舌が引っこむ、口が片側だけ開く、回数だけこなす）を実演。</td></tr>
+        <tr><td>22:00</td><td>違い③ 記録を読んで、調整している</td><td>いびきが大きかった日と小さかった日を比べ、来週を変える。例：お酒の日だけ長い → お酒の時間を変える。</td></tr>
+        <tr><td>28:00</td><td>ひとりで続けるのがむずかしい理由</td><td>３週目の壁。自分の体操は自分では見えない。記録の読み取りには慣れが必要。</td></tr>
+        <tr><td>31:00</td><td>12週間コースの紹介</td><td>12週間の流れ、１週間の流れ、フィードバックの例、面談なしでできること・できないこと、受講料300,000円、14日間の全額返金、毎月20名まで。向いていない方も正直に伝える。</td></tr>
+        <tr><td>37:00</td><td>申込の流れ</td><td>申込フォーム → 受講前チェックの確認 → お支払い → 受講開始。無理に決めなくていい。自習版もある。</td></tr>
+        <tr><td>39:00</td><td>まとめ</td><td>今夜も録音を続けること。質問はLINEのトークへ。</td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      <h3>台本で使わない言い方</h3>
+      <ul>
+        <li>「必ず治る」「〇日でいびきが止まる」など、効果を言い切る表現（消費者契約法の断定的判断の提供、特定商取引法の誇大広告にあたるおそれ）</li>
+        <li>「今だけ〇万円引き」「通常価格50万円」など、実際に販売した実績のない価格との比較</li>
+        <li>「病院に行っても治らない」など、受診を遠ざける表現</li>
+        <li>実在しない受講者の声。使う場合は、許諾を得た実例と、変化がなかった人の割合も添える</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== 5 ===================== -->
+  <section id="ops" aria-labelledby="ops-h">
+    <h2 id="ops-h"><span class="num">5</span>申込から受講開始まで</h2>
+    <ol class="ops">
+      <li>
+        <h3>申込フォームを受け取る（自動）</h3>
+        <p><code>program/index.html</code> のフォームは、受講前チェックの３項目のどれかが「はい」だと送信できません。CPAPなどの治療中の方は「主治医に確認した」にチェックが必要です。送信先は <code>assets/js/funnel.js</code> の <code>applyEndpoint</code>（Googleスプレッドシートへの受信など）。受信したら、LINEで「２営業日以内にご連絡します」と自動で返します。</p>
+      </li>
+      <li>
+        <h3>受講可否を確認する（担当・１件５分）</h3>
+        <p>回答と自由記述を読み、受講いただけるかを判断します。迷う場合は受診をすすめる側に倒します。</p>
+        <div class="tpl"><p class="tpl__h">受講いただける場合</p><p>〇〇さん、お申し込みありがとうございます。受講前チェックを確認し、12週間コースを受講いただけます。下のページで、内容・金額・お支払い時期・返金の条件をご確認のうえ、〇月〇日までにお支払いください。お支払いの翌週の月曜日から始まります。［お支払いページ］</p></div>
+        <div class="tpl"><p class="tpl__h">先に受診をおすすめする場合</p><p>〇〇さん、お申し込みありがとうございます。いただいた内容から、先に医療機関（睡眠外来・耳鼻咽喉科など）でのご相談をおすすめします。受診のうえ、問題がないと言われたら、あらためてお申し込みください。お支払いは発生していません。</p></div>
+      </li>
+      <li>
+        <h3>決済ページ（最終確認画面）</h3>
+        <p>お支払いの直前の画面に、商品名・提供内容・価格（税込）・支払時期と方法・提供時期・返金と解約の条件・申込の期限を表示します（特定商取引法 第12条の6）。決済サービス（Stripe、UnivaPay、銀行振込の案内など）の画面に表示できるかを確認してください。</p>
+      </li>
+      <li>
+        <h3>受講開始（自動）</h3>
+        <p>決済完了でタグ<code>受講中</code>。受講ページ、記録フォーム、提出のしかた、家族アカウントの招待をLINEで送ります。受講開始10日目に「合わないところはありませんか」とひとこと確認（14日間の返金期間内に、不満を早めに拾う）。</p>
+      </li>
+      <li>
+        <h3>毎週の運用（担当）</h3>
+        <p>月曜：動画（自動配信）／金曜：提出のリマインド（自動）／提出から48時間以内：フィードバック（担当、１人約20〜25分）。受診の目安に当たる記録や相談が出たら、受講を一時止めて受診をすすめる（対応ルールは医師の監修で作るのがおすすめ）。</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===================== 6 ===================== -->
+  <section id="sim" aria-labelledby="sim-h">
+    <h2 id="sim-h"><span class="num">6</span>収支シミュレーター</h2>
+    <p>数字はすべて仮定です。最初の１〜２か月の実績が出たら、実際の数字に置き換えて判断してください。</p>
+    <div class="sim" id="sim-form" role="group" aria-label="仮定の数字" aria-describedby="sim-note">
+      <fieldset>
+        <legend>集客</legend>
+        <label>月の広告費（円）<input type="number" id="s-ad" value="1000000" min="0" step="50000"></label>
+        <label>LINE登録１人あたりの広告費（円）<input type="number" id="s-cpl" value="1000" min="1" step="50"></label>
+        <label>受診案内で対象外になる割合（%）<input type="number" id="s-ex" value="10" min="0" max="100" step="1"></label>
+        <label>セミナーの視聴率（%）<input type="number" id="s-view" value="25" min="0" max="100" step="1"></label>
+      </fieldset>
+      <fieldset>
+        <legend>販売</legend>
+        <label>視聴者の申込率（%）<input type="number" id="s-apply" value="5" min="0" max="100" step="0.5"></label>
+        <label>受講前チェックを通る割合（%）<input type="number" id="s-pass" value="85" min="0" max="100" step="1"></label>
+        <label>決済完了率（%）<input type="number" id="s-pay" value="85" min="0" max="100" step="1"></label>
+        <label>受講料（円）<input type="number" id="s-price" value="300000" min="0" step="10000"></label>
+        <label>14日以内の返金率（%）<input type="number" id="s-refund" value="8" min="0" max="100" step="1"></label>
+        <label>月の受付上限（人）<input type="number" id="s-cap" value="20" min="1" step="1"></label>
+      </fieldset>
+      <fieldset>
+        <legend>自習版・費用</legend>
+        <label>自習版の購入率（対象者の%）<input type="number" id="s-selfr" value="2" min="0" max="100" step="0.5"></label>
+        <label>自習版の価格（円・未定）<input type="number" id="s-selfp" value="19800" min="0" step="1000"></label>
+        <label>決済手数料（%）<input type="number" id="s-fee" value="3.6" min="0" max="20" step="0.1"></label>
+        <label>担当１人が同時に見る受講者（人）<input type="number" id="s-load" value="30" min="1" step="1"></label>
+        <label>担当１人の月の費用（円）<input type="number" id="s-coach" value="400000" min="0" step="10000"></label>
+        <label>ツール類の月の費用（円）<input type="number" id="s-tool" value="50000" min="0" step="5000"></label>
+      </fieldset>
+    </div>
+    <p class="small" id="sim-note">「担当の人数」は、毎月同じ人数が入り、12週間（約３か月）在籍し続けたときに必要な人数です。</p>
+
+    <div class="tiles" aria-live="polite">
+      <div class="tile"><p class="tile__l">月の受講者</p><p class="tile__v" id="o-students">–</p><p class="tile__s" id="o-cap"></p></div>
+      <div class="tile"><p class="tile__l">月の売上（返金・手数料を引いたあと）</p><p class="tile__v" id="o-sales">–</p><p class="tile__s" id="o-sales-s"></p></div>
+      <div class="tile"><p class="tile__l">月の差引（広告費・担当・ツールを引いたあと）</p><p class="tile__v" id="o-profit">–</p><p class="tile__s" id="o-profit-s"></p></div>
+      <div class="tile"><p class="tile__l">受講者１人あたりの広告費</p><p class="tile__v" id="o-cpa">–</p><p class="tile__s" id="o-coaches"></p></div>
+    </div>
+
+    <figure class="funnel-chart">
+      <figcaption>月の人数（LINE登録から受講まで）</figcaption>
+      <ul id="o-funnel" class="bars" aria-label="月の人数"></ul>
+    </figure>
+  </section>
+
+  <!-- ===================== 7 ===================== -->
+  <section id="law" aria-labelledby="law-h">
+    <h2 id="law-h"><span class="num">7</span>法令・表現のチェック</h2>
+    <p>高額で、健康にかかわり、40〜80代が中心の商品です。トラブルを防ぐ作りにしてあります。公開前に、消費者関連の法律にくわしい専門家の確認を受けてください。</p>
+    <div class="law-wrap" tabindex="0" role="region" aria-label="法令・表現のチェック表（横にスクロールできます）">
+      <table class="law">
+        <thead><tr><th>確認すること</th><th>根拠</th><th>このページ・導線での対応</th><th>残っている作業</th></tr></thead>
+        <tbody>
+          <tr><td>通信販売の表示（価格・支払時期・提供時期・返品や解約の条件）</td><td>特定商取引法 第11条</td><td><code>tokushoho.html#course</code> に12週間コースの欄を追加</td><td>事業者情報と、15日目以降の解約条件を記入</td></tr>
+          <tr><td>お支払い直前の最終確認画面</td><td>特定商取引法 第12条の6</td><td>表示すべき項目を「5. 申込から受講開始まで」に記載</td><td>決済サービスの画面で表示できるか確認</td></tr>
+          <tr><td>誇大な広告・効果の言い切り</td><td>特定商取引法 第12条、消費者契約法 第4条</td><td>販売ページ・LINE・台本で「治る」と言わない。FAQで「お約束できません」と明記</td><td>広告文も同じ基準で書く</td></tr>
+          <tr><td>根拠のない値引き・限定</td><td>景品表示法</td><td>通常価格との比較なし。定員は担当の人数に基づく月20名</td><td>定員と締切を運用で守る</td></tr>
+          <tr><td>受講者の声・紹介者の投稿</td><td>景品表示法（ステルスマーケティング規制、2023年10月〜）</td><td>架空の声は使わない</td><td>実例は許諾を取り、紹介者を使うなら「広告」「PR」と表示</td></tr>
+          <tr><td>医療との線引き</td><td>医師法 第17条</td><td>フィードバックは生活習慣の助言に限る。受講前チェックと受診案内</td><td>担当者向けの「受診をすすめる基準」を作る</td></tr>
+          <tr><td>健康に関する情報の取得</td><td>個人情報保護法（要配慮個人情報の取得には本人の同意）</td><td>申込フォームで同意を取得。<code>privacy.html</code> のひな形を追加</td><td>委託先・保管期間を記入</td></tr>
+          <tr><td>電話での勧誘をしない</td><td>特定商取引法（電話勧誘販売）</td><td>やりとりはLINEの文字のみ。通話・面談なし</td><td>問い合わせに電話で折り返さない運用にする</td></tr>
+          <tr><td>広告の審査</td><td>Google・Meta・LINE広告の各ポリシー</td><td>広告の入口は無料小冊子（効果をうたわない）</td><td>出稿前に審査を通す</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 8 ===================== -->
+  <section id="todo" aria-labelledby="todo-h">
+    <h2 id="todo-h"><span class="num">8</span>公開までにやること</h2>
+    <ol class="todo">
+      <li><b>商品の中身を決める</b>：担当スタッフ（資格・人数）、カリキュラム、返信の時間、定員</li>
+      <li><b>価格と条件を決める</b>：受講料、14日間返金、15日目以降の解約、休会の条件</li>
+      <li><b>LINEの配信ツールを決める</b>：ステップ配信・タグ・流入経路URLが使えるもの。<code>assets/js/funnel.js</code> の <code>lineUrl</code> に設定</li>
+      <li><b>動画セミナーを撮る</b>：「4. 台本」をもとに。１人ずつ視聴期限を設定できる視聴ページを用意</li>
+      <li><b>申込フォームの受け取り先</b>：<code>applyEndpoint</code> を設定し、受講可否の連絡テンプレートを配信ツールに登録</li>
+      <li><b>決済ページ</b>：最終確認画面の表示項目を確認</li>
+      <li><b>自習版の価格</b>：既存LPの〇〇,〇〇〇円を決める（申し込まなかった方の受け皿）</li>
+      <li><b>表記と規約</b>：特定商取引法の表記・個人情報の取り扱いを記入し、専門家の確認を受ける</li>
+      <li><b>最初の受講者</b>：最初の数名はモニター価格で募集し、許諾を得た実例と、変化がなかった人の割合を集める</li>
+      <li><b>毎週見る数字</b>：登録単価、７日目までの継続、視聴率、申込率、決済率、返金率</li>
+    </ol>
+    <p class="small">作ったもの：小冊子プレゼントのページ <code>free/</code>、12週間コースの販売ページと申込フォーム <code>program/</code>、特定商取引法の表記に12週間コースの欄、個人情報の取り扱いのひな形 <code>privacy.html</code>、小冊子の裏表紙を「無料動画セミナー」の案内に変更、既存LPに無料小冊子への導線を追加。</p>
+  </section>
+
+</main>
+
+<footer class="foot"><div class="w"><p>静寂の夜メソッド｜販売導線の設計書（仮の商品案）。数字・価格・商品の中身はすべて仮です。</p></div></footer>
+
+</body>
+</html>
