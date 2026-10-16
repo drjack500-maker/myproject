@@ -1,0 +1,10 @@
+# 患者の画像・生成物はこの public リポジトリに入れない
+*.jpg
+*.jpeg
+*.png
+*.mp3
+*.wav
+*.mp4
+fonts/
+voice/
+drive/
