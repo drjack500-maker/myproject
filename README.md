@@ -12,6 +12,7 @@ https://www.meieki-dental.net/all_on_4_004/ の予約（コンバージョン）
 | [`server/gas/README.md`](server/gas/README.md) | 予約フォームの受信設定（Google スプレッドシートの予約台帳・通知メール・広告への成約データ連携） |
 | [`docs/reception-manual.md`](docs/reception-manual.md) | 予約リクエストの受付対応マニュアル（電話のタイミング・トーク例・台帳の更新・リマインド） |
 | [`docs/video/allon4-15min-narration.md`](docs/video/allon4-15min-narration.md) | **オールオンフォー15分講座のナレーション動画の原稿**（ステップメールの「動画はこちら」用。いびき改善5ステップ動画と同じ形式。画面の指示・注記・表現のチェック・制作前の確認事項つき） |
+| [`video-allon4/`](video-allon4/) | **上の原稿から作った動画**（15分23秒・字幕入り）の材料と作り方。`npm run build:video:allon4` で `dist/video-allon4/` に動画・字幕・サムネイル・YouTube概要欄を書き出す |
 
 ## ファイル構成
 

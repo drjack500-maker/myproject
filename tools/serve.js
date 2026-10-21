@@ -13,7 +13,7 @@ const TYPES = {
   '.avif': 'image/avif', '.ico': 'image/x-icon', '.json': 'application/json',
 };
 
-function createServer() {
+function createServer(root = ROOT) {
   return http.createServer((req, res) => {
     let url;
     try {
@@ -22,8 +22,8 @@ function createServer() {
       res.writeHead(400).end('Bad Request'); // 不正な % エスケープでもサーバーを落とさない
       return;
     }
-    let file = path.join(ROOT, url);
-    const rel = path.relative(ROOT, file);
+    let file = path.join(root, url);
+    const rel = path.relative(root, file);
     if (rel.startsWith('..') || path.isAbsolute(rel)) { res.writeHead(403).end(); return; } // lp/ の外は返さない
     if (url.endsWith('/')) file = path.join(file, 'index.html');
     fs.readFile(file, (err, body) => {

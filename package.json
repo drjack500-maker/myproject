@@ -10,7 +10,8 @@
     "lint:html": "html-validate lp/*.html",
     "build:images": "node tools/build-images.js",
     "build:preview": "node tools/build-preview.js",
-    "build:hotfix": "node tools/build-hotfix.js"
+    "build:hotfix": "node tools/build-hotfix.js",
+    "build:video:allon4": "node tools/build-video-allon4.js"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
