@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // 56秒スターター動画の書き出し。
-// scene.html を Chromium で1コマずつ撮影し、audio.py で作った音と合わせて ffmpeg で MP4 にする。
+// scene.html を Chromium で1コマずつ撮影し、audio.py で作った音（BGM・合図・ナレーション）と合わせて ffmpeg で MP4 にする。
 //
-//   node render.js                    … output/snore-reset-56-starter.mp4 と output/poster.jpg を作る
+//   node render.js                    … output/ に動画（snore-reset-56-starter.mp4）・サムネイル（poster.jpg）・字幕（captions.srt）を作る
 //   node render.js --stills 3,15,45   … 指定した秒の静止画だけ output/still-*.png に書き出す（確認用）
 //   node render.js --fps 24           … フレームレートを変える（既定 30）
 const path = require('path');
@@ -43,7 +43,7 @@ const POSTER_T = 2.4;
   }
 
   const wav = path.join(OUT, 'audio.wav');
-  execFileSync('python3', [path.join(DIR, 'audio.py'), wav, String(duration)], { stdio: 'inherit' });
+  execFileSync('python3', [path.join(DIR, 'audio.py'), wav, path.join(OUT, 'captions.srt')], { stdio: 'inherit' });
 
   const ff = spawn('ffmpeg', [
     '-y', '-loglevel', 'error',

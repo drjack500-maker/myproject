@@ -12,7 +12,7 @@
   - そのまま開く      … 再生プレビュー（クリックで最初から）
   - ?t=12.5          … その時刻の静止画
   - ?render=1        … 書き出し用（render.js が window.render(t) を1コマずつ呼ぶ）
-  タイミングを変えるときは audio.py の効果音の時刻も合わせて変える。
+  タイミングとナレーションは timeline.js にまとめてある（audio.py も同じファイルを読む）。
 -->
 <style>
 :root{--navy:#111a34;--indigo:#4657d7;--violet:#6955d9;--ink:#192236;--muted:#6b7280;--green:#1f9d57;--soft:#eef1ff}
@@ -204,33 +204,36 @@ body.preview #play{display:block}
 </div>
 <button id="play" type="button">▶ 最初から再生</button>
 
+<script src="timeline.js"></script>
 <script>
 'use strict';
-const DURATION = 56;
+const TL = window.TIMELINE;
+const DURATION = TL.duration;
 const $ = id => document.getElementById(id);
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, x) => a + (b - a) * x;
 const ease = x => (x = clamp(x), x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
 const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
 const inOut = (t, s, e, fi = .35, fo = .25) => Math.min(clamp((t - s) / fi), clamp((e - t) / fo));
+const lastStart = (starts, t) => starts.reduce((k, s, i) => (t >= s ? i : k), -1);   // t までに始まった最後の回（まだなら -1）
 
 // ---------- 場面 ----------
 const PHASES = [
- {id: 'intro', s: 0, e: 5},
- {id: 'prep', s: 5, e: 10, seg: 0, label: '準備', title: '姿勢をととのえる',
+ {id: 'intro', s: 0, e: TL.prep},
+ {id: 'prep', s: TL.prep, e: TL.s1, seg: 0, label: '準備', title: '姿勢をととのえる',
   instr: '背すじを伸ばして座り、肩の力を抜く。<br>口を閉じて、鼻でゆっくり呼吸。'},
- {id: 's1', s: 10, e: 24, seg: 1, label: 'STEP 1 / 3', title: '舌スライド',
+ {id: 's1', s: TL.s1, e: TL.s2, seg: 1, label: 'STEP 1 / 3', title: '舌スライド',
   instr: '舌先を上の前歯のすぐ裏につけ、<br>上あごをなぞるように奥へ。'},
- {id: 's2', s: 24, e: 38, seg: 2, label: 'STEP 2 / 3', title: '舌の吸いつけ',
+ {id: 's2', s: TL.s2, e: TL.s3, seg: 2, label: 'STEP 2 / 3', title: '舌の吸いつけ',
   instr: '舌全体を上あごにピタッと<br>押し当てて、5秒キープ。'},
- {id: 's3', s: 38, e: 50, seg: 3, label: 'STEP 3 / 3', title: '「アー」発声',
+ {id: 's3', s: TL.s3, e: TL.outro, seg: 3, label: 'STEP 3 / 3', title: '「アー」発声',
   instr: '口を大きく開けて「アー」。<br>のどの奥が上がるのを意識して。'},
- {id: 'outro', s: 50, e: 56}
+ {id: 'outro', s: TL.outro, e: DURATION}
 ];
 const phaseAt = t => PHASES.find(p => t < p.e) || PHASES[PHASES.length - 1];
-const S1_REP = 2.4, S1_SLIDE = 1.6;          // 舌スライド：1回2.4秒（奥へ1.6秒＋戻す0.8秒）×5回（12〜24秒）
-const S2_HOLDS = [26, 32], S2_HOLD = 5;       // 舌の吸いつけ：5秒キープ×2回
-const S3_REP = 10 / 3, S3_AH = 2.4;          // アー：3.33秒ごと×3回（40〜50秒）
+const S1_REPS = TL.s1Reps, S1_REP = TL.s1Rep, S1_SLIDE = TL.s1Slide;   // 舌スライド：奥へ S1_SLIDE 秒＋戻す ×5回
+const S2_HOLDS = TL.s2Holds, S2_HOLD = TL.s2Hold;                     // 舌の吸いつけ：5秒キープ×2回
+const S3_AHS = TL.s3Ahs, S3_AH = TL.s3Ah;                             // 「アー」×3回
 
 // ---------- 図形の道具 ----------
 function crPath(pts, closed, gap = -1) {   // gap：線を引かずに飛ばす区間（口を開けたときの唇のすき間）
@@ -322,35 +325,39 @@ const T_PRESS = (() => {
 // 時刻 → 図の状態
 function diagState(t) {
  const st = {tongue: T_REST, jaw: 0, soft: 0, air: 0, airDir: 0, spot: 0, arrow: 0, arrowDraw: 0, glow: 0, lift: 0, waves: 0, wavePhase: 0, labels: {}};
- if (t < 10) {
-  if (t >= 5) {
-   const u = t - 5; st.air = inOut(t, 5.3, 10, .4, .4); st.airDir = u < 2.5 ? 1 : -1; st.airPhase = u;
-   st.labels.nose = inOut(t, 5.4, 10, .4, .3);
+ if (t < TL.s1) {
+  if (t >= TL.prep) {
+   const inh = t < TL.exhale[0];
+   st.air = inOut(t, TL.prep + .3, TL.s1, .4, .4); st.airDir = inh ? 1 : -1; st.airPhase = t - (inh ? TL.inhale[0] : TL.exhale[0]);
+   st.labels.nose = inOut(t, TL.prep + .4, TL.s1, .4, .3);
   }
- } else if (t < 24) {
-  st.labels.spot = inOut(t, 10.3, 24); st.labels.slide = inOut(t, 12, 24);
-  st.spot = inOut(t, 10.4, 24, .4, .3);
-  if (t < 12) st.tongue = mixPts(T_REST, tSlide(0), ease((t - 10.6) / 1.0));
+ } else if (t < TL.s2) {
+  st.labels.spot = inOut(t, TL.s1 + .3, TL.s2); st.labels.slide = inOut(t, S1_REPS[0] - .4, TL.s2);
+  st.spot = inOut(t, TL.s1 + .4, TL.s2, .4, .3);
+  const k = lastStart(S1_REPS, t);
+  if (k < 0) st.tongue = mixPts(T_REST, tSlide(0), ease((t - TL.s1Spot[0]) / (TL.s1Spot[1] - TL.s1Spot[0])));
   else {
-   const k = Math.min(4, Math.floor((t - 12) / S1_REP)), u = (t - 12) - k * S1_REP;
+   const u = t - S1_REPS[k];
    const x = u < S1_SLIDE ? ease(u / S1_SLIDE) : 1 - ease((u - S1_SLIDE) / (S1_REP - S1_SLIDE));
    st.tongue = tSlide(x);
-   st.arrow = inOut(t, 12, 24, .3, .3) * (u < S1_SLIDE + .2 ? 1 : 1 - clamp((u - S1_SLIDE - .2) / .4));
+   st.arrow = inOut(t, S1_REPS[0], TL.s2, .3, .3) * (u < S1_SLIDE + .2 ? 1 : 1 - clamp((u - S1_SLIDE - .2) / .4));
    st.arrowDraw = u < S1_SLIDE ? ease(u / S1_SLIDE) : 1;
   }
- } else if (t < 38) {
-  st.labels.press = inOut(t, 24.3, 38);
-  if (t < 26) st.tongue = mixPts(tSlide(0), T_REST, ease((t - 24) / .8));
+ } else if (t < TL.s3) {
+  st.labels.press = inOut(t, TL.s2 + .3, TL.s3);
+  const k = lastStart(S2_HOLDS, t);
+  if (k < 0) st.tongue = mixPts(tSlide(0), T_REST, ease((t - TL.s2) / .8));
   else {
-   const hs = t < 32 ? S2_HOLDS[0] : S2_HOLDS[1], u = t - hs;
-   const x = u < S2_HOLD ? ease(u / .45) : 1 - ease((u - S2_HOLD) / .5);
+   const u = t - S2_HOLDS[k];
+   const x = u < S2_HOLD ? ease(u / .4) : 1 - ease((u - S2_HOLD) / .5);
    st.tongue = mixPts(T_REST, T_PRESS, x);
    st.glow = u < S2_HOLD ? clamp(u / .5) * (.55 + .2 * Math.sin(u * Math.PI * 2)) : 0;
   }
- } else if (t < 50) {
-  st.labels.soft = inOut(t, 38.3, 50);
-  if (t >= 40) {
-   const k = Math.min(2, Math.floor((t - 40) / S3_REP)), u = (t - 40) - k * S3_REP;
+ } else if (t < TL.outro) {
+  st.labels.soft = inOut(t, TL.s3 + .3, TL.outro);
+  const k = lastStart(S3_AHS, t);
+  if (k >= 0) {
+   const u = t - S3_AHS[k];
    const open = u < .35 ? ease(u / .35) : u < S3_AH ? 1 : 1 - ease((u - S3_AH) / .4);
    st.jaw = open; st.tongue = mixPts(T_REST, T_AH, open);
    st.soft = u < S3_AH ? ease((u - .12) / .4) : 1 - ease((u - S3_AH) / .35);
@@ -449,22 +456,22 @@ function render(t, opts = {}) {   // opts.poster：サムネイル用にリン�
  const left = opts.poster ? DURATION : DURATION - t;
  $('ringSec').textContent = Math.ceil(left - 1e-6);
  $('ringArc').setAttribute('stroke-dasharray', `${Math.max(.0001, left / DURATION).toFixed(4)} 2`);
- const fly = ease((t - 4.3) / .9), sc = lerp(1, 150 / 440, fly);
+ const fly = ease((t - (TL.prep - .6)) / .9), sc = lerp(1, 150 / 440, fly);
  const rx = lerp(320, 1080 - 56 - 150, fly), ry = lerp(560, 40, fly);
  const ringIn = easeOut(t / .7);
  $('ring').style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px) scale(${(sc * lerp(.85, 1, ringIn)).toFixed(4)})`;
- $('ring').style.opacity = (Math.min(ringIn, 1 - clamp((t - 49.7) / .4))).toFixed(3);
+ $('ring').style.opacity = (Math.min(ringIn, 1 - clamp((t - (TL.outro - .3)) / .4))).toFixed(3);
 
  // イントロ
- const introOut = clamp((t - 4.2) / .5);
+ const introOut = clamp((t - (TL.prep - .7)) / .5);
  [...$('intro').children].forEach((el, i) => {
   const a = easeOut((t - (.45 + i * .4)) / .55);
   el.style.opacity = (a * (1 - introOut)).toFixed(3);
   el.style.transform = `translateY(${((1 - a) * 40 - introOut * 40).toFixed(1)}px)`;
  });
 
- // 本編UI（5〜50秒）
- const ui = Math.min(easeOut((t - 4.8) / .6), 1 - clamp((t - 49.8) / .45));
+ // 本編UI（準備〜STEP 3）
+ const ui = Math.min(easeOut((t - (TL.prep - .2)) / .6), 1 - clamp((t - (TL.outro - .2)) / .45));
  setOp('prog', ui); setOp('foot', ui * .62);
  setOp('card', ui, (1 - ui) * 60);
  PHASES.filter(p => p.seg !== undefined).forEach(p => {
@@ -484,7 +491,7 @@ function render(t, opts = {}) {   // opts.poster：サムネイル用にリン�
  drawCounter(t, ph, ui);
 
  // エンディング
- const o = t - 50;
+ const o = t - TL.outro;
  setOp('outro', o > 0 ? 1 : 0);
  if (o > 0) {
   const ring = ease((o - .3) / .7), chk = ease((o - .8) / .45);
@@ -503,29 +510,32 @@ function render(t, opts = {}) {   // opts.poster：サムネイル用にリン�
 function drawCounter(t, ph, ui) {
  let big = '', small = '', cue = '', dots = null, hold = -1, breath = 0, key = '', pop = 99;
  if (ph.id === 'prep') {
-  const u = t - 5, inh = u < 2.5;
+  const inh = t < TL.exhale[0], [a, b] = inh ? TL.inhale : TL.exhale;
   cue = inh ? '鼻から、吸って…' : '鼻から、吐いて…';
-  breath = inh ? lerp(.62, 1, ease(u / 2.5)) : lerp(1, .62, ease((u - 2.5) / 2.5));
+  breath = inh ? lerp(.62, 1, ease((t - a) / (b - a))) : lerp(1, .62, ease((t - a) / (b - a)));
   key = 'prep' + inh;
  } else if (ph.id === 's1') {
-  if (t < 12) { big = '5'; small = '回'; cue = 'まず舌先をスポットへ'; dots = [5, -1]; key = 's1i'; pop = t - 10; }
+  const n = S1_REPS.length, k = lastStart(S1_REPS, t);
+  if (k < 0) { big = String(n); small = '回'; cue = 'まず舌先をスポットへ'; dots = [n, -1]; key = 's1i'; pop = t - TL.s1; }
   else {
-   const k = Math.min(4, Math.floor((t - 12) / S1_REP)), u = (t - 12) - k * S1_REP;
-   big = String(k + 1); small = '/ 5'; cue = u < S1_SLIDE ? '上あごをなぞって、奥へ…' : '前に戻して'; dots = [5, k]; key = 's1' + k; pop = u;
+   const u = t - S1_REPS[k];
+   big = String(k + 1); small = '/ ' + n; cue = u < S1_SLIDE ? '上あごをなぞって、奥へ…' : '前に戻して'; dots = [n, k]; key = 's1' + k; pop = u;
   }
  } else if (ph.id === 's2') {
-  if (t < 26) { big = '5'; small = '秒 × 2回'; cue = 'いったん舌の力を抜いて'; dots = [2, -1]; key = 's2i'; pop = t - 24; }
+  const k = lastStart(S2_HOLDS, t);
+  if (k < 0) { big = String(S2_HOLD); small = '秒 × ' + S2_HOLDS.length + '回'; cue = '舌全体を、上あごへ'; dots = [S2_HOLDS.length, -1]; key = 's2i'; pop = t - TL.s2; }
   else {
-   const k = t < 32 ? 0 : 1, u = t - S2_HOLDS[k];
-   dots = [2, k];
+   const u = t - S2_HOLDS[k];
+   dots = [S2_HOLDS.length, k];
    if (u < S2_HOLD) { big = String(Math.ceil(S2_HOLD - u - 1e-6)); small = '秒'; cue = 'ピタッとキープ'; hold = u / S2_HOLD; key = 's2h' + k + big; pop = u - Math.floor(u); }
    else { big = '✓'; small = ''; cue = 'ゆるめて、ひと息'; dots = [2, k + .5]; key = 's2r' + k; pop = u - S2_HOLD; }
   }
  } else if (ph.id === 's3') {
-  if (t < 40) { big = '3'; small = '回'; cue = '大きく口を開ける準備を'; dots = [3, -1]; key = 's3i'; pop = t - 38; }
+  const n = S3_AHS.length, k = lastStart(S3_AHS, t);
+  if (k < 0) { big = String(n); small = '回'; cue = '大きく口を開けて…'; dots = [n, -1]; key = 's3i'; pop = t - TL.s3; }
   else {
-   const k = Math.min(2, Math.floor((t - 40) / S3_REP)), u = (t - 40) - k * S3_REP;
-   dots = [3, k];
+   const u = t - S3_AHS[k];
+   dots = [n, k];
    if (u < S3_AH) { big = 'アー'; small = ''; cue = 'のどの奥を、持ち上げる'; key = 's3a' + k; pop = u; }
    else { big = '✓'; cue = '口を閉じて、ひと息'; dots = [3, k + .5]; key = 's3r' + k; pop = u - S3_AH; }
   }
@@ -547,12 +557,20 @@ function drawCounter(t, ph, ui) {
  $('dots').style.visibility = dots ? 'visible' : 'hidden';
 }
 
+// 進行バーの各区間の幅を、場面の長さに比例させる
+function layoutProgress() {
+ const segs = PHASES.filter(p => p.seg !== undefined), total = segs.reduce((a, p) => a + p.e - p.s, 0);
+ const room = 952 - 12 * (segs.length - 1);
+ segs.forEach(p => { $('prog').children[p.seg].style.width = (room * (p.e - p.s) / total).toFixed(1) + 'px'; });
+}
+
 // ---------- 起動 ----------
 const params = new URLSearchParams(location.search);
 window.render = render;
 window.DURATION = DURATION;
 document.fonts.ready.then(() => {
  buildLabels();
+ layoutProgress();
  if (params.has('render')) { render(0); window.__ready = true; return; }
  document.body.classList.add('preview');
  const fit = () => {
