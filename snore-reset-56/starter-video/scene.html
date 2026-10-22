@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SNORE RESET 56｜56秒スターター動画</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=block" rel="stylesheet">
+<!--
+  56秒スターター動画のシーン。1080×1920 の1枚のページを、時刻 t（秒）から毎回描き直す。
+  - そのまま開く      … 再生プレビュー（クリックで最初から）
+  - ?t=12.5          … その時刻の静止画
+  - ?render=1        … 書き出し用（render.js が window.render(t) を1コマずつ呼ぶ）
+  タイミングを変えるときは audio.py の効果音の時刻も合わせて変える。
+-->
+<style>
+:root{--navy:#111a34;--indigo:#4657d7;--violet:#6955d9;--ink:#192236;--muted:#6b7280;--green:#1f9d57;--soft:#eef1ff}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0b1022}
+body{font-family:"Noto Sans JP",sans-serif;color:#fff;font-feature-settings:"palt"}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;transform-origin:0 0;background:
+ radial-gradient(circle at 88% 6%,rgba(137,114,255,.42),transparent 34%),
+ radial-gradient(circle at 0% 100%,rgba(70,87,215,.5),transparent 42%),
+ linear-gradient(165deg,#111a34 0%,#1f2b60 46%,#4a3db0 100%)}
+.abs{position:absolute}
+.num{font-family:Inter,"Noto Sans JP",sans-serif;font-variant-numeric:tabular-nums}
+
+#logo{left:64px;top:64px;font-weight:900;font-size:34px;letter-spacing:.02em;line-height:1}
+#logo span{opacity:.68}
+
+/* 残り秒数のリング（イントロでは中央に大きく、その後は右上に小さく） */
+#ring{left:0;top:0;width:440px;height:440px;transform-origin:0 0}
+#ring svg{position:absolute;inset:0}
+#ringNum{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+#ringNum b{font-size:184px;font-weight:900;letter-spacing:-.04em}
+#ringNum small{font-size:46px;font-weight:700;opacity:.82;margin-top:6px}
+
+/* イントロ */
+#intro{left:0;right:0;top:1040px;text-align:center}
+#intro .eyebrow{font-size:28px;font-weight:800;letter-spacing:.22em;opacity:.75}
+#intro h1{font-size:108px;font-weight:900;line-height:1.12;margin:14px 0 0;letter-spacing:-.02em}
+#intro p{font-size:46px;font-weight:700;margin:26px 0 0;opacity:.92}
+#intro .pill{display:inline-block;margin-top:40px;padding:16px 34px;border-radius:999px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.28);font-size:34px;font-weight:700}
+
+/* 進行バー */
+#prog{left:64px;top:232px;width:952px;display:flex;gap:12px}
+#prog .seg{min-width:0}
+#prog .bar{height:12px;border-radius:6px;background:rgba(255,255,255,.18);overflow:hidden}
+#prog .bar i{display:block;height:100%;width:0;background:#fff;border-radius:6px}
+#prog .lab{font-size:24px;font-weight:700;margin-top:12px;white-space:nowrap;opacity:.5}
+#prog .seg.on .lab{opacity:1}
+
+/* 見出し */
+#hdr{left:64px;right:64px;top:332px}
+#label{font-size:30px;font-weight:800;letter-spacing:.14em;color:#c9ceff}
+#title{font-size:92px;font-weight:900;line-height:1.15;margin-top:8px;letter-spacing:-.01em;white-space:nowrap}
+#instr{font-size:44px;font-weight:700;line-height:1.5;margin-top:20px;opacity:.93}
+
+/* 図解カード */
+#card{left:48px;top:688px;width:984px;height:765px;border-radius:48px;background:#fff;overflow:hidden;box-shadow:0 40px 90px rgba(5,8,25,.45)}
+#card svg{display:block;width:984px;height:765px}
+#card text{font-family:"Noto Sans JP",sans-serif;font-feature-settings:"palt"}
+
+/* カウンター */
+#ctr{left:0;right:0;top:1486px;height:270px;text-align:center}
+#bigRow{height:150px;display:flex;align-items:flex-end;justify-content:center;gap:14px;line-height:1}
+#big{font-size:132px;font-weight:900;letter-spacing:-.02em;display:inline-block}
+#small{font-size:44px;font-weight:800;opacity:.8;padding-bottom:12px}
+#dots{display:flex;gap:18px;justify-content:center;margin-top:20px;height:30px}
+#dots i{width:30px;height:30px;border-radius:50%;border:4px solid rgba(255,255,255,.45)}
+#dots i.done{background:#fff;border-color:#fff}
+#dots i.now{background:#9aa6ff;border-color:#fff;box-shadow:0 0 0 8px rgba(154,166,255,.3)}
+#holdbar{width:420px;height:14px;border-radius:7px;background:rgba(255,255,255,.18);margin:20px auto 0;overflow:hidden}
+#holdbar i{display:block;height:100%;background:#9aa6ff;border-radius:7px}
+#cue{font-size:44px;font-weight:700;margin-top:22px}
+#breath{left:50%;top:0;width:150px;height:150px;margin-left:-75px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c3cbff,#6f7cf0);box-shadow:0 0 60px rgba(154,166,255,.55)}
+
+#foot{left:64px;right:64px;top:1800px;text-align:center;font-size:27px;font-weight:500;opacity:.62}
+
+/* エンディング */
+#outro{left:0;right:0;top:0;bottom:0}
+#done{left:390px;top:330px;width:300px;height:300px}
+#doneTitle{left:0;right:0;top:680px;text-align:center;font-size:112px;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+#doneSub{left:0;right:0;top:832px;text-align:center;font-size:46px;font-weight:700;line-height:1.5;opacity:.93}
+#chips{left:0;right:0;top:1010px;display:flex;justify-content:center;gap:16px}
+#chips span{padding:14px 26px;border-radius:999px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3);font-size:31px;font-weight:700;white-space:nowrap}
+#chips span b{color:#7ee2a8;margin-right:8px}
+#cta{left:64px;right:64px;top:1150px;padding:44px 48px 48px;border-radius:44px;background:#fff;color:var(--ink);box-shadow:0 40px 90px rgba(5,8,25,.45)}
+#cta .eb{font-size:26px;font-weight:900;letter-spacing:.2em;color:var(--indigo)}
+#cta h2{font-size:62px;font-weight:900;line-height:1.25;margin:10px 0 0;letter-spacing:-.01em}
+#cta p{font-size:33px;line-height:1.6;color:var(--muted);margin:18px 0 0;font-weight:500}
+#cta .btn{margin-top:30px;border-radius:26px;padding:28px;text-align:center;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;font-size:40px;font-weight:900}
+#disc{left:40px;right:40px;top:1744px;font-size:26px;line-height:1.6;opacity:.66;text-align:center}
+
+/* プレビュー用 */
+body.preview{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;overflow:hidden}
+body.preview #wrap{position:relative}
+#play{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#fff;color:#26347e;border:0;border-radius:999px;padding:12px 22px;font:700 15px "Noto Sans JP",sans-serif;cursor:pointer;display:none}
+body.preview #play{display:block}
+</style>
+</head>
+<body>
+<div id="wrap">
+<div id="stage">
+
+ <div id="logo" class="abs">SNORE <span>RESET 56</span></div>
+
+ <div id="prog" class="abs">
+  <div class="seg" style="width:102px"><div class="bar"><i></i></div><div class="lab">準備</div></div>
+  <div class="seg" style="width:285px"><div class="bar"><i></i></div><div class="lab">① 舌スライド</div></div>
+  <div class="seg" style="width:285px"><div class="bar"><i></i></div><div class="lab">② 舌の吸いつけ</div></div>
+  <div class="seg" style="width:244px"><div class="bar"><i></i></div><div class="lab">③「アー」発声</div></div>
+ </div>
+
+ <div id="hdr" class="abs">
+  <div id="label"></div>
+  <div id="title"></div>
+  <div id="instr"></div>
+ </div>
+
+ <div id="card" class="abs">
+  <svg id="dia" viewBox="100 60 720 560" aria-label="口の中の断面図">
+   <defs>
+    <filter id="blur" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+    <marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#4657d7"/></marker>
+    <marker id="ahBlue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0L10,5L0,10z" fill="#3d7bff"/></marker>
+   </defs>
+   <path id="head" fill="#e7eafb"/>
+   <path id="airway" fill="#d9e7ff"/>
+   <path id="mouth" fill="#d9e7ff"/>
+   <path id="air" fill="none" stroke="#3d7bff" stroke-width="7" stroke-linecap="round" stroke-dasharray="16 24" opacity="0"/>
+   <path id="tongue" fill="#f4919f" stroke="#d9677b" stroke-width="3.5" stroke-linejoin="round"/>
+   <path id="groove" fill="none" stroke="#e5788a" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+   <text id="tongueLab" font-size="36" font-weight="900" fill="#fff" text-anchor="middle">舌</text>
+   <path id="glow" fill="none" stroke="#7d8bff" stroke-width="40" stroke-linecap="round" filter="url(#blur)" opacity="0"/>
+   <path id="soft" fill="none" stroke="#a5adf3" stroke-width="22" stroke-linecap="round"/>
+   <circle id="uvula" r="13" fill="#a5adf3"/>
+   <path id="palate" fill="none" stroke="#6c79df" stroke-width="16" stroke-linecap="round"/>
+   <path id="toothU" fill="#fff" stroke="#b8bed8" stroke-width="3" stroke-linejoin="round"/>
+   <path id="toothL" fill="#fff" stroke="#b8bed8" stroke-width="3" stroke-linejoin="round"/>
+   <path id="outline" fill="none" stroke="#b7bfee" stroke-width="5" stroke-linejoin="round"/>
+   <g id="eye" fill="none" stroke="#9aa2cf" stroke-width="4" stroke-linecap="round">
+    <path d="M262,150 Q286,138 310,148"/>
+    <path d="M266,184 Q286,170 306,182"/>
+    <path d="M268,186 Q286,198 304,186"/>
+    <circle cx="275" cy="184" r="6" fill="#9aa2cf" stroke="none"/>
+   </g>
+   <!-- ステップごとの強調 -->
+   <g id="spot" opacity="0"><circle id="spotRing" r="22" fill="none" stroke="#4657d7" stroke-width="4"/><circle r="9" fill="#4657d7"/></g>
+   <path id="slideArrow" fill="none" stroke="#4657d7" stroke-width="7" stroke-linecap="round" marker-end="url(#ah)" opacity="0"/>
+   <path id="liftArrow" d="M614,402 C624,372 624,346 612,324" fill="none" stroke="#4657d7" stroke-width="7" stroke-linecap="round" marker-end="url(#ah)" opacity="0"/>
+   <g id="waves" fill="none" stroke="#4657d7" stroke-width="6" stroke-linecap="round" opacity="0">
+    <path d="M150,425 Q136,452 150,479"/><path d="M118,405 Q96,452 118,499"/><path d="M86,385 Q56,452 86,519"/>
+   </g>
+   <g id="labels"></g>
+  </svg>
+ </div>
+
+ <div id="ctr" class="abs">
+  <div id="breath" class="abs"></div>
+  <div id="bigRow"><span id="big" class="num"></span><span id="small"></span></div>
+  <div id="dots"></div>
+  <div id="holdbar"><i></i></div>
+  <div id="cue"></div>
+ </div>
+
+ <div id="foot" class="abs">痛みや違和感があれば、すぐに中止してください。</div>
+
+ <div id="intro" class="abs">
+  <div class="eyebrow">FREE STARTER VIDEO</div>
+  <h1>今夜、まず56秒。</h1>
+  <p>舌とのどの、3ステップ。</p>
+  <div class="pill">歯みがきのあと・座ったままでOK</div>
+ </div>
+
+ <div id="outro" class="abs">
+  <svg id="done" class="abs" viewBox="0 0 300 300">
+   <circle id="doneBg" cx="150" cy="150" r="138" fill="#1f9d57" opacity="0"/>
+   <circle id="doneRing" cx="150" cy="150" r="138" fill="none" stroke="#7ee2a8" stroke-width="12" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1" transform="rotate(-90 150 150)"/>
+   <path id="doneCheck" d="M88,154 L132,196 L214,110" fill="none" stroke="#fff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1"/>
+  </svg>
+  <div id="doneTitle" class="abs">56秒、完了！</div>
+  <div id="doneSub" class="abs">おつかれさまでした。<br>明日の夜も、同じ56秒を。</div>
+  <div id="chips" class="abs"><span><b>✓</b>舌スライド</span><span><b>✓</b>舌の吸いつけ</span><span><b>✓</b>「アー」発声</span></div>
+  <div id="cta" class="abs">
+   <div class="eb">NEXT STEP</div>
+   <h2>続けるなら、<br>56日間の「続く仕組み」へ。</h2>
+   <p>朝30秒の記録と夜5〜10分のセルフケアで、<br>自分に合う習慣を見つけるプログラムです。</p>
+   <div class="btn">SNORE RESET 56 プログラム</div>
+  </div>
+  <div id="disc" class="abs">※本動画はセルフケア習慣の入口です。効果を保証するものではありません。<br>呼吸が止まる・強い日中の眠気などがある場合は、<br>医療機関への相談を優先してください。</div>
+ </div>
+
+ <div id="ring" class="abs">
+  <svg viewBox="0 0 440 440">
+   <circle cx="220" cy="220" r="200" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)" stroke-width="18"/>
+   <circle id="ringArc" cx="220" cy="220" r="200" fill="none" stroke="#fff" stroke-width="18" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1" transform="rotate(-90 220 220)"/>
+  </svg>
+  <div id="ringNum"><b class="num" id="ringSec">56</b><small>秒</small></div>
+ </div>
+
+</div>
+</div>
+<button id="play" type="button">▶ 最初から再生</button>
+
+<script>
+'use strict';
+const DURATION = 56;
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, x) => a + (b - a) * x;
+const ease = x => (x = clamp(x), x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const inOut = (t, s, e, fi = .35, fo = .25) => Math.min(clamp((t - s) / fi), clamp((e - t) / fo));
+
+// ---------- 場面 ----------
+const PHASES = [
+ {id: 'intro', s: 0, e: 5},
+ {id: 'prep', s: 5, e: 10, seg: 0, label: '準備', title: '姿勢をととのえる',
+  instr: '背すじを伸ばして座り、肩の力を抜く。<br>口を閉じて、鼻でゆっくり呼吸。'},
+ {id: 's1', s: 10, e: 24, seg: 1, label: 'STEP 1 / 3', title: '舌スライド',
+  instr: '舌先を上の前歯のすぐ裏につけ、<br>上あごをなぞるように奥へ。'},
+ {id: 's2', s: 24, e: 38, seg: 2, label: 'STEP 2 / 3', title: '舌の吸いつけ',
+  instr: '舌全体を上あごにピタッと<br>押し当てて、5秒キープ。'},
+ {id: 's3', s: 38, e: 50, seg: 3, label: 'STEP 3 / 3', title: '「アー」発声',
+  instr: '口を大きく開けて「アー」。<br>のどの奥が上がるのを意識して。'},
+ {id: 'outro', s: 50, e: 56}
+];
+const phaseAt = t => PHASES.find(p => t < p.e) || PHASES[PHASES.length - 1];
+const S1_REP = 2.4, S1_SLIDE = 1.6;          // 舌スライド：1回2.4秒（奥へ1.6秒＋戻す0.8秒）×5回（12〜24秒）
+const S2_HOLDS = [26, 32], S2_HOLD = 5;       // 舌の吸いつけ：5秒キープ×2回
+const S3_REP = 10 / 3, S3_AH = 2.4;          // アー：3.33秒ごと×3回（40〜50秒）
+
+// ---------- 図形の道具 ----------
+function crPath(pts, closed, gap = -1) {   // gap：線を引かずに飛ばす区間（口を開けたときの唇のすき間）
+ const n = pts.length, P = i => closed ? pts[(i + n) % n] : pts[Math.max(0, Math.min(n - 1, i))];
+ let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
+ for (let i = 0; i < (closed ? n : n - 1); i++) {
+  const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+  if (i === gap) { d += `M${p2[0].toFixed(1)},${p2[1].toFixed(1)}`; continue; }
+  const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+  const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+  d += `C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+ }
+ return closed ? d + 'Z' : d;
+}
+function crSample(pts, per = 24) {
+ const n = pts.length, P = i => pts[Math.max(0, Math.min(n - 1, i))], out = [];
+ for (let i = 0; i < n - 1; i++) {
+  const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+  for (let j = 0; j < per; j++) {
+   const u = j / per, u2 = u * u, u3 = u2 * u;
+   out.push([0, 1].map(k => .5 * (2 * p1[k] + (-p0[k] + p2[k]) * u + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * u2 + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * u3)));
+  }
+ }
+ out.push(pts[n - 1]);
+ return out;
+}
+const mixPts = (A, B, x) => A.map((p, i) => [lerp(p[0], B[i][0], x), lerp(p[1], B[i][1], x)]);
+const add = (p, dx, dy) => [p[0] + dx, p[1] + dy];
+function rot(p, c, deg, dx = 0, dy = 0) {
+ const r = deg * Math.PI / 180, x = p[0] - c[0], y = p[1] - c[1];
+ return [c[0] + x * Math.cos(r) - y * Math.sin(r) + dx, c[1] + x * Math.sin(r) + y * Math.cos(r) + dy];
+}
+
+// ---------- 断面図（横顔・左向き） ----------
+const JAW_PIVOT = [660, 290], JAW_DEG = -9, JAW_SHIFT = [-18, 4];
+const jawT = (p, open, k = 1) => rot(p, JAW_PIVOT, JAW_DEG * open * k, JAW_SHIFT[0] * open * k, JAW_SHIFT[1] * open * k);
+const FACE_FIXED = [[300, -30], [262, 80], [250, 148], [238, 176], [200, 250], [156, 310], [170, 336], [204, 344], [198, 370], [189, 394], [206, 410]];
+const FACE_JAW = [[194, 425], [190, 446], [222, 470], [210, 515], [232, 556], [330, 588], [440, 602]];
+const NECK = [[470, 730]];
+const PALATE = [[238, 346], [262, 330], [300, 315], [360, 303], [420, 299], [480, 305]];
+const SOFT_REST = [[480, 305], [520, 320], [550, 343], [564, 372]];
+const SOFT_UP = [[480, 305], [522, 302], [560, 300], [590, 312]];
+const AIRWAY = [[184, 336], [226, 302], [300, 278], [420, 264], [540, 264], [612, 282], [652, 326], [664, 430], [660, 570], [656, 740], [592, 740], [590, 580], [592, 440], [586, 350], [540, 322], [420, 300], [300, 316], [240, 342], [204, 346]];
+const AIR_FLOW = [[132, 362], [184, 336], [240, 304], [330, 284], [450, 280], [560, 284], [622, 322], [628, 430], [626, 560], [624, 700]];
+const MOUTH_FIXED = [[208, 410], [226, 404], [238, 352]];  // 上唇の内側→上の前歯の裏
+const MOUTH_JAW = [[596, 516], [520, 534], [400, 538], [292, 520], [244, 470], [236, 414], [207, 414]];  // 奥→前（下唇の内側まで）
+const TOOTH_U = [[220, 342], [244, 348], [230, 408], [210, 404]];
+const TOOTH_L = [[219, 410], [236, 412], [248, 468], [228, 471]];
+
+// 上あごの下面（舌が触れる面）を弧長で引けるようにしておく
+const palSamples = (() => {
+ const c = crSample(PALATE, 40), out = [];
+ for (let i = 0; i < c.length; i++) {
+  const a = c[Math.max(0, i - 1)], b = c[Math.min(c.length - 1, i + 1)];
+  let nx = -(b[1] - a[1]), ny = b[0] - a[0]; const L = Math.hypot(nx, ny) || 1; nx /= L; ny /= L;
+  if (ny < 0) { nx = -nx; ny = -ny; }
+  out.push([c[i][0] + nx * 10, c[i][1] + ny * 10]);
+ }
+ const len = [0];
+ for (let i = 1; i < out.length; i++) len.push(len[i - 1] + Math.hypot(out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]));
+ return {pts: out, len, total: len[len.length - 1]};
+})();
+function pal(s) {
+ const d = clamp(s) * palSamples.total, L = palSamples.len;
+ let i = 1; while (i < L.length - 1 && L[i] < d) i++;
+ const u = (d - L[i - 1]) / ((L[i] - L[i - 1]) || 1), a = palSamples.pts[i - 1], b = palSamples.pts[i];
+ return [lerp(a[0], b[0], u), lerp(a[1], b[1], u)];
+}
+
+// 舌の輪郭（先端→上面→舌根→下面）12点
+const T_REST = [[248, 430], [270, 408], [322, 384], [400, 368], [480, 370], [545, 392], [582, 440], [590, 510], [540, 548], [420, 556], [310, 530], [258, 470]];
+const T_SPOT_BODY = [null, null, null, [400, 352], [478, 360], [545, 390], [582, 440], [590, 510], [540, 548], [420, 556], [290, 516], [264, 416]];
+const T_BACK_BODY = [null, null, null, [470, 326], [520, 348], [556, 392], [584, 444], [590, 512], [540, 548], [420, 556], [276, 506], [302, 420]];
+const T_AH = [[252, 438], [282, 430], [340, 422], [420, 420], [492, 426], [548, 448], [580, 490], [588, 530], [540, 556], [420, 562], [310, 536], [258, 476]];
+const SPOT_S = .07, BACK_S = .5;
+function tSlide(x) {           // x=0：舌先がスポット / x=1：上あごの中ほどまで奥へ
+ const s = lerp(SPOT_S, BACK_S, x);
+ const body = T_SPOT_BODY.map((p, i) => p && [lerp(p[0], T_BACK_BODY[i][0], x), lerp(p[1], T_BACK_BODY[i][1], x)]);
+ body[0] = pal(s); body[1] = pal(s + .08); body[2] = add(pal(s + .2), 0, 4);
+ return body;
+}
+const T_PRESS = (() => {
+ const t = T_REST.map(p => p.slice());
+ t[0] = add(pal(.02), 0, 2); t[1] = pal(.12); t[2] = pal(.32); t[3] = pal(.58); t[4] = pal(.86);
+ t[5] = [540, 350]; t[6] = [578, 418]; t[11] = [254, 410]; t[10] = [300, 516];
+ return t;
+})();
+
+// 時刻 → 図の状態
+function diagState(t) {
+ const st = {tongue: T_REST, jaw: 0, soft: 0, air: 0, airDir: 0, spot: 0, arrow: 0, arrowDraw: 0, glow: 0, lift: 0, waves: 0, wavePhase: 0, labels: {}};
+ if (t < 10) {
+  if (t >= 5) {
+   const u = t - 5; st.air = inOut(t, 5.3, 10, .4, .4); st.airDir = u < 2.5 ? 1 : -1; st.airPhase = u;
+   st.labels.nose = inOut(t, 5.4, 10, .4, .3);
+  }
+ } else if (t < 24) {
+  st.labels.spot = inOut(t, 10.3, 24); st.labels.slide = inOut(t, 12, 24);
+  st.spot = inOut(t, 10.4, 24, .4, .3);
+  if (t < 12) st.tongue = mixPts(T_REST, tSlide(0), ease((t - 10.6) / 1.0));
+  else {
+   const k = Math.min(4, Math.floor((t - 12) / S1_REP)), u = (t - 12) - k * S1_REP;
+   const x = u < S1_SLIDE ? ease(u / S1_SLIDE) : 1 - ease((u - S1_SLIDE) / (S1_REP - S1_SLIDE));
+   st.tongue = tSlide(x);
+   st.arrow = inOut(t, 12, 24, .3, .3) * (u < S1_SLIDE + .2 ? 1 : 1 - clamp((u - S1_SLIDE - .2) / .4));
+   st.arrowDraw = u < S1_SLIDE ? ease(u / S1_SLIDE) : 1;
+  }
+ } else if (t < 38) {
+  st.labels.press = inOut(t, 24.3, 38);
+  if (t < 26) st.tongue = mixPts(tSlide(0), T_REST, ease((t - 24) / .8));
+  else {
+   const hs = t < 32 ? S2_HOLDS[0] : S2_HOLDS[1], u = t - hs;
+   const x = u < S2_HOLD ? ease(u / .45) : 1 - ease((u - S2_HOLD) / .5);
+   st.tongue = mixPts(T_REST, T_PRESS, x);
+   st.glow = u < S2_HOLD ? clamp(u / .5) * (.55 + .2 * Math.sin(u * Math.PI * 2)) : 0;
+  }
+ } else if (t < 50) {
+  st.labels.soft = inOut(t, 38.3, 50);
+  if (t >= 40) {
+   const k = Math.min(2, Math.floor((t - 40) / S3_REP)), u = (t - 40) - k * S3_REP;
+   const open = u < .35 ? ease(u / .35) : u < S3_AH ? 1 : 1 - ease((u - S3_AH) / .4);
+   st.jaw = open; st.tongue = mixPts(T_REST, T_AH, open);
+   st.soft = u < S3_AH ? ease((u - .12) / .4) : 1 - ease((u - S3_AH) / .35);
+   st.lift = st.soft; st.waves = u > .3 && u < S3_AH ? Math.min(clamp((u - .3) / .2), clamp((S3_AH - u) / .2)) : 0; st.wavePhase = u;
+  }
+ }
+ return st;
+}
+
+function drawDiagram(t) {
+ const st = diagState(t), J = p => jawT(p, st.jaw);
+ const face = [...FACE_FIXED, ...FACE_JAW.map((p, i) => i === FACE_JAW.length - 1 ? jawT(p, st.jaw, .4) : J(p)), ...NECK];
+ const faceD = crPath(face, false);
+ $('head').setAttribute('d', faceD + 'L940,740L940,-40Z');
+ $('outline').setAttribute('d', st.jaw > .02 ? crPath(face, false, FACE_FIXED.length - 1) : faceD);
+ $('airway').setAttribute('d', crPath(AIRWAY, true));
+ $('air').setAttribute('d', crPath(AIR_FLOW, false));
+ $('mouth').setAttribute('d', crPath([...MOUTH_FIXED, ...palSamples.pts.filter((_, i) => i % 20 === 0).slice(1), [528, 330], [586, 362], ...MOUTH_JAW.map(p => jawT(p, st.jaw, p[0] > 560 ? .5 : 1))], true));
+ const tongue = st.tongue.map(p => J(p));
+ $('tongue').setAttribute('d', crPath(tongue, true));
+ $('groove').setAttribute('d', crPath([lerp2(tongue[1], tongue[2], .6, 0, 16), add(tongue[3], 0, 20), add(tongue[4], -6, 22)], false));
+ const c = tongue.slice(3, 10).reduce((a, p) => [a[0] + p[0] / 7, a[1] + p[1] / 7], [0, 0]);
+ $('tongueLab').setAttribute('x', c[0].toFixed(1)); $('tongueLab').setAttribute('y', (c[1] + 12).toFixed(1));
+ const soft = mixPts(SOFT_REST, SOFT_UP, st.soft);
+ $('soft').setAttribute('d', crPath(soft, false));
+ $('uvula').setAttribute('cx', soft[3][0]); $('uvula').setAttribute('cy', soft[3][1]);
+ $('palate').setAttribute('d', crPath(PALATE, false));
+ $('glow').setAttribute('d', crPath(palSamples.pts.filter((_, i) => i % 10 === 0), false));
+ $('glow').setAttribute('opacity', st.glow.toFixed(3));
+ $('toothU').setAttribute('d', 'M' + TOOTH_U.map(p => p.join(',')).join('L') + 'Z');
+ $('toothL').setAttribute('d', 'M' + TOOTH_L.map(p => J(p).map(v => v.toFixed(1)).join(',')).join('L') + 'Z');
+
+ // 鼻呼吸の流れ
+ $('air').setAttribute('opacity', st.air.toFixed(3));
+ if (st.air) $('air').setAttribute('stroke-dashoffset', (st.airDir > 0 ? -1 : 1) * (st.airPhase % 2.5) * 70);
+
+ // スポットと矢印
+ const sp = pal(SPOT_S);
+ $('spot').setAttribute('transform', `translate(${sp[0].toFixed(1)},${sp[1].toFixed(1)})`);
+ $('spot').setAttribute('opacity', st.spot.toFixed(3));
+ $('spotRing').setAttribute('r', (16 + 10 * ((t * 1.2) % 1)).toFixed(2));
+ $('spotRing').setAttribute('opacity', (1 - (t * 1.2) % 1).toFixed(3));
+ // 矢印は今の進み具合までの長さで描く（矢じりが常に先端に来るように）
+ const arrowEnd = lerp(.2, .6, Math.max(.04, st.arrowDraw)), arrowPts = [];
+ for (let i = 0; i <= 12; i++) { const p = pal(lerp(.14, arrowEnd, i / 12)); arrowPts.push([p[0] + 6, p[1] + 34]); }
+ $('slideArrow').setAttribute('d', crPath(arrowPts, false));
+ $('slideArrow').setAttribute('opacity', st.arrow.toFixed(3));
+ $('liftArrow').setAttribute('opacity', st.lift.toFixed(3));
+ $('waves').setAttribute('opacity', st.waves.toFixed(3));
+ [...$('waves').children].forEach((w, i) => w.setAttribute('opacity', (.35 + .65 * (.5 + .5 * Math.sin(st.wavePhase * 9 - i * 1.3))).toFixed(3)));
+ $('waves').setAttribute('transform', `translate(${(st.jaw * 8).toFixed(1)},${(st.jaw * 22).toFixed(1)})`);
+
+ for (const [k, el] of Object.entries(LABELS)) el.g.setAttribute('opacity', (st.labels[k] || 0).toFixed(3));
+}
+const lerp2 = (a, b, x, dx, dy) => [lerp(a[0], b[0], x) + dx, lerp(a[1], b[1], x) + dy];
+
+// 引き出し線つきラベル
+const LABEL_DEFS = {
+ nose: {text: '鼻から吸って、鼻から吐く', x: 116, y: 72, to: [182, 340]},
+ spot: {text: 'スポット＝上の前歯のすぐ裏', x: 116, y: 72, to: () => pal(SPOT_S)},
+ slide: {text: '上あごをなぞって奥へ', x: 470, y: 150, to: [420, 352]},
+ press: {text: '上あご全体にピタッ', x: 470, y: 150, to: [400, 300]},
+ soft: {text: 'のどの奥（軟口蓋）を上げる', x: 398, y: 150, to: [548, 334]}
+};
+const LABELS = {};
+function buildLabels() {
+ const NS = 'http://www.w3.org/2000/svg', root = $('labels');
+ for (const [k, d] of Object.entries(LABEL_DEFS)) {
+  const g = document.createElementNS(NS, 'g'), line = document.createElementNS(NS, 'path'), dot = document.createElementNS(NS, 'circle');
+  const rect = document.createElementNS(NS, 'rect'), text = document.createElementNS(NS, 'text');
+  text.textContent = d.text; text.setAttribute('font-size', '28'); text.setAttribute('font-weight', '700'); text.setAttribute('fill', '#fff');
+  g.append(line, dot, rect, text); root.append(g);
+  const w = text.getComputedTextLength() + 44, h = 54, to = typeof d.to === 'function' ? d.to() : d.to;
+  rect.setAttribute('x', d.x); rect.setAttribute('y', d.y); rect.setAttribute('width', w); rect.setAttribute('height', h); rect.setAttribute('rx', 27); rect.setAttribute('fill', '#4657d7');
+  text.setAttribute('x', d.x + 22); text.setAttribute('y', d.y + 37);
+  const from = [Math.min(Math.max(to[0], d.x + 30), d.x + w - 30), d.y + h];
+  line.setAttribute('d', `M${from[0]},${from[1]}L${to[0]},${to[1]}`); line.setAttribute('stroke', '#4657d7'); line.setAttribute('stroke-width', 3.5); line.setAttribute('fill', 'none');
+  dot.setAttribute('cx', to[0]); dot.setAttribute('cy', to[1]); dot.setAttribute('r', 7); dot.setAttribute('fill', '#fff'); dot.setAttribute('stroke', '#4657d7'); dot.setAttribute('stroke-width', 4);
+  g.setAttribute('opacity', 0); LABELS[k] = {g};
+ }
+}
+
+// ---------- 画面全体 ----------
+let lastPhase = null, lastCounterKey = null;
+function setOp(id, v, ty = 0, sc = 1) {
+ const el = $(id); el.style.opacity = v.toFixed(3);
+ el.style.transform = (ty || sc !== 1) ? `translateY(${ty.toFixed(1)}px) scale(${sc.toFixed(4)})` : '';
+ el.style.visibility = v <= .001 ? 'hidden' : 'visible';
+}
+
+function render(t, opts = {}) {   // opts.poster：サムネイル用にリングを「56秒・満タン」で止める
+ t = clamp(t, 0, DURATION - 1e-6);
+ const ph = phaseAt(t);
+
+ // 残り秒数リング
+ const left = opts.poster ? DURATION : DURATION - t;
+ $('ringSec').textContent = Math.ceil(left - 1e-6);
+ $('ringArc').setAttribute('stroke-dasharray', `${Math.max(.0001, left / DURATION).toFixed(4)} 2`);
+ const fly = ease((t - 4.3) / .9), sc = lerp(1, 150 / 440, fly);
+ const rx = lerp(320, 1080 - 56 - 150, fly), ry = lerp(560, 40, fly);
+ const ringIn = easeOut(t / .7);
+ $('ring').style.transform = `translate(${rx.toFixed(1)}px,${ry.toFixed(1)}px) scale(${(sc * lerp(.85, 1, ringIn)).toFixed(4)})`;
+ $('ring').style.opacity = (Math.min(ringIn, 1 - clamp((t - 49.7) / .4))).toFixed(3);
+
+ // イントロ
+ const introOut = clamp((t - 4.2) / .5);
+ [...$('intro').children].forEach((el, i) => {
+  const a = easeOut((t - (.45 + i * .4)) / .55);
+  el.style.opacity = (a * (1 - introOut)).toFixed(3);
+  el.style.transform = `translateY(${((1 - a) * 40 - introOut * 40).toFixed(1)}px)`;
+ });
+
+ // 本編UI（5〜50秒）
+ const ui = Math.min(easeOut((t - 4.8) / .6), 1 - clamp((t - 49.8) / .45));
+ setOp('prog', ui); setOp('foot', ui * .62);
+ setOp('card', ui, (1 - ui) * 60);
+ PHASES.filter(p => p.seg !== undefined).forEach(p => {
+  const seg = $('prog').children[p.seg];
+  seg.querySelector('i').style.width = (clamp((t - p.s) / (p.e - p.s)) * 100).toFixed(2) + '%';
+  seg.classList.toggle('on', t >= p.s && t < p.e);
+ });
+
+ if (ph.label && ph !== lastPhase) { $('label').textContent = ph.label; $('title').textContent = ph.title; $('instr').innerHTML = ph.instr; }
+ lastPhase = ph;
+ if (ph.label) {
+  const h = Math.min(inOut(t, ph.s, ph.e, .4, .25), ui);
+  setOp('hdr', h, (1 - clamp((t - ph.s) / .4)) * 24);
+ } else setOp('hdr', 0);
+
+ drawDiagram(t);
+ drawCounter(t, ph, ui);
+
+ // エンディング
+ const o = t - 50;
+ setOp('outro', o > 0 ? 1 : 0);
+ if (o > 0) {
+  const ring = ease((o - .3) / .7), chk = ease((o - .8) / .45);
+  $('doneRing').setAttribute('stroke-dasharray', `${Math.max(.0001, ring).toFixed(4)} 2`);
+  $('doneBg').setAttribute('opacity', (easeOut((o - .6) / .4) * .9).toFixed(3));
+  $('doneCheck').setAttribute('stroke-dasharray', `${Math.max(.0001, chk).toFixed(4)} 2`);
+  const pop = easeOut((o - .3) / .5);
+  $('done').style.transform = `scale(${lerp(.7, 1, pop).toFixed(4)})`; $('done').style.opacity = pop.toFixed(3);
+  const item = (id, s) => { const a = easeOut((o - s) / .5); setOp(id, a, (1 - a) * 36); };
+  item('doneTitle', .7); item('doneSub', 1.15);
+  [...$('chips').children].forEach((el, i) => { const a = easeOut((o - 1.6 - i * .2) / .45); el.style.opacity = a.toFixed(3); el.style.transform = `translateY(${((1 - a) * 24).toFixed(1)}px)`; });
+  item('cta', 2.6); item('disc', 3.3);
+ }
+}
+
+function drawCounter(t, ph, ui) {
+ let big = '', small = '', cue = '', dots = null, hold = -1, breath = 0, key = '', pop = 99;
+ if (ph.id === 'prep') {
+  const u = t - 5, inh = u < 2.5;
+  cue = inh ? '鼻から、吸って…' : '鼻から、吐いて…';
+  breath = inh ? lerp(.62, 1, ease(u / 2.5)) : lerp(1, .62, ease((u - 2.5) / 2.5));
+  key = 'prep' + inh;
+ } else if (ph.id === 's1') {
+  if (t < 12) { big = '5'; small = '回'; cue = 'まず舌先をスポットへ'; dots = [5, -1]; key = 's1i'; pop = t - 10; }
+  else {
+   const k = Math.min(4, Math.floor((t - 12) / S1_REP)), u = (t - 12) - k * S1_REP;
+   big = String(k + 1); small = '/ 5'; cue = u < S1_SLIDE ? '上あごをなぞって、奥へ…' : '前に戻して'; dots = [5, k]; key = 's1' + k; pop = u;
+  }
+ } else if (ph.id === 's2') {
+  if (t < 26) { big = '5'; small = '秒 × 2回'; cue = 'いったん舌の力を抜いて'; dots = [2, -1]; key = 's2i'; pop = t - 24; }
+  else {
+   const k = t < 32 ? 0 : 1, u = t - S2_HOLDS[k];
+   dots = [2, k];
+   if (u < S2_HOLD) { big = String(Math.ceil(S2_HOLD - u - 1e-6)); small = '秒'; cue = 'ピタッとキープ'; hold = u / S2_HOLD; key = 's2h' + k + big; pop = u - Math.floor(u); }
+   else { big = '✓'; small = ''; cue = 'ゆるめて、ひと息'; dots = [2, k + .5]; key = 's2r' + k; pop = u - S2_HOLD; }
+  }
+ } else if (ph.id === 's3') {
+  if (t < 40) { big = '3'; small = '回'; cue = '大きく口を開ける準備を'; dots = [3, -1]; key = 's3i'; pop = t - 38; }
+  else {
+   const k = Math.min(2, Math.floor((t - 40) / S3_REP)), u = (t - 40) - k * S3_REP;
+   dots = [3, k];
+   if (u < S3_AH) { big = 'アー'; small = ''; cue = 'のどの奥を、持ち上げる'; key = 's3a' + k; pop = u; }
+   else { big = '✓'; cue = '口を閉じて、ひと息'; dots = [3, k + .5]; key = 's3r' + k; pop = u - S3_AH; }
+  }
+ }
+ if (key !== lastCounterKey) {
+  $('big').textContent = big; $('small').textContent = small; $('cue').textContent = cue;
+  $('dots').innerHTML = dots ? Array.from({length: dots[0]}, (_, i) => `<i class="${i < Math.floor(dots[1]) || i < dots[1] - .1 ? 'done' : i === dots[1] ? 'now' : ''}"></i>`).join('') : '';
+  lastCounterKey = key;
+ }
+ const h = ph.label ? Math.min(inOut(t, ph.s, ph.e, .4, .25), ui) : 0;
+ $('ctr').style.opacity = h.toFixed(3);
+ $('big').style.transform = `scale(${(1 + .14 * (1 - easeOut(pop / .3))).toFixed(4)})`;
+ $('big').style.fontSize = big === 'アー' ? '120px' : '';
+ $('big').style.color = big === '✓' ? '#7ee2a8' : '';
+ $('holdbar').style.visibility = hold >= 0 ? 'visible' : 'hidden';
+ $('holdbar').firstElementChild.style.width = (clamp(hold) * 100).toFixed(2) + '%';
+ $('breath').style.visibility = breath ? 'visible' : 'hidden';
+ $('breath').style.transform = `scale(${breath.toFixed(4)})`;
+ $('dots').style.visibility = dots ? 'visible' : 'hidden';
+}
+
+// ---------- 起動 ----------
+const params = new URLSearchParams(location.search);
+window.render = render;
+window.DURATION = DURATION;
+document.fonts.ready.then(() => {
+ buildLabels();
+ if (params.has('render')) { render(0); window.__ready = true; return; }
+ document.body.classList.add('preview');
+ const fit = () => {
+  const s = Math.min(window.innerWidth / 1080, (window.innerHeight - 70) / 1920);
+  $('stage').style.transform = `scale(${s})`;
+  $('wrap').style.width = 1080 * s + 'px'; $('wrap').style.height = 1920 * s + 'px';
+ };
+ fit(); addEventListener('resize', fit);
+ if (params.has('t')) { render(parseFloat(params.get('t')) || 0); window.__ready = true; return; }
+ let start = performance.now();
+ $('play').onclick = () => { start = performance.now(); };
+ (function loop(now) { const t = (now - start) / 1000; render(Math.min(t, DURATION - .001)); requestAnimationFrame(loop); })(start);
+ window.__ready = true;
+});
+</script>
+</body>
+</html>
